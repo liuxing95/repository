@@ -1,5 +1,7 @@
 # 知识与任务中心
 
+刚接手项目，请先读 [开发者接手指南](docs/development/onboarding.md)：从独立样例运行、首次收录，到架构、代码入口、测试和排障。后续开发遵循 [代码与文档交付约定](CONTRIBUTING.md)。
+
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架、[场景 01：工作区接入与运行治理](docs/plans/2026-09-21-002-feat-workspace-runtime-governance-plan.md)和[场景 02：多来源资料收录](docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md)。
 
 资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。搜索、TaskNotes、Wiki 更新、模型、通知、日历和发布仍属于后续场景，配置路线不会自动启用这些能力。
