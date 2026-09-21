@@ -1,3 +1,5 @@
+import { Ingestion } from "../ingestion/manifest";
+import { ingestionRoutes } from "../ingestion/routes";
 import Fastify, { type FastifyRequest } from "fastify";
 import { z } from "zod";
 import { Id, SourcePolicy, type Principal, type Role } from "@kb/contracts";
@@ -151,9 +153,10 @@ export function createServer(
     return jobs.list();
   });
   app.post("/v1/jobs", async (req) =>
-    mutate(req, ["admin", "user"], true, () =>
-      jobs.enqueue(req.body, registry.settings().budget?.jobLimit ?? 0),
-    ),
+    mutate(req, ["admin", "user"], true, () => {
+      z.object({ kind: z.literal("diagnostic-check") }).parse(req.body);
+      return jobs.enqueue(req.body, registry.settings().budget?.jobLimit ?? 0);
+    }),
   );
   app.post("/v1/jobs/:id/cancel", async (req) =>
     mutate(req, ["admin", "user"], true, () => {
@@ -161,5 +164,6 @@ export function createServer(
       return jobs.cancel(id);
     }),
   );
+  ingestionRoutes(app, new Ingestion(registry, jobs), sessions, mutate);
   return app;
 }

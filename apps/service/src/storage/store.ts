@@ -1,9 +1,11 @@
+import { randomUUID } from "node:crypto";
+import { sources } from "./migrations/002-sources";
 import Database from "better-sqlite3";
 import { chmodSync, existsSync, lstatSync } from "node:fs";
 import { AppError } from "../errors";
-import { foundation, schemaVersion } from "./migrations/001-foundation";
+import { foundation } from "./migrations/001-foundation";
 
-function matchesFoundation(db: Database.Database) {
+function matchesSchema(db: Database.Database, version: number) {
   const expected = new Database(":memory:");
   const schema = (connection: Database.Database) =>
     connection
@@ -13,6 +15,7 @@ function matchesFoundation(db: Database.Database) {
       .all();
   try {
     expected.exec(foundation);
+    if (version === 2) expected.exec(sources);
     return JSON.stringify(schema(db)) === JSON.stringify(schema(expected));
   } finally {
     expected.close();
@@ -32,9 +35,9 @@ export class Store {
       .prepare("SELECT name FROM sqlite_master WHERE type='table'")
       .all();
     this.readOnly =
-      ![0, schemaVersion].includes(version) ||
+      ![0, 1, 2].includes(version) ||
       (version === 0 && tables.length > 0) ||
-      (version === schemaVersion && !matchesFoundation(this.db));
+      (version > 0 && !matchesSchema(this.db, version));
     this.sqliteVersion = (
       this.db.prepare("SELECT sqlite_version() AS v").get() as { v: string }
     ).v;
@@ -57,8 +60,18 @@ export class Store {
     this.db.pragma("busy_timeout = 3000");
     this.db.pragma("journal_mode = WAL");
     this.db.pragma("synchronous = FULL");
-    if (version === 0)
-      this.db.transaction(() => this.db.exec(foundation)).immediate();
+    if (version === 1) {
+      const backup = `${path}.before-v2-${randomUUID()}`;
+      this.db.prepare("VACUUM INTO ?").run(backup);
+      chmodSync(backup, 0o600);
+    }
+    if (version < 2)
+      this.db
+        .transaction(() => {
+          if (version === 0) this.db.exec(foundation);
+          this.db.exec(sources);
+        })
+        .immediate();
   }
   writable() {
     if (this.readOnly) throw new AppError("SCHEMA");

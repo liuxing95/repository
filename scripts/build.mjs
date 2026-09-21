@@ -4,6 +4,7 @@ await build({
   entryPoints: [
     "apps/service/src/main.ts",
     "apps/service/src/runtime/worker-entry.ts",
+    "apps/service/src/ingestion/parser-entry.ts",
   ],
   outdir: "apps/service/dist",
   bundle: true,
@@ -22,7 +23,13 @@ await build({
   platform: "browser",
   target: "es2022",
   format: "cjs",
-  external: ["obsidian"],
+  external: [
+    "obsidian",
+    "node:fs",
+    "node:path",
+    "node:crypto",
+    "node:fs/promises",
+  ],
   sourcemap: true,
 });
 await Promise.all(

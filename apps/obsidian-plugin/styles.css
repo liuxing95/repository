@@ -99,3 +99,46 @@
   word-break: break-word;
   font-size: 12px;
 }
+.kb-ingestion-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+.kb-ingestion-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--font-ui-small);
+}
+.kb-ingestion-form input,
+.kb-ingestion-form select,
+.kb-ingestion-form textarea {
+  width: 100%;
+}
+.kb-ingestion-entry {
+  padding: 12px;
+  margin-block: 10px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+.kb-ingestion button {
+  margin: 6px 6px 6px 0;
+}
+.kb-source-detail pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 400px;
+  overflow: auto;
+}
+.kb-ingestion-output,
+.kb-source-detail {
+  margin-top: 16px;
+}
+
+.kb-ingestion input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  appearance: auto;
+  align-self: flex-start;
+}

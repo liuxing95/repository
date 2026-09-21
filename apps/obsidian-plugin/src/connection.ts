@@ -40,7 +40,8 @@ export class Connection {
     const mutation =
       method !== "GET" &&
       !path.startsWith("/v1/session/") &&
-      path !== "/v1/pair";
+      path !== "/v1/pair" &&
+      !path.endsWith("/reparse");
     const signature = `${method}:${path}:${JSON.stringify(body)}`;
     const key = this.operationKeys.get(signature) ?? crypto.randomUUID();
     if (mutation) this.operationKeys.set(signature, key);
@@ -61,7 +62,7 @@ export class Connection {
       new Promise<never>((_resolve, reject) => {
         timer = setTimeout(
           () => reject(new Error("CONNECTION_TIMEOUT")),
-          10_000,
+          path.startsWith("/v1/ingestion/") ? 130_000 : 10_000,
         );
       }),
     ]).finally(() => {

@@ -1,0 +1,190 @@
+{
+  "mode": "autofix",
+  "plan_source": "explicit",
+  "plan": "docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md",
+  "base": "cdc4e73",
+  "execution": "Sequential perspectives in primary thread per supplied AGENTS.md. No independent reviewer agents.",
+  "review_rounds": 2,
+  "findings": [
+    {
+      "title": "Changed local snapshots cannot silently reuse staged bytes",
+      "severity": "P1",
+      "file": "apps/service/src/ingestion/manifest.ts",
+      "line": 638,
+      "why_it_matters": "Changed local snapshots cannot silently reuse staged bytes",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "ingestion-manifest.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Interrupted jobs reconcile batch state",
+      "severity": "P1",
+      "file": "apps/service/src/ingestion/manifest.ts",
+      "line": 45,
+      "why_it_matters": "Interrupted jobs reconcile batch state",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "ingestion-manifest.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Corrupt locators fail closed on readback",
+      "severity": "P1",
+      "file": "apps/service/src/ingestion/commit.ts",
+      "line": 267,
+      "why_it_matters": "Corrupt locators fail closed on readback",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "ingestion-commit.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Acquired originals remain accessible after parser failure",
+      "severity": "P1",
+      "file": "apps/service/src/ingestion/routes.ts",
+      "line": 108,
+      "why_it_matters": "Acquired originals remain accessible after parser failure",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "ingestion-commit.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Performance sampling cannot change parse identity",
+      "severity": "P1",
+      "file": "apps/service/src/ingestion/manifest.ts",
+      "line": 589,
+      "why_it_matters": "Performance sampling cannot change parse identity",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "ingestion-manifest.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "External Git metadata is outside the explicit directory grant",
+      "severity": "P1",
+      "file": "apps/service/src/ingestion/repository.ts",
+      "line": 44,
+      "why_it_matters": "External Git metadata is outside the explicit directory grant",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "repository-snapshot.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Explicit refetch creates a new acquisition identity",
+      "severity": "P2",
+      "file": "apps/obsidian-plugin/src/views/ingestion.ts",
+      "line": 444,
+      "why_it_matters": "Explicit refetch creates a new acquisition identity",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "obsidian-smoke.mjs and collection tests"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Migration backups require private permissions",
+      "severity": "P2",
+      "file": "apps/service/src/storage/store.ts",
+      "line": 66,
+      "why_it_matters": "Migration backups require private permissions",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "source-migration.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Only the Bridge creates the fixed managed source directory",
+      "severity": "P2",
+      "file": "apps/obsidian-plugin/src/writer/apply.ts",
+      "line": 7,
+      "why_it_matters": "Only the Bridge creates the fixed managed source directory",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "real Obsidian writer checks"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    },
+    {
+      "title": "Temporary passwords bypass persistent command keys",
+      "severity": "P2",
+      "file": "apps/obsidian-plugin/src/connection.ts",
+      "line": 44,
+      "why_it_matters": "Temporary passwords bypass persistent command keys",
+      "autofix_class": "safe_auto",
+      "owner": "review-fixer",
+      "requires_verification": true,
+      "confidence": 1.0,
+      "evidence": [
+        "ingestion-commit.test.ts"
+      ],
+      "pre_existing": false,
+      "status": "fixed_and_verified",
+      "reviewer": "sequential primary-thread review"
+    }
+  ],
+  "residual_actionable": [],
+  "advisory": [
+    "Only macOS parsing and Obsidian 1.13.7 are validated.",
+    "OCR, browser scripts, Wiki updates and search indexing remain unavailable by scope.",
+    "PDF table structure and aligned character-loss ground truth are not claimed verified.",
+    "Early sandbox probes left five macOS UE kernel records; signals sent, no CPU use; final profile passes confinement tests.",
+    "GitHub CLI is unauthenticated; no PR created."
+  ],
+  "suppressed_count": 0,
+  "verdict": "Ready with verified fixes for isolated pilot"
+}

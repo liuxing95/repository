@@ -105,7 +105,7 @@ export class Jobs {
       return this.get(id);
     });
   }
-  claim(queue: Queue, leaseMs = 30_000) {
+  claim(queue: Queue, leaseMs = 30_000, kind = "diagnostic-check") {
     return this.store.tx(() => {
       this.store.db
         .prepare(
@@ -115,9 +115,9 @@ export class Jobs {
       // A killed/expired worker never owns the next execution's fence.
       const row = this.store.db
         .prepare(
-          "SELECT * FROM jobs WHERE queue=? AND cancelled=0 AND (state='queued' OR (state='running' AND lease_until<=?)) ORDER BY created_at,id LIMIT 1",
+          "SELECT * FROM jobs WHERE queue=? AND kind=? AND cancelled=0 AND (state='queued' OR (state='running' AND lease_until<=?)) ORDER BY created_at,id LIMIT 1",
         )
-        .get(queue, this.now()) as Row | undefined;
+        .get(queue, kind, this.now()) as Row | undefined;
       if (!row) return undefined;
       this.store.db
         .prepare(

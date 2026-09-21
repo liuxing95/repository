@@ -204,7 +204,7 @@ export function renderSettings(
       row.append(
         el(
           "span",
-          `本地自检 · ${labels[job.state]} · 阶段 ${job.stage} · 尝试 ${job.attempt}`,
+          `${job.kind === "ingestion" ? "资料收录" : "本地自检"} · ${labels[job.state]} · 阶段 ${job.stage} · 尝试 ${job.attempt}`,
         ),
       );
       if (job.problem)

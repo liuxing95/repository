@@ -1,7 +1,7 @@
 ---
 title: 场景 02：多来源资料收录
 type: feat
-status: active
+status: completed
 date: 2026-09-21
 origin: docs/brainstorms/2026-09-21-obsidian-knowledge-and-task-center-requirements.md
 ---
@@ -92,16 +92,26 @@ flowchart TD
 
 ## 5. 实施单元
 
-- [ ] **I1：统一输入与清单。** 需求 R005—R010、R013—R015；依赖 G1—G3。文件：`packages/contracts/src/ingestion.ts`、`apps/service/src/ingestion/manifest.ts`、`apps/obsidian-plugin/src/views/ingestion.ts`；测试：`tests/integration/ingestion-manifest.test.ts`。沿用专题中的 acquisition／commit 分离。测试同 URL 同字节、同标题异源、并列目录漏页、集合中断恢复与新增页；预期去重正确、分母不漂移。完成依据：A02、A04、A08 能逐项解释。
+- [x] **I1：统一输入与清单。** 需求 R005—R010、R013—R015；依赖 G1—G3。文件：`packages/contracts/src/ingestion.ts`、`apps/service/src/ingestion/manifest.ts`、`apps/obsidian-plugin/src/views/ingestion.ts`；测试：`tests/integration/ingestion-manifest.test.ts`。沿用专题中的 acquisition／commit 分离。测试同 URL 同字节、同标题异源、并列目录漏页、集合中断恢复与新增页；预期去重正确、分母不漂移。完成依据：A02、A04、A08 能逐项解释。
 
-- [ ] **I2：网页与文件安全获取。** 需求 R011—R012、R084；依赖 I1、G2。文件：`apps/service/src/ingestion/fetcher.ts`、`apps/service/src/ingestion/web-parser.ts`、`apps/service/src/ingestion/file-reader.ts`；测试：`tests/security/acquisition-boundaries.test.ts`、`tests/integration/web-capture.test.ts`。测试正常正文、200 登录页、节选、压缩炸弹、重定向／DNS 地址变化、恶意 HTML；预期缺口明确且无脚本或越界网络执行。完成依据：真实网页回读与安全负例均通过。
+- [x] **I2：网页与文件安全获取。** 需求 R011—R012、R084；依赖 I1、G2。文件：`apps/service/src/ingestion/fetcher.ts`、`apps/service/src/ingestion/web-parser.ts`、`apps/service/src/ingestion/file-reader.ts`；测试：`tests/security/acquisition-boundaries.test.ts`、`tests/integration/web-capture.test.ts`。测试正常正文、200 登录页、节选、压缩炸弹、重定向／DNS 地址变化、恶意 HTML；预期缺口明确且无脚本或越界网络执行。完成依据：真实网页回读与安全负例均通过。
 
-- [ ] **I3：代码与 PDF 解析。** 需求 R016—R021；依赖 I1、G3。文件：`apps/service/src/ingestion/repository.ts`、`apps/service/src/ingestion/pdf-parser.ts`、`apps/service/src/ingestion/enhancement.ts`；测试：`tests/integration/repository-snapshot.test.ts`、`tests/integration/pdf-locators.test.ts`。测试移动分支、脏目录、dist、LFS、物理／印刷页错位、密码、扫描和表格；预期版本与缺失不混淆，未授权 OCR 请求为零。完成依据：A05—A07 有真实样本记录。
+- [x] **I3：代码与 PDF 解析。** 需求 R016—R021；依赖 I1、G3。文件：`apps/service/src/ingestion/repository.ts`、`apps/service/src/ingestion/pdf-parser.ts`、`apps/service/src/ingestion/enhancement.ts`；测试：`tests/integration/repository-snapshot.test.ts`、`tests/integration/pdf-locators.test.ts`。测试移动分支、脏目录、dist、LFS、物理／印刷页错位、密码、扫描和表格；预期版本与缺失不混淆，未授权 OCR 请求为零。完成依据：A05—A07 有真实样本记录。
 
-- [ ] **I4：来源提交和批次恢复。** 需求 R007—R010；依赖 I2、I3、W1—W3（场景 04）。文件：`apps/service/src/ingestion/commit.ts`、`apps/service/src/storage/migrations/002-sources.ts`；测试：`tests/faults/ingestion-commit.test.ts`。测试批准后断连、写一半、哈希不符、取消后迟到 worker、新解析复用原件；预期仅完整提交的版本对搜索可见。完成依据：收录 UI、来源账本、文件回执与索引状态一致。
+- [x] **I4：来源提交和批次恢复。** 需求 R007—R010；依赖 I2、I3、W1—W3（场景 04）。文件：`apps/service/src/ingestion/commit.ts`、`apps/service/src/storage/migrations/002-sources.ts`；测试：`tests/faults/ingestion-commit.test.ts`。测试批准后断连、写一半、哈希不符、取消后迟到 worker、新解析复用原件；预期仅完整提交的版本对搜索可见。完成依据：收录 UI、来源账本、文件回执与索引状态一致。
 
 ## 6. 上线门槛与待验证项
 
 先用 30 份真实资料覆盖四种主要输入，不能只用 UTF-8 文本替代 PDF 和代码验收。每种输入至少包含一个部分失败样本。记录原件可用性、块定位、字符损失、表格遗漏、峰值内存和总耗时。
 
 复杂 OCR、浏览器脚本执行、自动更新订阅均不是基础导入的隐含动作。其效果、资源开销和权限验证未通过时，只保留明确的人工重试入口。执行材料中的实验需要另一个由用户授权的工作流程，本场景不执行。
+
+## 7. 实施结果（2026-09-21）
+
+I1—I4 已实现并通过验收。入口为插件设置页“资料收录”，代码从 `packages/contracts/src/ingestion.ts`、`apps/service/src/ingestion/` 和 `apps/obsidian-plugin/src/views/ingestion.ts` 进入。
+
+[实施验收记录](../implementation/multi-source-ingestion-validation.md)包含 API、恢复步骤、50 项测试、30 份真实材料报告及真实 Obsidian 截图。正式来源提交后登记索引事件，实际检索仍由场景 03 实施。
+
+本次提前实现了场景 04 中来源新建需要的摘要批准、短期授权、Bridge 校验与回执恢复协议；Writer 仅允许不可变来源文件新建。Wiki 页面更新、编译与人工观察未纳入本次，也没有据此勾选场景 04 的完整 W1—W3。
+
+实现取舍：原件对象暂存于本机 SQLite BLOB，并以哈希校验；解析在已验证的 macOS 隔离进程中执行。PDF 复杂版式和表格结构保持部分覆盖，OCR 与动态浏览器路线关闭。语言／版本说明不代替允许路径的实际授权边界。

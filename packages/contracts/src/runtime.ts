@@ -12,7 +12,7 @@ export const JobInput = z
   .object({
     operationKey: z.string().min(8).max(160),
     queue: Queue,
-    kind: z.literal("diagnostic-check"),
+    kind: z.enum(["diagnostic-check", "ingestion"]),
     parentId: z.string().uuid().optional(),
   })
   .strict();

@@ -1,3 +1,5 @@
+import { renderIngestion } from "./views/ingestion";
+import { obsidianHost } from "./writer/apply";
 import {
   FileSystemAdapter,
   Plugin,
@@ -9,6 +11,11 @@ import { renderSettings } from "./views/settings";
 export default class KnowledgeTaskPlugin extends Plugin {
   connection!: Connection;
   drafts = { budget: "" };
+  ingestionDraft = {
+    fields: {},
+    previewId: crypto.randomUUID(),
+    signature: "",
+  };
   async onload() {
     if (!(this.app.vault.adapter instanceof FileSystemAdapter)) return;
     const data = (await this.loadData()) as { deviceId?: string } | null;
@@ -58,6 +65,14 @@ class GovernanceSettings extends PluginSettingTab {
       this.containerEl,
       this.plugin.connection,
       this.plugin.drafts,
+    );
+    const ingestion = document.createElement("section");
+    this.containerEl.append(ingestion);
+    renderIngestion(
+      ingestion,
+      this.plugin.connection,
+      obsidianHost(this.app, this.plugin.connection.vaultPath),
+      this.plugin.ingestionDraft,
     );
   }
 }

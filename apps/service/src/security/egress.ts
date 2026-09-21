@@ -38,18 +38,22 @@ export async function validateTarget(
   return { url, address: addresses[0]! };
 }
 // The validated IP is pinned in lookup; a second DNS lookup cannot rebind the connection.
-export async function fetchPublic(
+export async function fetchResponse(
   input: string,
   hosts: readonly string[],
   signal?: AbortSignal,
-): Promise<Buffer> {
+  maxBytes = 2_000_000,
+  checkPath: (url: URL) => boolean = () => true,
+): Promise<{ body: Buffer; finalUrl: string; contentType: string }> {
   let current = input;
   for (let hop = 0; hop < 4; hop++) {
     const { url, address } = await validateTarget(current, hosts);
+    if (!checkPath(url)) throw new AppError("FORBIDDEN", 403);
     const response = await new Promise<{
       code: number;
       location?: string;
       body: Buffer;
+      contentType: string;
     }>((resolve, reject) => {
       const timeout = AbortSignal.timeout(10_000);
       const req = request(
@@ -64,14 +68,17 @@ export async function fetchPublic(
               callback(null, [address]);
             else callback(null, address.address, address.family);
           },
-          headers: { accept: "text/plain, text/html, application/json" },
+          headers: {
+            accept: "text/plain, text/html, application/json",
+            "user-agent": "KnowledgeTaskCenter/0.1",
+          },
         },
         (res) => {
           const chunks: Buffer[] = [];
           let size = 0;
           res.on("data", (chunk: Buffer) => {
             size += chunk.length;
-            if (size > 2_000_000) res.destroy(new AppError("FETCH_LIMIT"));
+            if (size > maxBytes) res.destroy(new AppError("FETCH_LIMIT"));
             else chunks.push(chunk);
           });
           res.on("error", reject);
@@ -80,6 +87,7 @@ export async function fetchPublic(
               code: res.statusCode ?? 0,
               location: res.headers.location,
               body: Buffer.concat(chunks),
+              contentType: res.headers["content-type"] ?? "",
             }),
           );
         },
@@ -96,7 +104,19 @@ export async function fetchPublic(
     }
     if (response.code < 200 || response.code >= 300)
       throw new AppError("FETCH_FAILED", 502);
-    return response.body;
+    return {
+      body: response.body,
+      finalUrl: current,
+      contentType: response.contentType,
+    };
   }
   throw new AppError("REDIRECT_LIMIT", 502);
+}
+
+export async function fetchPublic(
+  input: string,
+  hosts: readonly string[],
+  signal?: AbortSignal,
+) {
+  return (await fetchResponse(input, hosts, signal)).body;
 }

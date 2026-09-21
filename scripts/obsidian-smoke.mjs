@@ -119,6 +119,7 @@ try {
   });
   browser = await chromium.connectOverCDP(endpoint);
   let page = browser.contexts()[0].pages()[0];
+  const vaultPage = page;
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => {
@@ -195,6 +196,121 @@ try {
     .getByRole("button", { name: "查看脱敏诊断", exact: true })
     .scrollIntoViewIfNeeded();
   await page.screenshot({ path: join(root, "obsidian-diagnostics.png") });
+  // Real plugin Writer contract: stop for an open Markdown editor, then resume
+  // the same approved candidate and recover through durable receipts.
+  const importFile = join(root, "source", `ingestion-${Date.now()}.md`);
+  await writeFile(importFile, "# 来源测试\n\n这是需要逐文件确认的资料 😀。\n");
+  await page
+    .getByLabel("入口 URL 或明确授权的本地文件 / 目录绝对路径")
+    .fill(importFile);
+  await page.getByRole("button", { name: "预览获取范围", exact: true }).click();
+  await page
+    .getByRole("heading", { name: "默认集合 · 待确认范围", exact: true })
+    .waitFor();
+  await page
+    .getByRole("button", { name: "确认清单并解析", exact: true })
+    .click();
+  for (let i = 0; i < 40; i++) {
+    await page.getByRole("button", { name: "刷新本批", exact: true }).click();
+    await page.waitForTimeout(200);
+    if (
+      await page
+        .getByRole("button", { name: "审核正式导入文件", exact: true })
+        .count()
+    )
+      break;
+  }
+  await page
+    .getByRole("button", { name: "审核正式导入文件", exact: true })
+    .click();
+  await page
+    .getByRole("heading", { name: "正式导入预览", exact: true })
+    .waitFor();
+  const patchPath = (
+    await page.locator(".kb-source-detail summary").first().innerText()
+  ).replace(/^新建 /, "");
+  await vaultPage.evaluate(async (path) => {
+    if (!(await window.app.vault.adapter.exists("KB-Sources")))
+      await window.app.vault.createFolder("KB-Sources");
+    const file = await window.app.vault.create(path, "人工草稿，不允许覆盖");
+    const leaf = window.app.workspace.getLeaf(true);
+    await leaf.openFile(file);
+    leaf.view.editor.setValue("尚未确认的编辑缓冲区 😀");
+  }, patchPath);
+  await page
+    .getByRole("button", { name: "批准以上文件并写入", exact: true })
+    .click();
+  await page
+    .getByText("目标文件正在编辑，写入已暂停。", { exact: false })
+    .waitFor();
+  const protectedEditor = await vaultPage.evaluate((path) => {
+    let value = null;
+    window.app.workspace.iterateAllLeaves((leaf) => {
+      if (leaf.view.file?.path === path) value = leaf.view.editor.getValue();
+    });
+    return value;
+  }, patchPath);
+  if (protectedEditor !== "尚未确认的编辑缓冲区 😀")
+    throw new Error("writer changed editing buffer");
+  await page
+    .getByRole("heading", { name: "正式导入预览", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: join(root, "obsidian-ingestion-conflict.png"),
+  });
+  // Wait for Obsidian to flush this test buffer before closing its leaf.
+  for (let i = 0; i < 30; i++) {
+    if (
+      (await readFile(join(workspace.vaultPath, patchPath), "utf8")) ===
+      "尚未确认的编辑缓冲区 😀"
+    )
+      break;
+    await page.waitForTimeout(100);
+  }
+  await vaultPage.evaluate(async (path) => {
+    const leaves = [];
+    window.app.workspace.iterateAllLeaves((leaf) => {
+      if (leaf.view.file?.path === path) leaves.push(leaf);
+    });
+    for (const leaf of leaves) leaf.detach();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Remove only the synthetic conflicting file created by this smoke test.
+    const file = window.app.vault.getAbstractFileByPath(path);
+    if (file) await window.app.vault.delete(file);
+  }, patchPath);
+  await page
+    .getByRole("button", { name: "审核正式导入文件", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "继续已批准的写入", exact: true })
+    .click();
+  await page.getByText("来源提交已完成。", { exact: true }).waitFor();
+  await page
+    .getByRole("button", { name: "查看文字与定位", exact: true })
+    .click();
+  await page
+    .getByRole("heading", { name: "原文与定位", exact: true })
+    .waitFor();
+  await page
+    .locator(".kb-source-detail details")
+    .first()
+    .evaluate((node) => {
+      node.open = true;
+    });
+  await page
+    .getByRole("heading", { name: "原文与定位", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page
+    .locator(".kb-source-detail details")
+    .first()
+    .evaluate((node) => node.scrollIntoView({ block: "center" }));
+  await page.screenshot({ path: join(root, "obsidian-ingestion.png") });
+  const diskSource = await readFile(
+    join(workspace.vaultPath, patchPath),
+    "utf8",
+  );
+  if (!diskSource.includes("这是需要逐文件确认的资料 😀。"))
+    throw new Error("source readback mismatch");
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(
@@ -207,6 +323,10 @@ try {
           "read-save-settings",
           "worker-success",
           "redacted-diagnostics",
+          "ingestion-preview-freeze-parse",
+          "writer-protects-open-editor",
+          "approval-resume-receipts-commit",
+          "source-locator-readback",
         ],
         pageErrors: errors,
       },

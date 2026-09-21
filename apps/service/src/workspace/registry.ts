@@ -275,7 +275,12 @@ export class WorkspaceRegistry {
           "SELECT count(*) n FROM calls WHERE state IN ('reserved','dispatched','unknown')",
         )
         .get() as { n: number };
-      if (running.n || unsettled.n)
+      const grants = this.store.db
+        .prepare(
+          "SELECT count(*) n FROM writer_grants g JOIN changesets c ON c.id=g.change_id WHERE json_extract(g.value,'$.expiresAt')>? AND json_extract(c.value,'$.state')='approved'",
+        )
+        .get(Date.now()) as { n: number };
+      if (running.n || unsettled.n || grants.n)
         throw new AppError("MASTER", 409, "请先停止并核对未完成作业。");
       w.deviceId = null;
       w.epoch++;
@@ -330,10 +335,21 @@ export class WorkspaceRegistry {
         enabled: valid,
         reason: valid ? "运行治理已就绪" : "数据版本待核对，仅诊断",
       },
+      {
+        id: "ingestion",
+        available: valid && process.platform === "darwin",
+        enabled: valid && process.platform === "darwin",
+        reason: "静态获取、来源追踪与本机隔离解析；OCR 关闭",
+      },
+      {
+        id: "writer",
+        available: valid,
+        enabled: valid,
+        reason: "仅支持来源不可变文件新建；逐文件批准和回读，Wiki 更新尚未启用",
+      },
       ...[
         "search",
         "tasknotes",
-        "writer",
         "model",
         "ocr",
         "embedding",
