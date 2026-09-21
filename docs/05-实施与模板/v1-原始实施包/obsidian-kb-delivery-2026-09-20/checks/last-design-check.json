@@ -1,0 +1,42 @@
+{
+  "scope": "Design attachments only; no service, plugin, real-model, upstream-SDK or Vault tests",
+  "runtime": {
+    "node": "v22.16.0",
+    "tsc": "Version 5.8.3",
+    "sqlite": "3.46.1"
+  },
+  "checkCount": 28,
+  "checks": [
+    "Both SQLite DDL drafts execute in fresh in-memory databases",
+    "Reject invalid object SHA256",
+    "Reject duplicate original revision for same source",
+    "Reject missing source foreign key",
+    "Different parser fingerprints can coexist for the same immutable source",
+    "Reject empty evidence range",
+    "Reject negative evidence start",
+    "Reject unsupported claim origin",
+    "Reject create patch with a before hash",
+    "Reject update patch without before hash",
+    "Reject approval bound to a different proposal digest",
+    "Reject inverted approval validity interval",
+    "Accept approval matching changeset digest and policy",
+    "Reject a second active writer session row",
+    "Allow a conflict receipt hash without copying private human text into objects",
+    "Conditional budget UPDATE blocks a second over-limit reservation (sequential SQL smoke test)",
+    "Seeded state DB passes SQLite integrity and foreign-key checks",
+    "FTS accepts explicitly pre-tokenized two-character term: 权限",
+    "FTS accepts explicitly pre-tokenized two-character term: 重排",
+    "FTS accepts explicitly pre-tokenized two-character term: 知识",
+    "Exact-symbol table preserves: C++",
+    "Exact-symbol table preserves: Node.js",
+    "Exact-symbol table preserves: app.vault.process",
+    "Config parses and remains uninitialized, model-disabled and write-disabled",
+    "16 synthetic JSONL cases have unique IDs and existing fixture sources",
+    "Markdown: 29 files, 23 balanced fenced blocks, 5 valid local links, 10 valid wiki links",
+    "Task plan contains E00-E14 plus E15-E17 optional extensions",
+    "TypeScript reference contracts pass strict noEmit typecheck (not app build)"
+  ],
+  "stateTables": 27,
+  "markdownFiles": 29,
+  "syntheticCases": 16
+}

@@ -1,0 +1,3120 @@
+{
+  "compiled_on": "2026-09-21",
+  "unique_url_count": 98,
+  "definition": "deduplicated exact URL strings from historical citation definitions and original catalog",
+  "not_included": "third-party full text, source-code snapshots, authentication data",
+  "entries": [
+    {
+      "url": "https://ai-sdk.dev/api/search-docs?q=ToolLoopAgent",
+      "titles": [
+        "AI SDK 搜索样例"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L05"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U001"
+    },
+    {
+      "url": "https://ai-sdk.dev/docs/introduction.md",
+      "titles": [
+        "AI SDK 引言的 Markdown 入口"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L03"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U002"
+    },
+    {
+      "url": "https://ai-sdk.dev/llms-full.txt",
+      "titles": [
+        "AI SDK 拼接全文入口"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L04"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U003"
+    },
+    {
+      "url": "https://ai-sdk.dev/llms.txt",
+      "titles": [
+        "AI SDK 机器访问说明"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L01"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U004"
+    },
+    {
+      "url": "https://ai-sdk.dev/sitemap.md",
+      "titles": [
+        "AI SDK 文档索引"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L02"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U005"
+    },
+    {
+      "url": "https://crawlee.dev/js/docs/introduction",
+      "titles": [
+        "Crawlee：TypeScript 爬取接口、持久队列和浏览器获取"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S02"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U006"
+    },
+    {
+      "url": "https://developers.google.com/workspace/calendar/api/guides/errors",
+      "titles": [
+        "Google Calendar：错误和sync token失效"
+      ],
+      "occurrences": [
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S09"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U007"
+    },
+    {
+      "url": "https://developers.google.com/workspace/calendar/api/guides/sync",
+      "titles": [
+        "Google Calendar：增量同步及sync token失效"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S09"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S09"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U008"
+    },
+    {
+      "url": "https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query",
+      "titles": [
+        "Google Calendar FreeBusy API"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S08"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S08"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S08"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U009"
+    },
+    {
+      "url": "https://docling-project.github.io/docling/concepts/docling_document/",
+      "titles": [
+        "DoclingDocument：统一文档结构与原件定位"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S09"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U010"
+    },
+    {
+      "url": "https://docs.github.com/en/repositories/working-with-files/using-files/getting-permanent-links-to-files",
+      "titles": [
+        "GitHub：固定 commit 文件链接"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S04"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U011"
+    },
+    {
+      "url": "https://docs.ntfy.sh/",
+      "titles": [
+        "ntfy：HTTP发布和手机/桌面订阅"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S11a"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S11a"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S11a"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U012"
+    },
+    {
+      "url": "https://docs.ntfy.sh/config/#access-control",
+      "titles": [
+        "ntfy：认证、topic授权和默认访问"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S11b"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S11b"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S11b"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U013"
+    },
+    {
+      "url": "https://docs.obsidian.md/Plugins/Vault",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S12"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S12"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U014"
+    },
+    {
+      "url": "https://esbuild.github.io/faq/",
+      "titles": [
+        "esbuild FAQ"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V6"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U015"
+    },
+    {
+      "url": "https://fastify.dev/docs/latest/Reference/TypeScript/",
+      "titles": [
+        "Fastify TypeScript / validation"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R37"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R37"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R37"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R37"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R37"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S05"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S05"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R37"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R37",
+          "title": "Fastify TypeScript / validation",
+          "kind": "官方文档",
+          "note": "HTTP 层候选；schema 信任说明另见同站 Validation-and-Serialization。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U016"
+    },
+    {
+      "url": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f",
+      "titles": [
+        "Karpathy：LLM Wiki idea file"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R08"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R08",
+          "title": "Karpathy：LLM Wiki idea file",
+          "kind": "原作者概念材料",
+          "note": "仅使用原始正文解释方法，不把评论区内容当作者结论。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U017"
+    },
+    {
+      "url": "https://github.com/2233admin/obsidian-llm-wiki/blob/main/README.md",
+      "titles": [
+        "2233admin / obsidian-llm-wiki"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R16"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R16"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R16"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R16"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R16"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R16"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R16",
+          "title": "2233admin / obsidian-llm-wiki",
+          "kind": "维护者 README",
+          "note": "review/promote 思路；默认依赖描述尚需代码一致性核验。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U018"
+    },
+    {
+      "url": "https://github.com/GD4AI/obsidian-llm-wiki",
+      "titles": [
+        "GD4AI / obsidian-llm-wiki"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R11"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R11"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R11"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R11"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R11"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R11"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R11",
+          "title": "GD4AI / obsidian-llm-wiki",
+          "kind": "维护者 README",
+          "note": "插件、PPR 检索、许可证及当前用户 CLI / 开发工具区分；不采用其竞品比较作为其他项目事实。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U019"
+    },
+    {
+      "url": "https://github.com/GD4AI/obsidian-llm-wiki/releases",
+      "titles": [
+        "GD4AI releases"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R12"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R12"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R12"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R12"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R12"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R12"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R12",
+          "title": "GD4AI releases",
+          "kind": "维护者发布说明",
+          "note": "历史 CLI 和功能演进；当前入口以所选版本 README 为准。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U020"
+    },
+    {
+      "url": "https://github.com/WiseLibs/better-sqlite3",
+      "titles": [
+        "better-sqlite3"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R42"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R42"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R42"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R42"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R42"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R42"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R42",
+          "title": "better-sqlite3",
+          "kind": "维护者仓库",
+          "note": "Node SQLite 驱动候选；部署需要固定二进制兼容版本。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U021"
+    },
+    {
+      "url": "https://github.com/WiseLibs/better-sqlite3/blob/master/docs/api.md",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S06"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S06"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U022"
+    },
+    {
+      "url": "https://github.com/asg017/sqlite-vec",
+      "titles": [
+        "sqlite-vec"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R27"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R27"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R27"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R27"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R27"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R27"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R27",
+          "title": "sqlite-vec",
+          "kind": "维护者仓库",
+          "note": "可选本地向量适配器，不是第一版必选。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U023"
+    },
+    {
+      "url": "https://github.com/atomicstrata/llm-wiki-compiler",
+      "titles": [
+        "atomicstrata / llm-wiki-compiler"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R44"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R44"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R44"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R44"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R44"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R44"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R44",
+          "title": "atomicstrata / llm-wiki-compiler",
+          "kind": "维护者 README",
+          "note": "TypeScript 编译器、CLI/SDK/MCP、知识维护能力。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U024"
+    },
+    {
+      "url": "https://github.com/brianpetro/obsidian-smart-connections",
+      "titles": [
+        "Smart Connections"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R19"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R19"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R19"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R19"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R19"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R19"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R19",
+          "title": "Smart Connections",
+          "kind": "维护者 README 与许可证",
+          "note": "相关笔记；source-available 状态。许可证正文另见同仓库 LICENSE。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U025"
+    },
+    {
+      "url": "https://github.com/callumalpass/tasknotes",
+      "titles": [
+        "TaskNotes 维护者仓库：Markdown任务、Bases、计时、循环与集成",
+        "TaskNotes 仓库：插件与独立 Web/iPhone Beta 入口区分"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S01"
+        },
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S12"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S01"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S12"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S01"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U026"
+    },
+    {
+      "url": "https://github.com/callumalpass/tasknotes-workflows",
+      "titles": [
+        "TaskNotes Workflows：事件工作流、触发与可执行YAML"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S05"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S05"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U027"
+    },
+    {
+      "url": "https://github.com/chaitin/PandaWiki",
+      "titles": [
+        "PandaWiki"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R23"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R23"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R23"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R23"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R23"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R23"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R23",
+          "title": "PandaWiki",
+          "kind": "维护者 README",
+          "note": "AI 文档/问答/发布和导入能力，AGPL-3.0。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U028"
+    },
+    {
+      "url": "https://github.com/coddingtonbear/obsidian-local-rest-api",
+      "titles": [
+        "Obsidian Local REST API"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R21"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R21"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R21"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R21"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R21"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R21"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R21",
+          "title": "Obsidian Local REST API",
+          "kind": "维护者 README / 官方插件目录",
+          "note": "当前内置 MCP；权限范围需收窄。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U029"
+    },
+    {
+      "url": "https://github.com/docling-project/docling",
+      "titles": [
+        "Docling",
+        "Docling：格式、布局、表格、OCR 与本地执行能力"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R29"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R29"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R29"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R29"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R29"
+        },
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R29"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R29",
+          "title": "Docling",
+          "kind": "维护者仓库",
+          "note": "复杂文档解析候选，独立 worker。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U030"
+    },
+    {
+      "url": "https://github.com/ekadetov/llm-wiki",
+      "titles": [
+        "ekadetov / llm-wiki"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R15"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R15"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R15"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R15"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R15"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R15"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R15",
+          "title": "ekadetov / llm-wiki",
+          "kind": "维护者 README",
+          "note": "轻量 raw/wiki、ingest/compile/query/lint 工作流。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U031"
+    },
+    {
+      "url": "https://github.com/jackyzha0/quartz",
+      "titles": [
+        "Quartz"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R22"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R22"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R22"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R22"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R22"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R22"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R22",
+          "title": "Quartz",
+          "kind": "维护者 README",
+          "note": "Markdown 静态发布候选；不保证全部 Obsidian 扩展语法。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U032"
+    },
+    {
+      "url": "https://github.com/logancyang/obsidian-copilot",
+      "titles": [
+        "Obsidian Copilot"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R20"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R20"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R20"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R20"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R20"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R20"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R20",
+          "title": "Obsidian Copilot",
+          "kind": "维护者 README",
+          "note": "助手交互比较对象，不推定全部治理能力。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U033"
+    },
+    {
+      "url": "https://github.com/microsoft/markitdown",
+      "titles": [
+        "Microsoft MarkItDown",
+        "MarkItDown：转换范围、高保真限制与输入权限边界"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R30"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R30"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R30"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R30"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R30"
+        },
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S10"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R30"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R30",
+          "title": "Microsoft MarkItDown",
+          "kind": "维护者仓库",
+          "note": "文档转换候选。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U034"
+    },
+    {
+      "url": "https://github.com/mozilla/pdf.js",
+      "titles": [
+        "Mozilla PDF.js"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R40"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R40"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R40"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R40"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R40"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R40"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R40",
+          "title": "Mozilla PDF.js",
+          "kind": "维护者仓库",
+          "note": "JavaScript PDF 解析/渲染候选；本轮未进行 PDF 样本评测。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U035"
+    },
+    {
+      "url": "https://github.com/mozilla/readability",
+      "titles": [
+        "Mozilla Readability",
+        "Mozilla Readability：正文提取与安全边界"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R28"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R28"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R28"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R28"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R28"
+        },
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S01"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R28"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R28",
+          "title": "Mozilla Readability",
+          "kind": "维护者仓库",
+          "note": "网页正文抽取组件。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U036"
+    },
+    {
+      "url": "https://github.com/nashsu/llm_wiki",
+      "titles": [
+        "nashsu / llm_wiki"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R13"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R13"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R13"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R13"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R13"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R13"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R13",
+          "title": "nashsu / llm_wiki",
+          "kind": "维护者 README",
+          "note": "独立桌面应用、来源/Wiki/审核、许可证。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U037"
+    },
+    {
+      "url": "https://github.com/obsidianmd/obsidian-api",
+      "titles": [
+        "Obsidian Plugin API"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R02"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R02"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R02"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R02"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R02"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R02"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R02",
+          "title": "Obsidian Plugin API",
+          "kind": "官方开发接口",
+          "note": "Vault、Workspace、MetadataCache 与插件约束。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U038"
+    },
+    {
+      "url": "https://github.com/obsidianmd/obsidian-clipper",
+      "titles": [
+        "Obsidian 官方 Web Clipper"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S03"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S01"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S02"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S02"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S01"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U039"
+    },
+    {
+      "url": "https://github.com/obsidianmd/obsidian-sample-plugin",
+      "titles": [
+        "Obsidian sample plugin"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R36"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R36"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R36"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R36"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R36"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S15"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S09"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S09"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S15"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R36"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R36",
+          "title": "Obsidian sample plugin",
+          "kind": "官方模板",
+          "note": "插件工程起点，实施时固定版本。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U040"
+    },
+    {
+      "url": "https://github.com/tobi/qmd",
+      "titles": [
+        "QMD"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R17"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R17"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R17"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R17"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R17"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R17"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R17",
+          "title": "QMD",
+          "kind": "维护者 README",
+          "note": "本地关键词、向量、重排、CLI 与 MCP。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U041"
+    },
+    {
+      "url": "https://github.com/tobi/qmd/blob/main/LICENSE",
+      "titles": [
+        "QMD LICENSE"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R18"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R18"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R18"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R18"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R18"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R18"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R18",
+          "title": "QMD LICENSE",
+          "kind": "项目许可证",
+          "note": "MIT；许可证文件不单独证明搜索能力。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U042"
+    },
+    {
+      "url": "https://github.com/topics/wiki",
+      "titles": [
+        "GitHub Wiki topic"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R25"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R25"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R25"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R25"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R25"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R25"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R25",
+          "title": "GitHub Wiki topic",
+          "kind": "项目发现入口",
+          "note": "用于发现项目，不作为性能榜单或能力证据。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U043"
+    },
+    {
+      "url": "https://github.com/vercel/ai",
+      "titles": [
+        "Vercel AI SDK"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R33"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R33"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R33"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R33"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R33"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R33"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R33",
+          "title": "Vercel AI SDK",
+          "kind": "官方仓库",
+          "note": "可选 TypeScript 模型调用适配器。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U044"
+    },
+    {
+      "url": "https://microsoft.github.io/graphrag/index/overview/",
+      "titles": [
+        "GraphRAG Indexing overview"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R35"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R35"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R35"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R35"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R35"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R35"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R35",
+          "title": "GraphRAG Indexing overview",
+          "kind": "官方项目文档",
+          "note": "RAG 也可以包含预计算结构与摘要。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U045"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "titles": [
+        "MCP Tools specification"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R32"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R32"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R32"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R32"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R32"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S17"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S17"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R32"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R32",
+          "title": "MCP Tools specification",
+          "kind": "官方协议",
+          "note": "工具协议与 annotations 信任边界；不声称该日期是协议最新版本。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U046"
+    },
+    {
+      "url": "https://mozilla.github.io/pdf.js/api/draft/api.js.html",
+      "titles": [
+        "PDF.js：文档加载、文本和页面 API；采用前固定版本"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S07"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U047"
+    },
+    {
+      "url": "https://nodejs.org/en/about/previous-releases",
+      "titles": [
+        "Node.js Releases"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R34"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R34"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R34"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R34"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R34"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S03"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S05"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S05"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S03"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R34"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R34",
+          "title": "Node.js Releases",
+          "kind": "官方发布计划",
+          "note": "运行时支持版本选择；报告建议固定受测版本。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U048"
+    },
+    {
+      "url": "https://obsidian.md/",
+      "titles": [
+        "Obsidian 官方主页"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R01"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R01"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R01"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R01"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R01"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R01"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R01",
+          "title": "Obsidian 官方主页",
+          "kind": "官方产品介绍",
+          "note": "本地文件知识工作台的定位。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U049"
+    },
+    {
+      "url": "https://obsidian.md/help/bases",
+      "titles": [
+        "Introduction to Bases"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R05"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R05"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R05"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R05"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R05"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R05"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R05",
+          "title": "Introduction to Bases",
+          "kind": "官方帮助",
+          "note": "本地 Markdown/properties 的数据库式视图。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U050"
+    },
+    {
+      "url": "https://obsidian.md/help/cli",
+      "titles": [
+        "Obsidian CLI"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R04"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R04"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R04"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R04"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R04"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R04"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R04",
+          "title": "Obsidian CLI",
+          "kind": "官方帮助",
+          "note": "桌面应用依赖和 CLI 适用边界。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U051"
+    },
+    {
+      "url": "https://obsidian.md/help/headless",
+      "titles": [
+        "Obsidian Headless"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R07"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R07"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R07"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R07"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R07"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R07"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R07",
+          "title": "Obsidian Headless",
+          "kind": "官方帮助",
+          "note": "独立客户端、open beta 状态；与 CLI 区别。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U052"
+    },
+    {
+      "url": "https://obsidian.md/help/plugin-security",
+      "titles": [
+        "Plugin security"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R10"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R10"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R10"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R10"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R10"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S14"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S14"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R10"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R10",
+          "title": "Plugin security",
+          "kind": "官方安全说明",
+          "note": "社区插件权限与信任边界。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U053"
+    },
+    {
+      "url": "https://obsidian.md/help/sync/headless",
+      "titles": [
+        "Headless Sync"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R09"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R09"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R09"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R09"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R09"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R09"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R09",
+          "title": "Headless Sync",
+          "kind": "官方帮助",
+          "note": "同步订阅、运行方式及同设备双同步限制。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U054"
+    },
+    {
+      "url": "https://obsidian.md/help/vault",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S01"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S01"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U055"
+    },
+    {
+      "url": "https://obsidian.md/help/web-clipper",
+      "titles": [
+        "Obsidian Web Clipper"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R06"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R06"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R06"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R06"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R06"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R06"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R06",
+          "title": "Obsidian Web Clipper",
+          "kind": "官方帮助",
+          "note": "网页采集与模板入口。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U056"
+    },
+    {
+      "url": "https://obsidian.md/help/web-clipper/templates",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S02"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S03"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S03"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S02"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U057"
+    },
+    {
+      "url": "https://obsidian.md/help/web-clipper/variables",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S04"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S04"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U058"
+    },
+    {
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/cogs.12002",
+      "titles": [
+        "问题解决技能、示例与测试效应的研究入口"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L09"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U059"
+    },
+    {
+      "url": "https://onlinelibrary.wiley.com/doi/10.1207/s15516709cog1803_3",
+      "titles": [
+        "Eliciting Self-Explanations Improves Understanding"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L08"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U060"
+    },
+    {
+      "url": "https://pnpm.io/workspaces",
+      "titles": [
+        "pnpm workspace"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R43"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R43"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R43"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R43"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R43"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S04"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S04"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R43"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R43",
+          "title": "pnpm workspace",
+          "kind": "官方文档",
+          "note": "工作区与显式包依赖。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U061"
+    },
+    {
+      "url": "https://publish.obsidian.md/tasks/Introduction",
+      "titles": [
+        "Obsidian Tasks：checkbox、查询、到期和重复任务"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S06"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S06"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S06"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U062"
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+      "titles": [
+        "Test-enhanced learning: taking memory tests improves long-term retention"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L06"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U063"
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19076480/",
+      "titles": [
+        "Spacing effects in learning: a temporal ridgeline of optimal retention"
+      ],
+      "occurrences": [
+        {
+          "document": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+          "label": "L07"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U064"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/atomicstrata/llm-wiki-compiler/main/docs/concepts/how-it-works.mdx",
+      "titles": [
+        "atomicstrata compiler internals guide"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R48"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R48"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R48"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R48"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R48"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R48"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R48",
+          "title": "atomicstrata compiler internals guide",
+          "kind": "维护者架构文档",
+          "note": "两阶段编译、增量与检索；不沿用其对所有 RAG 的泛化表述。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U065"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/atomicstrata/llm-wiki-compiler/main/docs/configuration/review-policy.mdx",
+      "titles": [
+        "atomicstrata review policy"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R47"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R47"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R47"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R47"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R47"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S10"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S08"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S08"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S10"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R47"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R47",
+          "title": "atomicstrata review policy",
+          "kind": "维护者行为文档",
+          "note": "默认 compile 写入、review all、query save 不同门禁。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U066"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/atomicstrata/llm-wiki-compiler/main/docs/guides/sdk.mdx",
+      "titles": [
+        "atomicstrata SDK guide"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R46"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R46"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R46"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R46"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R46"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S09"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S09"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R46"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R46",
+          "title": "atomicstrata SDK guide",
+          "kind": "维护者 SDK 文档",
+          "note": "ingestText、review、输入信任与服务集成边界；search 返回值与 facade 有漂移。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U067"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/atomicstrata/llm-wiki-compiler/main/package.json",
+      "titles": [
+        "atomicstrata package.json"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R45"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R45"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R45"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R45"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R45"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S08"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S06"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S06"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S08"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R45"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R45",
+          "title": "atomicstrata package.json",
+          "kind": "项目配置源码",
+          "note": "读取快照为 1.1.0、MIT、Node >=24，不等于实测 npm 包。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U068"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/atomicstrata/llm-wiki-compiler/main/src/index.ts",
+      "titles": [
+        "atomicstrata SDK public exports"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R49"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R49"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R49"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R49"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R49"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R49"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R49",
+          "title": "atomicstrata SDK public exports",
+          "kind": "项目源码",
+          "note": "核对 createWiki 等真实公开导出。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U069"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/atomicstrata/llm-wiki-compiler/main/src/sdk/wiki.ts",
+      "titles": [
+        "atomicstrata SDK facade"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R50"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R50"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R50"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R50"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R50"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S11"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S07"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S07"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S11"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R50"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R50",
+          "title": "atomicstrata SDK facade",
+          "kind": "项目源码",
+          "note": "核对方法调用与 search 返回形状；不代表全链路运行验证。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U070"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/chaitin/PandaWiki/main/PROJECT_STRUCTURE.md",
+      "titles": [
+        "PandaWiki 项目结构"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R24"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R24"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R24"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R24"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R24"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R24"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R24",
+          "title": "PandaWiki 项目结构",
+          "kind": "维护者工程说明",
+          "note": "Go 后端、Node.js/React 前端及目录边界。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U071"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/nashsu/llm_wiki/main/package.json",
+      "titles": [
+        "nashsu package.json"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R14"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R14"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R14"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R14"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R14"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R14"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R14",
+          "title": "nashsu package.json",
+          "kind": "项目配置源码",
+          "note": "核对前端/桌面相关工程配置，不代表全后端代码审计。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U072"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/obsidianmd/obsidian-api/master/obsidian.d.ts",
+      "titles": [
+        "Obsidian API 类型定义"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R03"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R03"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R03"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R03"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R03"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S13"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S13"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R03"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R03",
+          "title": "Obsidian API 类型定义",
+          "kind": "官方类型源码",
+          "note": "核对 Vault.process、renameFile 及文件事件；不是全应用源码审计。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U073"
+    },
+    {
+      "url": "https://rolldown.rs/",
+      "titles": [
+        "Rolldown official site"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V7"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U074"
+    },
+    {
+      "url": "https://sqlite.org/backup.html",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S16"
+        },
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+          "label": "S10"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+          "label": "S10"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S16"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U075"
+    },
+    {
+      "url": "https://sqlite.org/fts5.html",
+      "titles": [
+        "SQLite FTS5"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R26"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R26"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R26"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R26"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R26"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R26"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R26",
+          "title": "SQLite FTS5",
+          "kind": "官方技术文档",
+          "note": "tokenizer、trigram 短词限制、索引一致性与删除残留。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U076"
+    },
+    {
+      "url": "https://tasknotes.dev/HTTP_API/",
+      "titles": [
+        "TaskNotes HTTP API：另一入口；快照差异需锁版复验"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S04b"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S04b"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S04b"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U077"
+    },
+    {
+      "url": "https://tasknotes.dev/app/mdbase/",
+      "titles": [
+        "TaskNotes独立app与mdbase：不同部署与连接条件"
+      ],
+      "occurrences": [
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S12"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U078"
+    },
+    {
+      "url": "https://tasknotes.dev/features/reminders/",
+      "titles": [
+        "TaskNotes：相对/绝对提醒和数据表达"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S10"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S10"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S10"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U079"
+    },
+    {
+      "url": "https://tasknotes.dev/obsidian/HTTP_API/",
+      "titles": [
+        "TaskNotes HTTP API：本次获取到的较旧页面快照"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S04a"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S04a"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S04a"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U080"
+    },
+    {
+      "url": "https://tasknotes.dev/obsidian/companion-plugins/",
+      "titles": [
+        "TaskNotes Companion Plugins：运行时API与数据责任"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S02"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S02"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S02"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U081"
+    },
+    {
+      "url": "https://tasknotes.dev/obsidian/companion-plugins/tasknotes-workflows/",
+      "titles": [
+        "TaskNotes Workflows：运行条件、触发与可执行YAML"
+      ],
+      "occurrences": [
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S05"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U082"
+    },
+    {
+      "url": "https://tasknotes.dev/obsidian/javascript-api/",
+      "titles": [
+        "TaskNotes Runtime API：任务与事件等接口"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S03"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S03"
+        },
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S03"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U083"
+    },
+    {
+      "url": "https://tree-sitter.github.io/tree-sitter/",
+      "titles": [
+        "Tree-sitter：语法树与语言绑定"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S05"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U084"
+    },
+    {
+      "url": "https://ts-morph.com/details/source-files",
+      "titles": [
+        "ts-morph：源码 AST 与文件接口"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+          "label": "S06"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U085"
+    },
+    {
+      "url": "https://unifiedjs.com/learn/",
+      "titles": [
+        "unified Learn"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R41"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R41"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R41"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R41"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R41"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R41"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R41",
+          "title": "unified Learn",
+          "kind": "官方项目文档",
+          "note": "Markdown AST 流程候选。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U086"
+    },
+    {
+      "url": "https://v7.vite.dev/guide/dep-pre-bundling",
+      "titles": [
+        "Vite 7: Dependency Pre-Bundling"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V1"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U087"
+    },
+    {
+      "url": "https://v7.vite.dev/guide/rolldown",
+      "titles": [
+        "Vite 7: Rolldown Integration"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V3"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U088"
+    },
+    {
+      "url": "https://v7.vite.dev/guide/why",
+      "titles": [
+        "Vite 7: Why Vite"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V2"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U089"
+    },
+    {
+      "url": "https://vite.dev/blog/announcing-vite8",
+      "titles": [
+        "Vite 8.0 is out! — 2026-03-12"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V4"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U090"
+    },
+    {
+      "url": "https://vite.dev/guide/features",
+      "titles": [
+        "Vite Features"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V8"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U091"
+    },
+    {
+      "url": "https://vite.dev/guide/migration",
+      "titles": [
+        "Migration from v7"
+      ],
+      "occurrences": [
+        {
+          "document": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+          "label": "V5"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U092"
+    },
+    {
+      "url": "https://vitest.dev/api/test",
+      "titles": [
+        "Vitest test API"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R39"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R39"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R39"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R39"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R39"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R39"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R39",
+          "title": "Vitest test API",
+          "kind": "官方文档",
+          "note": "领域、集成与回归测试工具。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U093"
+    },
+    {
+      "url": "https://www.sqlite.org/fts5.html",
+      "titles": [],
+      "occurrences": [
+        {
+          "document": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+          "label": "S07"
+        },
+        {
+          "document": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+          "label": "S07"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U094"
+    },
+    {
+      "url": "https://www.todoist.com/help/articles/introduction-to-reminders-9PezfU",
+      "titles": [
+        "Todoist 官方提醒说明；平台和套餐条件采用前复核"
+      ],
+      "occurrences": [
+        {
+          "document": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S07"
+        },
+        {
+          "document": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+          "label": "S07"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U095"
+    },
+    {
+      "url": "https://www.todoist.com/help/todoist/features/introduction-to-reminders-9PezfU",
+      "titles": [
+        "Todoist 官方提醒说明；平台和套餐条件采用前复核"
+      ],
+      "occurrences": [
+        {
+          "document": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+          "label": "S07"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "catalog_id": "U096"
+    },
+    {
+      "url": "https://x.com/haoran_tang97/status/2101381110186000858",
+      "titles": [
+        "Lab 305：从0到1，搭建起你的个人知识库"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R31"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R31"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R31"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R31"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R31"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R31"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R31",
+          "title": "Lab 305：从0到1，搭建起你的个人知识库",
+          "kind": "用户指定 X 长文；仅部分正文",
+          "note": "已取得标题和 RAG/LLM Wiki 分类等片段，全文抽取截断，不归因未读的搭建步骤。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U097"
+    },
+    {
+      "url": "https://zod.dev/",
+      "titles": [
+        "Zod"
+      ],
+      "occurrences": [
+        {
+          "document": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+          "label": "R38"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+          "label": "R38"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+          "label": "R38"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+          "label": "R38"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+          "label": "R38"
+        },
+        {
+          "document": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+          "label": "R38"
+        }
+      ],
+      "verification": "inherited_reference; not_rechecked_in_packaging",
+      "historical_metadata": [
+        {
+          "id": "R38",
+          "title": "Zod",
+          "kind": "官方文档",
+          "note": "运行时 schema 与 TS 类型推导。",
+          "accessed_date": "2026-09-20"
+        }
+      ],
+      "catalog_id": "U098"
+    }
+  ]
+}

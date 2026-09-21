@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "2.1",
+  "timezone": "Asia/Singapore",
+  "taskAuthority": "tasknotes-vault",
+  "planAuthority": "local-service",
+  "availability": [],
+  "planning": {
+    "mode": "propose_only",
+    "horizonDays": 7,
+    "maxTasks": 100,
+    "maxSearchNodes": 2000,
+    "freezeBeforeStartMinutes": 30,
+    "allowCrossDayAutoMove": false,
+    "allowHardDeadlineChange": false,
+    "allowMeetingWrites": false,
+    "requireFreshConfiguredCalendarsForAutoApply": true
+  },
+  "sync": {
+    "automaticWriterDevices": 1,
+    "tasknotesFieldAutoWriteEnabled": false,
+    "progressTargetP95Ms": 2000,
+    "replanTargetP95Ms": 5000,
+    "targetsAreBenchmarks": false
+  },
+  "notifications": {
+    "enabled": false,
+    "executor": null,
+    "channels": [],
+    "morningLocalTime": null,
+    "eveningLocalTime": null,
+    "includeSensitiveTitles": false,
+    "suppressDynamicNagWhenStale": true
+  },
+  "learning": {
+    "createTasksForEveryImportedPage": false,
+    "autoMarkMastered": false
+  }
+}

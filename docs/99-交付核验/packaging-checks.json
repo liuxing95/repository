@@ -1,0 +1,83 @@
+{
+  "date": "2026-09-21",
+  "scope": "document organization and original-byte integrity only",
+  "checks": [
+    {
+      "check": "original_artifact_coverage",
+      "status": "passed",
+      "detail": {
+        "records": 12,
+        "standalone_markdown": 9,
+        "source_zips": 3
+      }
+    },
+    {
+      "check": "byte_identical_preservation",
+      "status": "passed",
+      "detail": {
+        "standalone_markdown": 9,
+        "zip_members": 54
+      }
+    },
+    {
+      "check": "new_document_relative_links",
+      "status": "passed",
+      "detail": {
+        "checked": 486,
+        "broken": 0,
+        "scope": "newly added navigation, synthesis, source catalog and packaging docs; historical originals unchanged"
+      }
+    },
+    {
+      "check": "new_document_code_fences",
+      "status": "passed",
+      "detail": {
+        "balanced": true
+      }
+    },
+    {
+      "check": "json_and_jsonl_syntax",
+      "status": "passed",
+      "detail": {
+        "json_files_at_check": 6,
+        "jsonl_records": 16
+      }
+    },
+    {
+      "check": "source_catalog_occurrences",
+      "status": "passed",
+      "detail": {
+        "deduplicated_url_entries": 98,
+        "all_documents_exist": true,
+        "external_links_reverified": false
+      }
+    },
+    {
+      "check": "historical_member_checksums",
+      "status": "passed",
+      "detail": {
+        "validated_entries": 41,
+        "historical_scripts_executed": false
+      }
+    },
+    {
+      "check": "archive_structure",
+      "status": "passed",
+      "detail": {
+        "symlinks": 0,
+        "font_or_executable_binary_files": 0,
+        "credential_files": 0,
+        "nested_zip_files": 0
+      }
+    }
+  ],
+  "not_executed": [
+    "network revalidation",
+    "historical application checks",
+    "package installation",
+    "Obsidian or TaskNotes integration",
+    "LLM or corpus evaluation",
+    "calendar or todo writes",
+    "reminder creation or delivery"
+  ]
+}

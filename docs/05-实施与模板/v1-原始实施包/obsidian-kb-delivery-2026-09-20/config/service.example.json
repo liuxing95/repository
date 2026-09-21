@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "profile": "desktop-single-writer",
+  "initialized": false,
+  "vaultId": null,
+  "vaultName": "Knowledge-Pilot",
+  "runtimeRoot": null,
+  "server": {
+    "host": "127.0.0.1",
+    "port": 27124,
+    "requireAuthentication": true,
+    "allowRemoteClients": false
+  },
+  "paths": {
+    "inbox": "00-Inbox",
+    "sources": "10-Sources",
+    "wiki": "20-Wiki",
+    "humanReadOnly": [
+      "30-Notes",
+      "40-Projects"
+    ],
+    "queries": "50-Queries",
+    "review": "80-Review",
+    "provenance": "90-System/provenance",
+    "templates": "90-System/Templates"
+  },
+  "input": {
+    "extensions": [
+      ".md",
+      ".txt"
+    ],
+    "maxBytes": 10485760,
+    "encoding": "utf-8",
+    "automaticUrlFetch": false,
+    "watcherAutoIngest": false,
+    "watcherAutoCompile": false
+  },
+  "model": {
+    "enabled": false,
+    "routeId": null,
+    "routes": []
+  },
+  "compiler": {
+    "adapter": "disabled",
+    "maxSourcesPerJob": 3,
+    "maxNewPages": 1,
+    "maxUpdatedPages": 2,
+    "maxClaims": 20,
+    "maxAttempts": 3
+  },
+  "retrieval": {
+    "mode": "lexical",
+    "maxLexicalCandidates": 30,
+    "maxExactCandidates": 10,
+    "maxEvidenceBlocks": 8,
+    "maxBlocksPerSource": 3,
+    "vectorEnabled": false,
+    "graphEnabled": false,
+    "rerankerEnabled": false
+  },
+  "jobs": {
+    "maxRunningJobs": 1,
+    "leaseMs": 30000,
+    "heartbeatMs": 10000
+  },
+  "writes": {
+    "enabled": false,
+    "allowSourceImports": false,
+    "allowWikiChanges": false,
+    "approvalRequired": true,
+    "approvalTtlSeconds": 600,
+    "rejectOpenEditorTargets": true,
+    "fileSystemFallback": false
+  },
+  "privacy": {
+    "defaultVisibility": "private",
+    "defaultAllowedModelRouteIds": [],
+    "networkResearchEnabled": false,
+    "logFullPrompt": false
+  },
+  "budget": {
+    "currency": "USD",
+    "unit": "microUSD",
+    "confirmed": false,
+    "timezone": "Asia/Singapore",
+    "maxJobMicroUsd": 500000,
+    "maxDayMicroUsd": 3000000,
+    "maxMonthMicroUsd": 50000000,
+    "maxInputTokensPerCall": 12000,
+    "maxOutputTokensPerCall": 2000,
+    "maxCallsPerJob": 6,
+    "maxInputTokensPerJob": 48000,
+    "maxOutputTokensPerJob": 8000,
+    "priceBookVersion": null
+  },
+  "backup": {
+    "automaticEnabled": false,
+    "requireVerifiedBackupBeforeProductionWrites": true,
+    "includeIndex": false
+  }
+}

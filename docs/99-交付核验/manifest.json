@@ -1,0 +1,422 @@
+{
+  "date": "2026-09-21",
+  "package": "Obsidian-KB-Complete-Research-2026-09-21",
+  "hash": "SHA-256",
+  "exclusions": [
+    "99-交付核验/SHA256SUMS",
+    "99-交付核验/manifest.json"
+  ],
+  "payload_file_count": 82,
+  "files": [
+    {
+      "path": "00-总览与阅读导航/01-整套方案总览.md",
+      "bytes": 8296,
+      "sha256": "2b714e3254869c5098d961d7ad9c929816f132ef554809d074a4a7b0c452ef06"
+    },
+    {
+      "path": "00-总览与阅读导航/02-版本关系与阅读顺序.md",
+      "bytes": 4348,
+      "sha256": "b083c882bf8379e671cc27b42fe8bb4926c56aadce31a67b7f1cf00a9f2f32f9"
+    },
+    {
+      "path": "00-总览与阅读导航/03-需求与交付对应表.md",
+      "bytes": 3726,
+      "sha256": "3367a35b584aca05a74a091f391b8ce2e440863d841dd7d1a57251f97607c0e8"
+    },
+    {
+      "path": "01-当前设计基线/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+      "bytes": 65955,
+      "sha256": "9d5ff3790da3d5bd187cd683a7b00f5410764ea6dac6886ef476f9729fb3487d"
+    },
+    {
+      "path": "01-当前设计基线/README.md",
+      "bytes": 875,
+      "sha256": "7532d28eefb2e07788c6ea1bf17d19bc21878c60849a7bab39ba23c4f301c6f4"
+    },
+    {
+      "path": "01-当前设计基线/原始任务中心包/Obsidian-KB-Task-Center-Rollout-2026-09-21.md",
+      "bytes": 5256,
+      "sha256": "51773b01caf8331bf8e76dbc26fb384ae92d38a1fb6bebc938877e7af7445bad"
+    },
+    {
+      "path": "01-当前设计基线/原始任务中心包/Obsidian-KB-v2.1-Audit-and-Task-Planning-2026-09-21.md",
+      "bytes": 65955,
+      "sha256": "9d5ff3790da3d5bd187cd683a7b00f5410764ea6dac6886ef476f9729fb3487d"
+    },
+    {
+      "path": "01-当前设计基线/原始任务中心包/README.md",
+      "bytes": 581,
+      "sha256": "1dfda39fd71a6654318043f84ecb0b3eb578787be8a3e6384eb0c3dfe7d2e79c"
+    },
+    {
+      "path": "01-当前设计基线/原始任务中心包/VALIDATION.md",
+      "bytes": 2206,
+      "sha256": "5286b08f16fb2cfef3a1f6eef6880a6376eb6a5982153e8aa395fcd567627f05"
+    },
+    {
+      "path": "01-当前设计基线/原始任务中心包/planning-policy.example.json",
+      "bytes": 993,
+      "sha256": "d23b07536ad145abba6a725b417668a833425f7b55c3c3b9b4eae29bbe22edcb"
+    },
+    {
+      "path": "02-完整调研/Obsidian-KB-Research-and-TypeScript-Plan-2026-09-20.md",
+      "bytes": 120325,
+      "sha256": "edffd568c8cc9266c19147e3cd7fdab6e939aba2125748724143512767f25d40"
+    },
+    {
+      "path": "02-完整调研/README.md",
+      "bytes": 653,
+      "sha256": "01fa28de99d506a76f67099250aa099635f35e7f2f73b9d41ccd814d91d487a7"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/00-complete-report.md",
+      "bytes": 120325,
+      "sha256": "edffd568c8cc9266c19147e3cd7fdab6e939aba2125748724143512767f25d40"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/01-research.md",
+      "bytes": 26790,
+      "sha256": "13f22fecf7fdce4f071fb69684417635d7fe3dc5b2a854a9c46c2a47321752ed"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/02-typescript-implementation-plan.md",
+      "bytes": 87471,
+      "sha256": "c513b1df23651b8137ad66cf0bdf8d131f68408e76a587914901b3284014a31b"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/03-sources.md",
+      "bytes": 10860,
+      "sha256": "b737c3923e73040514b851f49d8c9d5692931fe0afde2bdcdee5f67908f0c45f"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/README.md",
+      "bytes": 894,
+      "sha256": "4f3b75a8aa17cb4588acc0ba637c7520deb1569f2be0beb73195129f04e52f30"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/sources/sources.json",
+      "bytes": 13346,
+      "sha256": "bd48d8b1b21be7f1f6a11500e460e0738f1d30a0a5e6a002bead287f9aed3fd8"
+    },
+    {
+      "path": "02-完整调研/原始调研包/Obsidian-KB-Report/verification-notes.md",
+      "bytes": 1861,
+      "sha256": "e1c45e22547dcaab735d3f317d3c2f0041b661ea0457fd1b59b6b932f708efda"
+    },
+    {
+      "path": "03-资料收录与课题研究/Obsidian-KB-Ingestion-Relations-and-Research-2026-09-20.md",
+      "bytes": 28713,
+      "sha256": "d02032e9e7079651d0f73f3ac16664f4281e189630c53d4ac7d7077323e4d034"
+    },
+    {
+      "path": "03-资料收录与课题研究/Obsidian-KB-Multi-Source-Ingestion-2026-09-20.md",
+      "bytes": 40985,
+      "sha256": "ad081e2fcd37adb2ea0c0213864b463fd30d76bfa4caa30cb857c0b1136741b6"
+    },
+    {
+      "path": "03-资料收录与课题研究/README.md",
+      "bytes": 745,
+      "sha256": "c8ccf64078271795da1f40c4b460d140878fb5e6428a41d980f2ee04a8b2565b"
+    },
+    {
+      "path": "04-自动收录与学习编排/AI-SDK-整站收录与学习编排.md",
+      "bytes": 9486,
+      "sha256": "b4d8e85558c718174132454213d0fc70d4d0f0cd0b10a10ebcdb709cbed0d8d9"
+    },
+    {
+      "path": "05-实施与模板/Obsidian-KB-Task-Center-Rollout-2026-09-21.md",
+      "bytes": 5256,
+      "sha256": "51773b01caf8331bf8e76dbc26fb384ae92d38a1fb6bebc938877e7af7445bad"
+    },
+    {
+      "path": "05-实施与模板/README.md",
+      "bytes": 2085,
+      "sha256": "da162da99bfb1e17ae4f6668addf5d8cc6679f6eedf8e22920801b3c2baf7f36"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/00-阅读与执行顺序.md",
+      "bytes": 1957,
+      "sha256": "debe84418fd7ebf699cac975e52f9fb47d19515a04ccaffb6e707f930d2e1f5e"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/01-Obsidian知识库技术方案.md",
+      "bytes": 46076,
+      "sha256": "f2b78bd87d4cd656ee5e520169c80e1c85510ee0f20706e0413110350798b912"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/02-Obsidian知识库落地手册.md",
+      "bytes": 28259,
+      "sha256": "6a8708c737ec236ce0ae3b4294d44aad1029fa33b0d28bef5acbe2ea44279143"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/03-开发任务与验收.md",
+      "bytes": 29244,
+      "sha256": "381d826c5370fd6ec8d03606e5a07fd69a254e6ec448cea2ed29a00e0246fa74"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/04-来源与核查说明.md",
+      "bytes": 4255,
+      "sha256": "be13d76e59d31a88d4814d2f563db211a3c8d70cdc19c06c5584b28757526299"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/05-交付检查记录.md",
+      "bytes": 2641,
+      "sha256": "459158630cb3e1d0fd032dcfa3db82d770d6d456cdfe9bff38db88487bbfaac7"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/SHA256SUMS",
+      "bytes": 4170,
+      "sha256": "977c7bd39b5ad601894aefe221ac178b1bd38920e4de5a66a70bed7140c6bc28"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/checks/last-design-check.json",
+      "bytes": 2021,
+      "sha256": "24f46384184e3375e8feafcbf46d9e4cee9b121ef81ca810290b9bd8e0c4deae"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/checks/verify_design.py",
+      "bytes": 9294,
+      "sha256": "ecb064900421b5bc18f9bae118bbb6e4280bac7164588a8eac000fbdf03e928b"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/config/README.md",
+      "bytes": 1249,
+      "sha256": "2619a15913efbfae4ff515a69999896431eb9230dea8178b981ec2ac5e2c7590"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/config/service.example.json",
+      "bytes": 2333,
+      "sha256": "7792c73a5a6d8858526d7054c0ba9d7e3fcb778beb1303894fe1c127904ba708"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/README.md",
+      "bytes": 841,
+      "sha256": "26b3684fb6246f774ef80f623e3399bdd3569ce25185c6c9aa67dca8ff8919ef"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/eval-cases.jsonl",
+      "bytes": 3842,
+      "sha256": "60c56d3236973e369b9e15a1f6a9c60c92e45afe64a80a63e3650c3cbd20f277"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/demokv-v1.md",
+      "bytes": 389,
+      "sha256": "fb58f317473329b8e9eea68547c35ea95a33246f26afa37ba9b534bd6b6562f8"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/demokv-v2-blog.md",
+      "bytes": 423,
+      "sha256": "842a4063c759a6c2f2cdbb8c900ff08c3e8cca0997ec261fc203671decc043af"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/demokv-v2.md",
+      "bytes": 441,
+      "sha256": "b4e744ca8e87487765487ebe15bbf96236940e61d41c16103992c32dc1017510"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/excerpt.md",
+      "bytes": 298,
+      "sha256": "b0237fadc414f7bbca6cfdadafc9e010c3aba0fa57583d228f2adb99b11fffbd"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/human-decision.md",
+      "bytes": 423,
+      "sha256": "f8f79e9866fd5cb1b55b8fc826480bd1113c15ea1a0de9dc2f5229c1e9ce4ac9"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/injection.md",
+      "bytes": 418,
+      "sha256": "a6d44f8ada2975eb2da06277f1554cf5c0b5dbcabb08200ce671e3f4a44b968e"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/private.md",
+      "bytes": 332,
+      "sha256": "f7d14b9c8318cd3524ef4751f7fa02e91072d1cfc8b28a1c2ad22f72cae9af18"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/fixtures/synthetic/sources/symbols.md",
+      "bytes": 441,
+      "sha256": "c885ede3311e574172517221bf1a6bcf3ffe028077e934d7278f486e6cf04442"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/references/001-state.sql",
+      "bytes": 9047,
+      "sha256": "a525f1d3ccebcbf6ce989efd12c45dd108b78cd23a0f33c9d76104b063dcedd9"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/references/002-index.sql",
+      "bytes": 990,
+      "sha256": "1ac0a568f9d1718464a29c2fe45e7686c5f2e7c8c135506a24fc796b2c15a304"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/references/contracts.ts",
+      "bytes": 5348,
+      "sha256": "5242f940fb59a479983502b940b4ce2f7dbf22995fc805f0f001484e536c501f"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/00-Inbox/.keep",
+      "bytes": 73,
+      "sha256": "4868410a59aa524a528951a883ab268692aca02528c7fd4f08946244c87062fe"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/10-Sources/.keep",
+      "bytes": 73,
+      "sha256": "4868410a59aa524a528951a883ab268692aca02528c7fd4f08946244c87062fe"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/20-Wiki/.keep",
+      "bytes": 73,
+      "sha256": "4868410a59aa524a528951a883ab268692aca02528c7fd4f08946244c87062fe"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/30-Notes/我的知识库使用约定.md",
+      "bytes": 773,
+      "sha256": "4cd6be6373eada9aa8ccd74efe2dff62f8d593a329f17b0341d22f4e882c1254"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/40-Projects/知识库试点.md",
+      "bytes": 1894,
+      "sha256": "967232fae8c97acf6922e14ac52d27ee7cba656b8d3f51fa25b891ab4f5f1f8f"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/50-Queries/.keep",
+      "bytes": 73,
+      "sha256": "4868410a59aa524a528951a883ab268692aca02528c7fd4f08946244c87062fe"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/80-Review/.keep",
+      "bytes": 73,
+      "sha256": "4868410a59aa524a528951a883ab268692aca02528c7fd4f08946244c87062fe"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/Templates/决策模板.md",
+      "bytes": 420,
+      "sha256": "df3225d09a987b0a0fee6abb8c6d858309e4cd7dd82cfa5bbb4f92e32a26b98e"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/Templates/审核记录模板.md",
+      "bytes": 482,
+      "sha256": "e81590cb826922556ed3813fe3906b00e8232fa81649876ee418f87286a8a0e5"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/Templates/来源模板.md",
+      "bytes": 606,
+      "sha256": "53d2d6929ea95ace713c0e9bd07bd55104f438753e6d2d8b3ee55f4062d4754f"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/Templates/概念模板.md",
+      "bytes": 470,
+      "sha256": "30e60e4f778f5e1d6fcf5c69aa24c21ca0291f8127d52bad1043c913a8ea82c0"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/Templates/比较模板.md",
+      "bytes": 479,
+      "sha256": "6e7d4dd027c693610cd87cb1f9474f960e5687323b14049fcb1f823cc95b9f14"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/Templates/系统模板.md",
+      "bytes": 443,
+      "sha256": "4c2272c0ccd8857a5c91f52d02fbfe53215f73bf1addbc2d4667bbfc1fd240ed"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/使用边界.md",
+      "bytes": 892,
+      "sha256": "18794b12c8021bece497aee01f3ac05164ac9054e4f67d2abb461577ef594b15"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/starter-vault/90-System/首页.md",
+      "bytes": 1170,
+      "sha256": "46a61e1956c3418dc72d3e071a9576ca6f938801aa082285088d564e4a303dd9"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/templates/上线验收表.md",
+      "bytes": 1325,
+      "sha256": "6e0df01068e8564daed46eb4e0ec4fcdd08564f5c4cbb173f1f23357761c37f0"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/templates/来源登记表.md",
+      "bytes": 696,
+      "sha256": "1251f4d277501737dbaff673d2d65e86f143c723d1f5c7f32509b777fa309759"
+    },
+    {
+      "path": "05-实施与模板/v1-原始实施包/obsidian-kb-delivery-2026-09-20/templates/模型路线登记表.md",
+      "bytes": 836,
+      "sha256": "e8fd4a6a3e9ed977aed6b71ddc76f588596bdd2c227713387667813b133fef12"
+    },
+    {
+      "path": "06-来源索引/README.md",
+      "bytes": 941,
+      "sha256": "61c1b1e2042e9e828535cc52b759c17185a82b1ee00386a2552a0b75ac2b1bd6"
+    },
+    {
+      "path": "06-来源索引/sources-index.json",
+      "bytes": 103354,
+      "sha256": "2e079b1342b6c2f9d937b518c1ebbf3f063b54c4175f844fa82f102b28666bab"
+    },
+    {
+      "path": "06-来源索引/来源入口汇总.md",
+      "bytes": 90851,
+      "sha256": "57a66e7748a5d68d72636dbaca8bddca59b6ddf5bfc61be2fc1dbe7e9f6aa3af"
+    },
+    {
+      "path": "90-历史版本/README.md",
+      "bytes": 621,
+      "sha256": "317694c09df2c33bf59256d147c7b95d02ce856c8f195048e55346c3390139c0"
+    },
+    {
+      "path": "90-历史版本/v1/Obsidian-KB-Development-Tasks-2026-09-20.md",
+      "bytes": 29244,
+      "sha256": "381d826c5370fd6ec8d03606e5a07fd69a254e6ec448cea2ed29a00e0246fa74"
+    },
+    {
+      "path": "90-历史版本/v1/Obsidian-KB-Rollout-Plan-2026-09-20.md",
+      "bytes": 28259,
+      "sha256": "6a8708c737ec236ce0ae3b4294d44aad1029fa33b0d28bef5acbe2ea44279143"
+    },
+    {
+      "path": "90-历史版本/v1/Obsidian-KB-Technical-Spec-2026-09-20.md",
+      "bytes": 46076,
+      "sha256": "f2b78bd87d4cd656ee5e520169c80e1c85510ee0f20706e0413110350798b912"
+    },
+    {
+      "path": "90-历史版本/v2/Obsidian-KB-v2-Audit-and-Task-Planning-2026-09-20.md",
+      "bytes": 51911,
+      "sha256": "d91a838a8d0a0cce474b423b950e9e9f87033bc92e2198c9a134347970358fa8"
+    },
+    {
+      "path": "99-交付核验/README.md",
+      "bytes": 1309,
+      "sha256": "61afe9765973d84b4715a3250d8a66b62106f27e51a3fb39b6b44b1bcb7aaae0"
+    },
+    {
+      "path": "99-交付核验/VALIDATION.md",
+      "bytes": 1763,
+      "sha256": "1a1df6aaa2860a7a5e007c9030f18644f10f4688dc6d6781e002467f4b5eccd6"
+    },
+    {
+      "path": "99-交付核验/original-artifacts.json",
+      "bytes": 23972,
+      "sha256": "f3ef9b6ca6d24c6c6af032e6b2e42ce58eda051bfb9873f30155890dcacfa196"
+    },
+    {
+      "path": "99-交付核验/packaging-checks.json",
+      "bytes": 1961,
+      "sha256": "95d0704b395dcd8f2096686fab7e17f0686b4e9c00c8fbc8c65354ca05450d2d"
+    },
+    {
+      "path": "99-交付核验/verify_package.py",
+      "bytes": 2454,
+      "sha256": "de8345cd2662cf12faff4d6053a5fb5eeb8ffaddfb942f0fc935bb9a304c871b"
+    },
+    {
+      "path": "99-交付核验/原始交付对照.md",
+      "bytes": 2514,
+      "sha256": "edaf3ba80f9c03047114327bcb1c7e7e4d3251517670559c0a2d34ffa402665f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3816,
+      "sha256": "64065730400e3f2608c3f68f039bfc167aa32b00c5f2f7001998b66af872ef17"
+    }
+  ]
+}
