@@ -1,0 +1,11 @@
+{
+  "blocks": 10000,
+  "bytes": 1196900,
+  "p95Ms": 74.33108300000004,
+  "samples": 20,
+  "cpu": "Apple M3",
+  "totalMemory": 17179869184,
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v24.14.1"
+}

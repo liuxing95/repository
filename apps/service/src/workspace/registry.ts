@@ -347,8 +347,13 @@ export class WorkspaceRegistry {
         enabled: valid,
         reason: "仅支持来源不可变文件新建；逐文件批准和回读，Wiki 更新尚未启用",
       },
+      {
+        id: "search",
+        available: valid,
+        enabled: valid,
+        reason: "本地中文、别名与代码符号检索；固定引用、原文整理和知识检查",
+      },
       ...[
-        "search",
         "tasknotes",
         "model",
         "ocr",

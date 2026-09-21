@@ -204,6 +204,9 @@ test("real HTTP + plugin transport reaches background parse, approval, receipt a
               `/v1/ingestion/${preview.id}`,
             )
           ).state,
+        // This exercises a real process, not a sub-second latency SLA. Keep the
+        // completion wait bounded while allowing normal process startup variance.
+        { timeout: 5000 },
       )
       .toBe("ready");
     expect(await connection.request("/v1/sources")).toEqual([]);

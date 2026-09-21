@@ -2,7 +2,7 @@
 
 ## 接手当前工程
 
-仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录。开发入口如下：
+仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据和问答工程接口；真实模型与人工语义验收仍待完成。开发入口如下：
 
 | 需要了解什么 | 入口 |
 |---|---|
@@ -11,6 +11,7 @@
 | 完整需求与场景划分 | [PRD](brainstorms/2026-09-21-obsidian-knowledge-and-task-center-requirements.md)、[总体技术方案](plans/2026-09-21-001-feat-overall-knowledge-task-plan.md) |
 | 工作区和运行治理的实际交付 | [场景 01 实施验收](implementation/runtime-governance-validation.md) |
 | 多来源收录的实际交付 | [场景 02 实施验收](implementation/multi-source-ingestion-validation.md) |
+| 本地检索、证据整理、问答接口和边界 | [场景 03 使用与维护](implementation/evidence-search-answer.md)、[验收记录](implementation/evidence-search-validation.md) |
 | 后续每次开发需要补什么说明 | [贡献与交付约定](../CONTRIBUTING.md) |
 
 设计方案描述目标，实施说明记录实际完成范围；两者不同的地方以明确记录的实施边界为准。下面保留早期资料包的导航和当时状态。

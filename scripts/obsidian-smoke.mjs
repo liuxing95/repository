@@ -199,7 +199,10 @@ try {
   // Real plugin Writer contract: stop for an open Markdown editor, then resume
   // the same approved candidate and recover through durable receipts.
   const importFile = join(root, "source", `ingestion-${Date.now()}.md`);
-  await writeFile(importFile, "# 来源测试\n\n这是需要逐文件确认的资料 😀。\n");
+  await writeFile(
+    importFile,
+    "# 来源测试\n\n这是需要逐文件确认的资料 😀。\n权限默认关闭。Node.js C++ parseValue。\n",
+  );
   await page
     .getByLabel("入口 URL 或明确授权的本地文件 / 目录绝对路径")
     .fill(importFile);
@@ -311,6 +314,55 @@ try {
   );
   if (!diskSource.includes("这是需要逐文件确认的资料 😀。"))
     throw new Error("source readback mismatch");
+  await page.getByLabel("问题、中文短词或代码符号").fill("权限");
+  await page.getByRole("button", { name: "搜索原文", exact: true }).click();
+  await page.locator(".kb-search details").first().waitFor();
+  await page
+    .locator(".kb-search details")
+    .first()
+    .evaluate((node) => {
+      node.open = true;
+    });
+  await page
+    .getByRole("heading", { name: "06 / 证据检索与问答", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-search.png") });
+  await page
+    .getByRole("button", { name: "回读固定原文", exact: true })
+    .first()
+    .click();
+  await page
+    .locator(".kb-search")
+    .getByText("相邻上下文", { exact: true })
+    .waitFor();
+  await page
+    .getByRole("button", { name: "整理本次原文证据", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "保存为待审核候选", exact: true })
+    .waitFor();
+  await page
+    .getByRole("heading", { name: "有原文支持的证据", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-evidence-answer.png") });
+  await page
+    .getByRole("button", { name: "保存为待审核候选", exact: true })
+    .click();
+  await page
+    .getByText("已保存固定候选；等待场景 04 审核，不会直接写入 Wiki。", {
+      exact: true,
+    })
+    .waitFor();
+  await page.getByRole("button", { name: "查看模型状态", exact: true }).click();
+  await page
+    .getByText("未配置模型；可以搜索和整理原文证据。", { exact: true })
+    .waitFor();
+  await page
+    .getByRole("button", { name: "检查知识与引用", exact: true })
+    .click();
+  await page.waitForFunction(() =>
+    document.querySelector(".kb-search").textContent.includes('"issues"'),
+  );
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(
@@ -327,6 +379,9 @@ try {
           "writer-protects-open-editor",
           "approval-resume-receipts-commit",
           "source-locator-readback",
+          "keyword-search-and-fixed-evidence",
+          "extractive-answer-and-candidate",
+          "model-disabled-and-knowledge-health",
         ],
         pageErrors: errors,
       },

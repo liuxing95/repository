@@ -85,9 +85,9 @@ flowchart TD
 
 ## 6. 实施单元
 
-- [ ] **E1：固定证据与范围关系。** 需求 R022—R026；依赖 G1—G3，输入合同与 I1 协同。文件：`packages/contracts/src/evidence.ts`、`apps/service/src/evidence/locator.ts`、`apps/service/src/evidence/scope.ts`、`apps/service/src/storage/migrations/003-evidence.ts`；测试：`tests/unit/evidence-scope.test.ts`、`tests/integration/evidence-readback.test.ts`。测试 emoji 偏移、换行、重解析、损坏引用、版本不相交与未知范围、来源循环；预期位置可回读且不产生伪支持。完成依据：A09—A12 的固定证据断言通过。
+- [x] **E1：固定证据与范围关系。** 需求 R022—R026；依赖 G1—G3，输入合同与 I1 协同。文件：`packages/contracts/src/evidence.ts`、`apps/service/src/evidence/locator.ts`、`apps/service/src/evidence/scope.ts`、`apps/service/src/storage/migrations/003-evidence.ts`；测试：`tests/unit/evidence-scope.test.ts`、`tests/integration/evidence-readback.test.ts`。测试 emoji 偏移、换行、重解析、损坏引用、版本不相交与未知范围、来源循环；预期位置可回读且不产生伪支持。完成依据：A09—A12 的固定证据断言通过。
 
-- [ ] **E2：无模型索引与搜索。** 需求 R027—R028；依赖 E1、I4。文件：`apps/service/src/search/tokenizer.ts`、`apps/service/src/search/indexer.ts`、`apps/service/src/search/search.ts`、`apps/obsidian-plugin/src/views/search.ts`；测试：`tests/integration/lexical-search.test.ts`、`tests/performance/search-benchmark.test.ts`。测试两字词、别名、符号、授权后排名、半完成索引及索引代切换。完成依据：无密钥完成 A01，约一万文本块热检索 p95 <500ms，记录机器和总字节。
+- [x] **E2：无模型索引与搜索。** 需求 R027—R028；依赖 E1、I4。文件：`apps/service/src/search/tokenizer.ts`、`apps/service/src/search/indexer.ts`、`apps/service/src/search/search.ts`、`apps/obsidian-plugin/src/views/search.ts`；测试：`tests/integration/lexical-search.test.ts`、`tests/performance/search-benchmark.test.ts`。测试两字词、别名、符号、授权后排名、半完成索引及索引代切换。完成依据：无密钥完成 A01，约一万文本块热检索 p95 <500ms，记录机器和总字节。
 
 - [ ] **E3：证据问答与缓存。** 需求 R029—R031；依赖 E2、G3。文件：`apps/service/src/answers/evidence-pack.ts`、`apps/service/src/answers/answer.ts`、`apps/service/src/answers/cache.ts`；测试：`tests/integration/grounded-answer.test.ts`、`tests/security/revoked-evidence.test.ts`。测试有答案、无答案、同范围冲突、五转载、遗漏否定、模型结构错误、生成中撤回、缓存越权。完成依据：机械引用 100% 可回读，语义评测达到 PRD 门槛，权限失败不返回正文。
 
@@ -98,3 +98,14 @@ flowchart TD
 先标注 20 个真实问题，再扩为约 80 题；17 道可回答题用于召回，3 道无答案题须全部说明不足。重要主张支持率目标 ≥95%，来源家族 Recall@10 ≥90%，同时报告过度拒答。不能把模型自评分作为最终验收。
 
 本方案不承诺所有语言的最优分词，也不在规划阶段证明性能。实施中若词法未达标，先分析失败题和查询计划，再决定是否替换分词；不以提前增加多个检索组件掩盖问题。
+
+## 8. 2026-09-21 实施状态
+
+运行与接手说明见 [场景 03 使用与维护](../implementation/evidence-search-answer.md)，实际验证见 [验收记录](../implementation/evidence-search-validation.md)。
+
+- E1、E2 已实现并验证：固定证据、范围与来源家族、schema 3、本地分词与精确符号、索引代、快照和插件入口。
+- E3 工程接口已实现：证据包、受信提供方接口、预算、严格引用与范围校验、缓存和候选保存。真实提供方尚未指定、未安装；未进行人工重要主张支持率验收，因此 E3 不勾选完成。默认提供原文整理，不能把它称为生成式问答。
+- E4 已实现知识检查、增强关闭门禁和固定 20 题项目文档召回基线。该基线只有 7 个来源家族，不能代表开放领域；约 80 题扩展及 P7 真实增强同题对照尚未实施，因此 E4 的完整效果验收仍保留未完成。
+- 候选以固定记录交给场景 04，尚无 Wiki 更新或图形关系编辑器。
+
+工程上的保守选择：来源事实须保留完整原文块；自由改写标为推断。范围仍未知、上下文装不下或只有弱词匹配时明确说明不足。语义正确性仍由真实评测和人工核对决定。计划保持 `active`，不以测试适配器或模型自评分替代真实质量门槛。

@@ -1,3 +1,6 @@
+import { searchRoutes } from "../search/routes";
+import { EvidenceStore } from "../evidence/locator";
+import type { AnswerProvider } from "../answers/answer";
 import { Ingestion } from "../ingestion/manifest";
 import { ingestionRoutes } from "../ingestion/routes";
 import Fastify, { type FastifyRequest } from "fastify";
@@ -15,6 +18,7 @@ export function createServer(
   sessions: Sessions,
   jobs: Jobs,
   port = 27124,
+  answerProviders?: ReadonlyMap<string, AnswerProvider>,
 ) {
   const app = Fastify({
     logger: false,
@@ -165,5 +169,6 @@ export function createServer(
     }),
   );
   ingestionRoutes(app, new Ingestion(registry, jobs), sessions, mutate);
+  searchRoutes(app, new EvidenceStore(registry), sessions, answerProviders);
   return app;
 }

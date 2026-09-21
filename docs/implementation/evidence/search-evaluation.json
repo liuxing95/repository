@@ -1,0 +1,330 @@
+{
+  "dataset": "7 immutable real project documents/code files, 20 project onboarding questions",
+  "questions": 20,
+  "answerable": 17,
+  "unanswerable": 3,
+  "familyRecallAt10": 1,
+  "correctInsufficient": 3,
+  "overRefusal": 1,
+  "semanticHumanReview": "not-performed",
+  "modelCalls": 0,
+  "enhancement": {
+    "enabled": false,
+    "mode": "keyword",
+    "fingerprint": null,
+    "externalRequests": 0,
+    "reason": "尚无固定同题对照证明收益，向量、重排与图增强保持关闭。"
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "question": "权限会话过期后如何重新配对",
+      "expectedFamilies": [
+        "readme"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source",
+        "cli"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 35.07358300000001
+    },
+    {
+      "id": "Q02",
+      "question": "中文文本支持哪些编码",
+      "expectedFamilies": [
+        "source"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "insufficient",
+      "latencyMs": 11.60620800000001
+    },
+    {
+      "id": "Q03",
+      "question": "PDF 物理页标签如何保留",
+      "expectedFamilies": [
+        "source"
+      ],
+      "answerable": true,
+      "actual": [
+        "source",
+        "readme"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 12.732209000000012
+    },
+    {
+      "id": "Q04",
+      "question": "GitHub ref 如何固定 commit",
+      "expectedFamilies": [
+        "source"
+      ],
+      "answerable": true,
+      "actual": [
+        "source",
+        "readme"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 13.424459000000013
+    },
+    {
+      "id": "Q05",
+      "question": "ZIP 路径如何限制",
+      "expectedFamilies": [
+        "source"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 13.669542000000035
+    },
+    {
+      "id": "Q06",
+      "question": "afterHash 如何恢复来源提交",
+      "expectedFamilies": [
+        "source"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 18.14708300000001
+    },
+    {
+      "id": "Q07",
+      "question": "软件模型密钥如何存储",
+      "expectedFamilies": [
+        "readme"
+      ],
+      "answerable": true,
+      "actual": [
+        "source",
+        "cli",
+        "readme"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 12.304625000000044
+    },
+    {
+      "id": "Q08",
+      "question": "Node.js pnpm 受测版本",
+      "expectedFamilies": [
+        "readme"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source",
+        "cli",
+        "budget",
+        "store",
+        "auth"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 27.928707999999972
+    },
+    {
+      "id": "Q09",
+      "question": "预算微美元如何换算",
+      "expectedFamilies": [
+        "readme"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 8.81858299999999
+    },
+    {
+      "id": "Q10",
+      "question": "Obsidian 插件如何安装",
+      "expectedFamilies": [
+        "readme"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source",
+        "auth"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 15.427041999999972
+    },
+    {
+      "id": "Q11",
+      "question": "主端如何释放和交接",
+      "expectedFamilies": [
+        "readme"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 11.356666000000018
+    },
+    {
+      "id": "Q12",
+      "question": "maxInputTokens 字段限制",
+      "expectedFamilies": [
+        "policy"
+      ],
+      "answerable": true,
+      "actual": [
+        "policy",
+        "budget",
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 13.199124999999981
+    },
+    {
+      "id": "Q13",
+      "question": "预算 reserved unknown settled 如何保留",
+      "expectedFamilies": [
+        "budget"
+      ],
+      "answerable": true,
+      "actual": [
+        "budget",
+        "store",
+        "auth",
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 16.438416000000018
+    },
+    {
+      "id": "Q14",
+      "question": "SQLite journal_mode 设置",
+      "expectedFamilies": [
+        "store"
+      ],
+      "answerable": true,
+      "actual": [
+        "store",
+        "readme",
+        "source"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 12.352541999999971
+    },
+    {
+      "id": "Q15",
+      "question": "service.lock 如何防止重复启动",
+      "expectedFamilies": [
+        "cli"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "cli",
+        "source",
+        "budget",
+        "store",
+        "auth"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 24.026250000000005
+    },
+    {
+      "id": "Q16",
+      "question": "Origin app://obsidian.md 如何校验",
+      "expectedFamilies": [
+        "auth"
+      ],
+      "answerable": true,
+      "actual": [
+        "auth",
+        "readme",
+        "source",
+        "cli"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 17.564459
+    },
+    {
+      "id": "Q17",
+      "question": "schema 1 升级快照如何备份",
+      "expectedFamilies": [
+        "source"
+      ],
+      "answerable": true,
+      "actual": [
+        "readme",
+        "store",
+        "source",
+        "policy",
+        "auth",
+        "cli"
+      ],
+      "recall": 1,
+      "status": "supported",
+      "latencyMs": 21.940832999999998
+    },
+    {
+      "id": "Q18",
+      "question": "木星极光光谱波长是多少",
+      "expectedFamilies": [],
+      "answerable": false,
+      "actual": [],
+      "recall": 0,
+      "status": "insufficient",
+      "latencyMs": 1.5364169999999717
+    },
+    {
+      "id": "Q19",
+      "question": "量子纠缠退相干寿命是多少",
+      "expectedFamilies": [],
+      "answerable": false,
+      "actual": [],
+      "recall": 0,
+      "status": "insufficient",
+      "latencyMs": 1.2235830000000192
+    },
+    {
+      "id": "Q20",
+      "question": "珊瑚共生藻染色体数量是多少",
+      "expectedFamilies": [],
+      "answerable": false,
+      "actual": [
+        "readme",
+        "source"
+      ],
+      "recall": 0,
+      "status": "insufficient",
+      "latencyMs": 8.56879200000003
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { renderSearch } from "./views/search";
 import { renderIngestion } from "./views/ingestion";
 import { obsidianHost } from "./writer/apply";
 import {
@@ -11,6 +12,7 @@ import { renderSettings } from "./views/settings";
 export default class KnowledgeTaskPlugin extends Plugin {
   connection!: Connection;
   drafts = { budget: "" };
+  searchDraft = { query: "", version: "", collection: "" };
   ingestionDraft = {
     fields: {},
     previewId: crypto.randomUUID(),
@@ -68,11 +70,14 @@ class GovernanceSettings extends PluginSettingTab {
     );
     const ingestion = document.createElement("section");
     this.containerEl.append(ingestion);
+    const search = document.createElement("section");
     renderIngestion(
       ingestion,
       this.plugin.connection,
       obsidianHost(this.app, this.plugin.connection.vaultPath),
       this.plugin.ingestionDraft,
     );
+    this.containerEl.append(search);
+    renderSearch(search, this.plugin.connection, this.plugin.searchDraft);
   }
 }

@@ -4,7 +4,7 @@
 
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架、[场景 01：工作区接入与运行治理](docs/plans/2026-09-21-002-feat-workspace-runtime-governance-plan.md)和[场景 02：多来源资料收录](docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md)。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。真实模型提供方和人工语义验收尚未完成；TaskNotes、Wiki 更新、通知、日历和发布仍属于后续场景。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。搜索、TaskNotes、Wiki 更新、模型、通知、日历和发布仍属于后续场景，配置路线不会自动启用这些能力。
 
 ## 开发与检查
 
@@ -88,7 +88,7 @@ pnpm service serve
 - 三条队列各一个独立 worker：交互、通知、批量。自有 worker 是受信静态程序；第三方执行必须走固定 OCI 镜像、禁网、非 root、只读输入与专用输出，不挂载 Vault、主目录或容器 socket。
 - 取消阻止后续步骤，已发生的远端费用仍可结算。过期 worker 的旧栅栏结果会被拒绝；过期租约最多尝试 3 次。失败自检可在列表重试，仍关联原根作业。
 - 服务通过应用数据目录内的 `service.lock` 阻止重复启动。正常退出会清理锁；崩溃后，先读取锁内 PID，用 `ps -p <PID> -o command=` 核对旧服务确已退出，再删除该锁文件。不要删除数据库或账本来“恢复额度”。
-- 原件、来源修订、解析、批准与回执已进入 `state.db`。正式来源提交后发出索引事件，场景 03 在首次查询或显式重建时构建索引；不能把数据库当作可丢弃索引。
+- 原件、来源修订、解析、批准与回执已进入 `state.db`。正式来源提交后发出索引事件，实际检索仍由场景 03 实现；不能把数据库当作可丢弃索引。
 
 公开接口与验证记录见[场景 01 实施验收](docs/implementation/runtime-governance-validation.md)。完整产品设计从[总体技术方案](docs/plans/2026-09-21-001-feat-overall-knowledge-task-plan.md)进入。
 
@@ -108,7 +108,7 @@ pnpm service serve
 
 收录上限：100 个选定条目、单原件 20 MB、范围总量最多 50 MB、最多 1000 个候选、网页发现深度 5、发现时限 120 秒。每个解析进程最多 20 秒、V8 堆 256 MB、结果 8 MB；PDF 首次最多解析 200 页。V8 堆上限不是总 RSS 上限，真实样本峰值见验收记录。
 
-数据库已升级为 schema 3。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
+数据库已升级为 schema 2。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
 
 [场景 02 实施与验收记录](docs/implementation/multi-source-ingestion-validation.md)包含 API、50 项测试、30 份真实资料、桌面截图和恢复方法。重跑真实网络样本：
 
@@ -116,11 +116,3 @@ pnpm service serve
 pnpm test:corpus
 KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 ```
-
-## 搜索与证据整理
-
-正式提交资料后，在设置页“06 / 证据检索与问答”搜索“权限”“重排”、`C++`、`Node.js` 或完整函数名。首次查询构建本地索引，结果显示固定快照、覆盖与版本；通过“回读固定原文”核对上下文。
-
-“整理本次原文证据”保留完整摘录，保存结果只会进入待审核候选，不直接写 Wiki。真实模型默认关闭。若已有自定义来源政策，本地读取需要 `routes.read` 包含 `local`；模型用途单独授权。
-
-完整流程、接口、代码入口、迁移及排障见 [场景 03 说明](docs/implementation/evidence-search-answer.md)，实际测试与性能边界见 [验收记录](docs/implementation/evidence-search-validation.md)。

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "readme",
+    "path": "README.md",
+    "commit": "bacff36",
+    "sha256": "6dc5c2ad98a8478292cc94697562c49f7eaeffb97534be41728b04b31c55086e"
+  },
+  {
+    "id": "policy",
+    "path": "packages/contracts/src/policy.ts",
+    "commit": "bacff36",
+    "sha256": "ccade6bb1cb56226c2c905f2d7f4ea4b24a6f539d5017ee5f3890da9ee50883a"
+  },
+  {
+    "id": "cli",
+    "path": "apps/service/src/main.ts",
+    "commit": "bacff36",
+    "sha256": "17bd82c5eec8ca7dac91899ad954bc321f777d1f25389f59ba96972c8cac7384"
+  },
+  {
+    "id": "auth",
+    "path": "apps/service/src/http/auth.ts",
+    "commit": "bacff36",
+    "sha256": "63928e4b454bc71664f961da1afa4ace4301174cf766a079a6a3c65288aa8740"
+  },
+  {
+    "id": "budget",
+    "path": "apps/service/src/runtime/budget.ts",
+    "commit": "bacff36",
+    "sha256": "cc8b125ba3dc30eb0c4d5500ce3a60e84a474add7b4860cd24c36b1b413d8b47"
+  },
+  {
+    "id": "source",
+    "path": "docs/implementation/multi-source-ingestion-validation.md",
+    "commit": "bacff36",
+    "sha256": "efea903c3beefa9fe53d1945f1749f447614642fdaea75dd66b1b9dcbdee8ae0"
+  },
+  {
+    "id": "store",
+    "path": "apps/service/src/storage/store.ts",
+    "commit": "bacff36",
+    "sha256": "e115ac5a98283c1fd266dee66d9d916d37316a68dfa6d70ea4fc24bdcf7f9793"
+  }
+]

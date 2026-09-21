@@ -62,7 +62,13 @@ export class Connection {
       new Promise<never>((_resolve, reject) => {
         timer = setTimeout(
           () => reject(new Error("CONNECTION_TIMEOUT")),
-          path.startsWith("/v1/ingestion/") ? 130_000 : 10_000,
+          path.startsWith("/v1/ingestion/") ||
+            path === "/v1/search" ||
+            path === "/v1/search/rebuild"
+            ? 130_000
+            : path === "/v1/answers"
+              ? 35_000
+              : 10_000,
         );
       }),
     ]).finally(() => {

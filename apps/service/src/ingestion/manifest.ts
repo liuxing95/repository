@@ -119,6 +119,7 @@ export class Ingestion {
         status: reason ? "excluded" : "pending",
         reason,
         metadata: {
+          kind,
           language: plan.language,
           version: plan.version,
           collection: plan.collection,

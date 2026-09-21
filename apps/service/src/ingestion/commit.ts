@@ -1,3 +1,4 @@
+import { SourcePolicy } from "@kb/contracts";
 import { randomBytes, randomUUID } from "node:crypto";
 import type {
   ChangeSet,
@@ -242,11 +243,13 @@ export class SourceCommit {
     });
   }
   revoked(sourceId: string) {
+    const raw = this.store.get(`source:${sourceId}`);
+    if (raw === undefined) return false;
+    const policy = SourcePolicy.safeParse(raw);
     return (
-      (
-        this.store.get(`source:${sourceId}`) as
-          { retracted?: boolean } | undefined
-      )?.retracted === true
+      !policy.success ||
+      policy.data.retracted ||
+      !policy.data.routes.read.includes("local")
     );
   }
   readable(revisionId: string) {

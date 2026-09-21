@@ -1,0 +1,156 @@
+[
+  {
+    "id": "Q01",
+    "question": "权限会话过期后如何重新配对",
+    "expectedFamilies": [
+      "readme"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q02",
+    "question": "中文文本支持哪些编码",
+    "expectedFamilies": [
+      "source"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q03",
+    "question": "PDF 物理页标签如何保留",
+    "expectedFamilies": [
+      "source"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q04",
+    "question": "GitHub ref 如何固定 commit",
+    "expectedFamilies": [
+      "source"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q05",
+    "question": "ZIP 路径如何限制",
+    "expectedFamilies": [
+      "source"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q06",
+    "question": "afterHash 如何恢复来源提交",
+    "expectedFamilies": [
+      "source"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q07",
+    "question": "软件模型密钥如何存储",
+    "expectedFamilies": [
+      "readme"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q08",
+    "question": "Node.js pnpm 受测版本",
+    "expectedFamilies": [
+      "readme"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q09",
+    "question": "预算微美元如何换算",
+    "expectedFamilies": [
+      "readme"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q10",
+    "question": "Obsidian 插件如何安装",
+    "expectedFamilies": [
+      "readme"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q11",
+    "question": "主端如何释放和交接",
+    "expectedFamilies": [
+      "readme"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q12",
+    "question": "maxInputTokens 字段限制",
+    "expectedFamilies": [
+      "policy"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q13",
+    "question": "预算 reserved unknown settled 如何保留",
+    "expectedFamilies": [
+      "budget"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q14",
+    "question": "SQLite journal_mode 设置",
+    "expectedFamilies": [
+      "store"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q15",
+    "question": "service.lock 如何防止重复启动",
+    "expectedFamilies": [
+      "cli"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q16",
+    "question": "Origin app://obsidian.md 如何校验",
+    "expectedFamilies": [
+      "auth"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q17",
+    "question": "schema 1 升级快照如何备份",
+    "expectedFamilies": [
+      "source"
+    ],
+    "answerable": true
+  },
+  {
+    "id": "Q18",
+    "question": "木星极光光谱波长是多少",
+    "expectedFamilies": [],
+    "answerable": false
+  },
+  {
+    "id": "Q19",
+    "question": "量子纠缠退相干寿命是多少",
+    "expectedFamilies": [],
+    "answerable": false
+  },
+  {
+    "id": "Q20",
+    "question": "珊瑚共生藻染色体数量是多少",
+    "expectedFamilies": [],
+    "answerable": false
+  }
+]

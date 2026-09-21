@@ -1,6 +1,6 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-21，已实现范围为场景 01、02。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-21，已实现范围为场景 01、02，以及场景 03 的本地检索、证据整理和问答工程接口。真实模型与人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
@@ -15,8 +15,11 @@
 | 工作区接入、主端、会话、预算、作业治理 | 已实现 | 一份应用数据对应一个工作区；主端交接要显式完成 |
 | 多来源获取、原件保存、解析与定位 | 已实现 | 基础解析目前仅在受测 macOS 环境开放；网页仅处理静态响应 |
 | 来源文件审核与写入 | 已实现 | 仅新建不可变来源投影；不会自动覆盖人工修改 |
-| 搜索、问答、Wiki 更新、研究、任务排程 | 后续场景 | 产生索引请求事件不代表已有搜索功能 |
+| 本地搜索、固定引用、原文整理与候选保存 | 已实现 | 首次查询或显式重建产生索引；原文摘录不等于已审核答案 |
+| 模型回答、Wiki 更新、研究、任务排程 | 部分接口及后续场景 | 模型适配器接口已实现，真实提供方与语义验收未完成；Wiki、研究和任务编排仍待实现 |
 | OCR、模型、日历、通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力 |
+
+首次收录后，可以直接进入 [检索与证据整理说明](../implementation/evidence-search-answer.md)，搜索中文短词或代码符号、回读引用，并了解模型能力当前的边界。
 
 先保留默认配置 `{ "schemaVersion": 1, "budget": null, "routes": [] }`，即可跑通本地文本收录，不需要模型密钥。金额配置的单位是微美元，1 美元等于 1,000,000 微美元。
 
@@ -135,7 +138,7 @@ flowchart LR
   Vault -->|回读哈希与回执| Plugin
 ```
 
-服务保存资料事实和提交记录，插件负责正式 Vault 写入。解析器只接收原字节与必要配置，不能写 Vault、访问网络或启动子进程。当前 macOS 解析隔离与第三方程序的 OCI 隔离是两条不同路径。
+服务保存资料事实、证据、索引和提交记录，插件负责正式 Vault 写入。检索与问答内部架构及流程见 [场景 03 图示](../implementation/evidence-search-answer.md#3-数据怎么流动)。解析器只接收原字节与必要配置，不能写 Vault、访问网络或启动子进程。当前 macOS 解析隔离与第三方程序的 OCI 隔离是两条不同路径。
 
 ```mermaid
 sequenceDiagram
@@ -177,6 +180,7 @@ sequenceDiagram
 | 获取、冻结、重试和解析调度 | [ingestion/routes.ts](../../apps/service/src/ingestion/routes.ts) | [manifest.ts](../../apps/service/src/ingestion/manifest.ts)、[fetcher.ts](../../apps/service/src/ingestion/fetcher.ts)、[repository.ts](../../apps/service/src/ingestion/repository.ts) |
 | 原件、修订与解析保存 | [objects.ts](../../apps/service/src/ingestion/objects.ts) | [store.ts](../../apps/service/src/storage/store.ts)、[002-sources.ts](../../apps/service/src/storage/migrations/002-sources.ts) |
 | 解析入口与格式处理 | [parser.ts](../../apps/service/src/ingestion/parser.ts) | [parser-entry.ts](../../apps/service/src/ingestion/parser-entry.ts)、[web-parser.ts](../../apps/service/src/ingestion/web-parser.ts)、[pdf-parser.ts](../../apps/service/src/ingestion/pdf-parser.ts) |
+| 本地检索、索引代、证据和问答 | [search/search.ts](../../apps/service/src/search/search.ts)、[evidence/locator.ts](../../apps/service/src/evidence/locator.ts) | [answers/answer.ts](../../apps/service/src/answers/answer.ts)、[场景 03 说明](../implementation/evidence-search-answer.md) |
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
 | 作业租约和费用 | [jobs.ts](../../apps/service/src/runtime/jobs.ts)、[budget.ts](../../apps/service/src/runtime/budget.ts) | [worker-pool.ts](../../apps/service/src/runtime/worker-pool.ts) |
 | 出站与文件授权边界 | [security/egress.ts](../../apps/service/src/security/egress.ts)、[security/paths.ts](../../apps/service/src/security/paths.ts) | [file-reader.ts](../../apps/service/src/ingestion/file-reader.ts) |
@@ -189,6 +193,7 @@ app-data/
   state.db-wal / state.db-shm       SQLite 运行时可能存在的伴随文件
   service.lock                     当前服务 PID
   state.db.before-v2-<id>           从 schema 1 升级时才生成的数据库快照
+  state.db.before-v3-<id>           迁移到证据与检索 schema 3 前的数据库快照
   workspace-<id>/
     pilot/                         Obsidian 打开的试点
       .obsidian/plugins/knowledge-task-center/
