@@ -1,0 +1,13 @@
+{
+  "name": "@kb/service",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@kb/contracts": "workspace:*",
+    "@napi-rs/keyring": "2.1.0",
+    "better-sqlite3": "13.0.3",
+    "fastify": "5.12.4",
+    "ipaddr.js": "2.5.0",
+    "zod": "4.6.5"
+  }
+}

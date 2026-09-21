@@ -1,0 +1,35 @@
+import { build } from "esbuild";
+import { mkdir, copyFile } from "node:fs/promises";
+await build({
+  entryPoints: [
+    "apps/service/src/main.ts",
+    "apps/service/src/runtime/worker-entry.ts",
+  ],
+  outdir: "apps/service/dist",
+  bundle: true,
+  platform: "node",
+  target: "node24",
+  format: "esm",
+  packages: "external",
+  alias: { "@kb/contracts": "./packages/contracts/src/index.ts" },
+  sourcemap: true,
+});
+await mkdir("apps/obsidian-plugin/dist", { recursive: true });
+await build({
+  entryPoints: ["apps/obsidian-plugin/src/main.ts"],
+  outfile: "apps/obsidian-plugin/dist/main.js",
+  bundle: true,
+  platform: "browser",
+  target: "es2022",
+  format: "cjs",
+  external: ["obsidian"],
+  sourcemap: true,
+});
+await Promise.all(
+  ["manifest.json", "styles.css"].map((file) =>
+    copyFile(
+      `apps/obsidian-plugin/${file}`,
+      `apps/obsidian-plugin/dist/${file}`,
+    ),
+  ),
+);

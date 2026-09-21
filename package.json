@@ -1,0 +1,33 @@
+{
+  "name": "knowledge-task-center",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=24.14.1 <25"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint apps packages tests scripts",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:built",
+    "service": "node apps/service/dist/main.js",
+    "test:oci": "KB_TEST_OCI=1 vitest run tests/security/worker-confinement.test.ts",
+    "test:built": "KB_TEST_BUILT=1 vitest run tests/faults/built-service.test.ts",
+    "test:desktop": "pnpm build && node scripts/obsidian-smoke.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/jsdom": "30.0.0",
+    "@types/node": "24.13.4",
+    "esbuild": "0.28.2",
+    "eslint": "9.39.5",
+    "jsdom": "30.0.1",
+    "prettier": "3.9.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.0",
+    "vitest": "4.1.11"
+  }
+}

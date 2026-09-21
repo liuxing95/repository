@@ -1,0 +1,11 @@
+{
+  "name": "@kb/obsidian-plugin",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@kb/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "obsidian": "1.13.1"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "knowledge-task-center",
+  "name": "知识与任务中心",
+  "version": "0.1.0",
+  "minAppVersion": "1.13.7",
+  "description": "连接本地治理服务，管理试点工作区、权限、预算和作业。",
+  "author": "Knowledge Task Center",
+  "isDesktopOnly": true
+}
