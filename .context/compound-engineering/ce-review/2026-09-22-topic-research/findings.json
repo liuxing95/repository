@@ -1,0 +1,23 @@
+{
+  "reviewer": "sequential-main-thread-review",
+  "mode": "autofix",
+  "base": "139bd98",
+  "findings": [
+    {
+      "title": "RSH3 真实模型与语义质量门槛未完成",
+      "severity": "P1",
+      "file": "docs/plans/2026-09-21-006-feat-topic-research-report-plan.md",
+      "status": "open",
+      "owner": "release",
+      "autofix_class": "advisory",
+      "confidence": 1,
+      "pre_existing": false,
+      "why_it_matters": "原文整理与机械校验不能代替跨章节综合论述、提供方实际费用和人工语义验收；方案必须保持 active。",
+      "evidence": ["研究 CLI 没有安装真实 ResearchProvider", "checkChapter 仅接收完整原文主张", "报告 semantic 状态为 not-reviewed"],
+      "requires_verification": true
+    }
+  ],
+  "fixed_findings": "见 review.md 的修复记录",
+  "residual_risks": ["词法检索和来源上限可能遗漏材料，需查看缺口", "取消不抹除已发生费用", "已导出文件不能远程撤回"],
+  "testing_gaps": ["真实模型综合与人工语义门槛", "提供方实际费用回执", "本轮未重跑真实语料专项"]
+}

@@ -1,3 +1,5 @@
+import { researchRoutes } from "../research/routes";
+import type { ResearchProvider } from "../research/chapters";
 import { reviewRoutes } from "../review/routes";
 import { searchRoutes } from "../search/routes";
 import { EvidenceStore } from "../evidence/locator";
@@ -20,6 +22,7 @@ export function createServer(
   jobs: Jobs,
   port = 27124,
   answerProviders?: ReadonlyMap<string, AnswerProvider>,
+  researchProviders?: ReadonlyMap<string, ResearchProvider>,
 ) {
   const app = Fastify({
     logger: false,
@@ -172,5 +175,6 @@ export function createServer(
   ingestionRoutes(app, new Ingestion(registry, jobs), sessions, mutate);
   searchRoutes(app, new EvidenceStore(registry), sessions, answerProviders);
   reviewRoutes(app, new EvidenceStore(registry), sessions);
+  researchRoutes(app, new EvidenceStore(registry), sessions, researchProviders);
   return app;
 }

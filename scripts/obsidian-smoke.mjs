@@ -508,6 +508,104 @@ try {
     .getByRole("heading", { name: "07 / Wiki 候选与审核", exact: true })
     .scrollIntoViewIfNeeded();
   await page.screenshot({ path: join(root, "obsidian-wiki-committed.png") });
+  // Scene 05: a confirmed brief, explicit snapshot, chapter and independently reviewed report save.
+  const research = page.locator(".kb-research");
+  const researchTitle = `权限研究验收 ${Date.now()}`;
+  await research.getByLabel("研究课题", { exact: true }).fill(researchTitle);
+  await research.getByLabel("目标读者", { exact: true }).fill("刚接手的开发者");
+  await research
+    .getByLabel("必答问题（每行一个，可修改建议）", { exact: true })
+    .fill("权限有什么限制？");
+  await research
+    .getByLabel("必要证据类型（逗号分隔，与来源范围中的 sourceType 对应）", {
+      exact: true,
+    })
+    .fill("text");
+  await research
+    .getByRole("button", { name: "预览课题清单", exact: true })
+    .click();
+  await research.getByLabel("确认课题与根预算确认", { exact: true }).check();
+  await research
+    .getByRole("button", { name: "确认课题与根预算", exact: true })
+    .click();
+  await research
+    .getByRole("button", { name: "准备研究快照差异", exact: true })
+    .click();
+  await research.getByLabel("确认推进研究快照确认", { exact: true }).check();
+  await research
+    .getByRole("button", { name: "确认推进研究快照", exact: true })
+    .click();
+  await research
+    .getByRole("button", { name: "生成本章候选", exact: true })
+    .click();
+  await research
+    .getByText("章节已保存在账本，尚未写文件。", { exact: true })
+    .waitFor();
+  await research
+    .getByRole("button", { name: "冻结报告候选", exact: true })
+    .click();
+  await research
+    .getByRole("button", { name: "送入待审核候选", exact: true })
+    .waitFor();
+  const reportContent = await research.locator("pre").last().innerText();
+  for (const marker of [
+    "最终快照",
+    "问题覆盖",
+    "来源及版本",
+    "费用摘要",
+    "尚未完成",
+  ])
+    if (!reportContent.includes(marker))
+      throw new Error(`research report missing ${marker}`);
+  await research
+    .getByRole("heading", { name: "报告候选 v1", exact: true })
+    .scrollIntoViewIfNeeded();
+  await research
+    .getByRole("heading", { name: "报告候选 v1", exact: true })
+    .locator("..")
+    .screenshot({ path: join(root, "obsidian-research-report.png") });
+  await research
+    .getByRole("button", { name: "送入待审核候选", exact: true })
+    .click();
+  await research
+    .getByText(
+      "已登记固定报告候选，尚未写文件。进入 07 / Wiki 候选与审核，先审核保存到候选区。",
+      { exact: true },
+    )
+    .waitFor();
+  await page.getByLabel("Wiki 页面标题", { exact: true }).fill(researchTitle);
+  await page
+    .getByRole("button", { name: "读取待审核候选", exact: true })
+    .click();
+  const reportRow = page
+    .locator(".kb-review div")
+    .filter({ has: page.locator("p").filter({ hasText: researchTitle }) })
+    .filter({
+      has: page.getByRole("button", { name: "审核保存到候选区", exact: true }),
+    })
+    .last();
+  await reportRow
+    .getByRole("button", { name: "审核保存到候选区", exact: true })
+    .click();
+  const reportPath = (
+    await page.locator(".kb-review-detail summary").first().innerText()
+  ).replace(/^新建：/, "");
+  await page.getByLabel("确认本次固定变更", { exact: true }).check();
+  await page
+    .getByRole("button", { name: "批准并应用本次变更", exact: true })
+    .click();
+  await page
+    .getByText("候选区提交完成；可创建新的 Wiki 提升提案。", { exact: true })
+    .waitFor();
+  if (
+    (await readFile(join(workspace.vaultPath, reportPath), "utf8")) !==
+    reportContent
+  )
+    throw new Error("reviewed research report differs from preview");
+  await research
+    .getByRole("button", { name: "取消后续研究", exact: true })
+    .click();
+  await research.getByText(/状态：cancelled/).waitFor();
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(
@@ -531,6 +629,10 @@ try {
           "wiki-promotion-and-committed-search",
           "wiki-dirty-editor-buffer-protected",
           "wiki-observation-and-reviewed-process-update",
+          "research-brief-and-snapshot-confirmation",
+          "research-chapter-and-frozen-report",
+          "research-candidate-reviewed-writer-save",
+          "research-cancel-preserves-report",
         ],
         pageErrors: errors,
       },

@@ -1,4 +1,4 @@
-import type { AnswerResult, Principal } from "@kb/contracts";
+import type { AnswerResult, Principal, ResearchReport } from "@kb/contracts";
 import { EvidenceStore } from "../evidence/locator";
 import { AppError } from "../errors";
 import { digest } from "../workspace/registry";
@@ -7,6 +7,7 @@ export type SavedCandidate = {
   answer: AnswerResult;
   createdBy: string;
   state: string;
+  report?: { id: string; digest: string; content: string; title: string };
 };
 export class Candidates {
   constructor(readonly evidence: EvidenceStore) {}
@@ -17,6 +18,25 @@ export class Candidates {
       .get(id) as { value: string } | undefined;
     if (!row) throw new AppError("NOT_FOUND", 404);
     const candidate = JSON.parse(row.value) as SavedCandidate;
+    if (candidate.report) {
+      const row = this.evidence.store.db
+        .prepare("SELECT value FROM research_reports WHERE id=?")
+        .get(candidate.report.id) as { value: string } | undefined;
+      if (!row) throw new AppError("BASELINE");
+      const report = JSON.parse(row.value) as ResearchReport;
+      const { digest: storedDigest, ...body } = report;
+      if (
+        digest(body) !== storedDigest ||
+        candidate.report.digest !== storedDigest ||
+        candidate.report.content !== report.content ||
+        candidate.id !== report.id ||
+        candidate.answer.snapshotId !== report.snapshotId ||
+        digest(candidate.answer.evidence) !== digest(report.evidence) ||
+        digest(candidate.answer.claims) !==
+          digest(report.chapters.flatMap((c) => c.claims))
+      )
+        throw new AppError("HASH_MISMATCH");
+    }
     for (const original of candidate.answer.evidence) {
       const current = this.evidence.read(original.id);
       if (digest(current) !== digest(original))
@@ -42,7 +62,10 @@ export class Candidates {
         return [
           {
             id,
-            title: c.answer.claims[0]?.text.slice(0, 80) ?? "证据不足",
+            title:
+              c.report?.title ??
+              c.answer.claims[0]?.text.slice(0, 80) ??
+              "证据不足",
             status: c.answer.status,
           },
         ];

@@ -19,6 +19,16 @@ export function compileCandidate(
       409,
       "决定页需要填写本人确认的决定；模型建议不能自动提升为决定。",
     );
+  if (candidate.report && input.destination === "candidate") {
+    if (Buffer.byteLength(candidate.report.content) > 128000)
+      throw new AppError("LIMIT");
+    return {
+      content: candidate.report.content,
+      claims: candidate.answer.claims,
+      deferred: candidate.answer.gaps,
+      evidenceIds: candidate.answer.evidence.map((e) => e.id),
+    };
+  }
   const all = candidate.answer.claims;
   const claims = all.slice(0, 20);
   const evidence = candidate.answer.evidence;

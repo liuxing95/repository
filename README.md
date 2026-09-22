@@ -4,7 +4,7 @@
 
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架、[场景 01：工作区接入与运行治理](docs/plans/2026-09-21-002-feat-workspace-runtime-governance-plan.md)和[场景 02：多来源资料收录](docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md)。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。真实模型编译与语义验收尚未完成；TaskNotes、通知、日历和发布仍属于后续场景。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。真实模型编译与语义验收尚未完成；TaskNotes、通知、日历和发布仍属于后续场景。
 
 ## 开发与检查
 
@@ -108,7 +108,7 @@ pnpm service serve
 
 收录上限：100 个选定条目、单原件 20 MB、范围总量最多 50 MB、最多 1000 个候选、网页发现深度 5、发现时限 120 秒。每个解析进程最多 20 秒、V8 堆 256 MB、结果 8 MB；PDF 首次最多解析 200 页。V8 堆上限不是总 RSS 上限，真实样本峰值见验收记录。
 
-数据库已升级为 schema 4。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
+数据库已升级为 schema 5。schema 4 升级前创建 `state.db.before-v5-<id>` 私有快照，再事务增加研究清单、证据快照、章节与报告表。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
 
 [场景 02 实施与验收记录](docs/implementation/multi-source-ingestion-validation.md)包含 API、50 项测试、30 份真实资料、桌面截图和恢复方法。重跑真实网络样本：
 
@@ -138,4 +138,17 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 
 页面更新使用 Obsidian 的同步 `Vault.process` 检查当前内容；回执丢失时按 afterHash 恢复，遇到第三版本则保留人工内容。只有所有必要文件核对一致，正式知识版本才推进；磁盘部分应用不等于业务提交完成。已完成的页面更新可生成反向提案，重新审核后恢复原字节；首次新建不会自动删文件。
 
-完整操作、接口、代码入口、schema 4 迁移和恢复见 [Wiki 使用与维护](docs/implementation/wiki-review-commit.md)，本次检查和真实桌面记录见 [场景 04 验收](docs/implementation/wiki-review-validation.md)。升级时服务与插件需一起重新构建部署；旧服务不能写 schema 4 数据库。
+完整操作、接口、代码入口、当时的 schema 4 迁移和恢复见 [Wiki 使用与维护](docs/implementation/wiki-review-commit.md)，该场景的检查和真实桌面记录见 [场景 04 验收](docs/implementation/wiki-review-validation.md)。当前数据库已随研究场景升级至 schema 5，服务与插件需一起重新构建部署；旧服务不能写新版本数据库。
+
+## 生成一份课题研究报告
+
+进入“08 / 课题研究与报告”，填写课题、读者、必答问题、版本范围和时间意图。无模型时根费用与调用上限填 0，来源模式选择“仅使用库内资料”。
+
+1. 点击“预览课题清单”，补齐待填项，核对并确认根预算。
+2. 点击“准备研究快照差异”，阅读原文与变化，确认推进快照。
+3. 逐题核对覆盖与反证线索，点击“生成本章候选”；缺失题会保留为未完成。
+4. 点击“冻结报告候选”，检查来源、版本、覆盖、缺口和费用，再“送入待审核候选”。到 07 审核保存完整报告；提升 Wiki 仍需第二次审核。
+
+历史时点按已确认的公开日期区分当时资料、后发解释和时间未知资料，不用抓取时间代替。新收录资料不会自动混入旧研究，需重新确认快照。补采仅在事先确认的域名／路径内按用户指定入口执行，并与库内材料共用根上限。
+
+当前报告保留完整原文与条件，真实模型默认关闭；机械引用有效不等于语义已经核实。完整操作、接口、费用与取消恢复见 [课题研究接手说明](docs/implementation/topic-research-report.md)，本轮检查见 [场景 05 验收](docs/implementation/topic-research-validation.md)。

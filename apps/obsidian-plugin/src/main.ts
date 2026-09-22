@@ -1,3 +1,4 @@
+import { renderResearch } from "./views/research";
 import { renderReview, syncWikiObservations } from "./views/review";
 import { renderSearch } from "./views/search";
 import { renderIngestion } from "./views/ingestion";
@@ -102,6 +103,9 @@ class GovernanceSettings extends PluginSettingTab {
     renderSearch(search, this.plugin.connection, this.plugin.searchDraft);
     const review = document.createElement("section");
     this.containerEl.append(review);
+    const research = document.createElement("section");
+    this.containerEl.append(research);
+    renderResearch(research, this.plugin.connection);
     renderReview(
       review,
       this.plugin.connection,

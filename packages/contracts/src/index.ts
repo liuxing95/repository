@@ -6,3 +6,5 @@ export * from "./changeset";
 export * from "./evidence";
 
 export * from "./wiki";
+
+export * from "./research";

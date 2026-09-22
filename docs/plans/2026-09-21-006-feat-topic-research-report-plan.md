@@ -77,16 +77,29 @@ flowchart TD
 
 ## 5. 实施单元
 
-- [ ] **RSH1：课题与覆盖表。** 需求 R039—R041；依赖 E1—E3。文件：`packages/contracts/src/research.ts`、`apps/service/src/research/brief.ts`、`apps/service/src/research/coverage.ts`、`apps/obsidian-plugin/src/views/research.ts`；测试：`tests/integration/research-coverage.test.ts`。沿用专题的问题先行和 PRD 时间意图。测试一般概览、项目版本缺失、多个分发范围、后发指南和未知公开时间；预期条件明确且历史口径不混淆。完成依据：A40 的三类资料有不同证据资格。
+- [x] **RSH1：课题与覆盖表。** 需求 R039—R041；依赖 E1—E3。文件：`packages/contracts/src/research.ts`、`apps/service/src/research/brief.ts`、`apps/service/src/research/coverage.ts`、`apps/obsidian-plugin/src/views/research.ts`；测试：`tests/integration/research-coverage.test.ts`。沿用专题的问题先行和 PRD 时间意图。测试一般概览、项目版本缺失、多个分发范围、后发指南和未知公开时间；预期条件明确且历史口径不混淆。完成依据：A40 的三类资料有不同证据资格。
 
-- [ ] **RSH2：补采与快照变更。** 需求 R042；依赖 RSH1、I4。文件：`apps/service/src/research/acquisition.ts`、`apps/service/src/research/snapshots.ts`；测试：`tests/integration/research-snapshot.test.ts`。测试库内模式不发网络请求、范围越界、仅取得搜索摘要、收录待写入、研究中更新来源；预期补采有上界且正式提交前不推进研究快照。完成依据：用户能核对快照差异及受影响章节。
+- [x] **RSH2：补采与快照变更。** 需求 R042；依赖 RSH1、I4。文件：`apps/service/src/research/acquisition.ts`、`apps/service/src/research/snapshots.ts`；测试：`tests/integration/research-snapshot.test.ts`。测试库内模式不发网络请求、范围越界、仅取得搜索摘要、收录待写入、研究中更新来源；预期补采有上界且正式提交前不推进研究快照。完成依据：用户能核对快照差异及受影响章节。
 
 - [ ] **RSH3：章节生成与全文检查。** 需求 R040—R043；依赖 RSH1、G3，补采可不启用。文件：`apps/service/src/research/chapters.ts`、`apps/service/src/research/report-check.ts`；测试：`tests/evaluation/research-report.test.ts`、`tests/faults/research-budget.test.ts`。测试缺关键题、矛盾章节、去掉否定、虚构性能倍数、并发章耗尽同一预算；预期不足可见、错误结论被阻断、预算到限不再调用。完成依据：A15 和报告语义门槛通过。
 
-- [ ] **RSH4：报告候选与恢复。** 需求 R044；依赖 RSH3、W3—W4。文件：`apps/service/src/research/artifacts.ts`、`apps/service/src/storage/migrations/005-research.ts`；测试：`tests/integration/research-save.test.ts`。测试取消后返回、重复保存、来源撤回、报告升级；预期章节与费用不丢、保存不直接进入正式 Wiki。完成依据：报告每条重要结论可追溯最终快照和原文。
+- [x] **RSH4：报告候选与恢复。** 需求 R044；依赖 RSH3、W3—W4。文件：`apps/service/src/research/artifacts.ts`、`apps/service/src/storage/migrations/005-research.ts`；测试：`tests/integration/research-save.test.ts`。测试取消后返回、重复保存、来源撤回、报告升级；预期章节与费用不丢、保存不直接进入正式 Wiki。完成依据：报告每条重要结论可追溯最终快照和原文。
 
 ## 6. 风险与实施验证
 
 最容易低估的是跨章节条件保持和来源公开时间不足。试点选跨版本技术主题，人工标注必答问题、反证与历史时间角色。不要以报告长度或引用数量评定成功。
 
 具体模型、上下文容量和单章上限实施时根据已授权路线配置；上限影响批次，不改变证据标准。模型失效时仍可输出已确认的来源清单、覆盖表和缺口，不虚构完整报告。
+
+## 7. 2026-09-22 实施状态
+
+本轮交付 RSH1、RSH2 和 RSH4 的本地流程，以及 RSH3 的原文整理、受信模型接口、共享预算和机械检查。RSH4 已能保存部分研究及未解决项，不以 RSH3 语义验收完成为前提。使用、代码、接口与恢复见[研究接手说明](../implementation/topic-research-report.md)，实际结果见[验收记录](../implementation/topic-research-validation.md)。
+
+与目标方案的差异明确保留：
+
+- 当前按完整原文组织章节，模型接口也只接受可逐字核对的原文主张，不支持自由综合论述。真实提供方未配置，跨章节语义和人工质量门槛未通过验收。因此 RSH3 不勾选，整体状态保持 `active`，不能据机械引用有效宣称 A15 已完整通过。
+- 补采由用户为具体问题指定入口，在预先确认的域名和路径内执行；没有自动搜索引擎。新增编排通过固定响应测试，真实网络获取复用场景 02。只有来源正式提交后才能准备新快照，用户确认后才推进。
+- 覆盖表显示范围和证据缺口；足够支持、冲突等结论由人明确判断，反证检索只提供线索。历史资格已用当时公开、后发解释、日期未知三类验证，不用抓取日期代替。
+- schema 升级为 5；保留旧研究、章节、报告和费用。取消停止新工作，但仍可读取和保存部分报告。报告通过场景 04 的原有审批与 Writer 写入候选区，提升 Wiki 另行审核。
+
+最终类型检查、lint、106 项自动化测试和真实 Obsidian 21 项桌面检查通过；2 项真实语料测试跳过。真实模型费用、开放领域语义效果和既有真实语料问题没有被本次结果关闭。
