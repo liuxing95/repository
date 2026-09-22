@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { sources } from "./migrations/002-sources";
+import { changesets } from "./migrations/004-changesets";
 import { evidence } from "./migrations/003-evidence";
 import Database from "better-sqlite3";
 import { chmodSync, existsSync, lstatSync } from "node:fs";
@@ -18,6 +19,7 @@ function matchesSchema(db: Database.Database, version: number) {
     expected.exec(foundation);
     if (version >= 2) expected.exec(sources);
     if (version >= 3) expected.exec(evidence);
+    if (version >= 4) expected.exec(changesets);
     return JSON.stringify(schema(db)) === JSON.stringify(schema(expected));
   } finally {
     expected.close();
@@ -37,7 +39,7 @@ export class Store {
       .prepare("SELECT name FROM sqlite_master WHERE type='table'")
       .all();
     this.readOnly =
-      ![0, 1, 2, 3].includes(version) ||
+      ![0, 1, 2, 3, 4].includes(version) ||
       (version === 0 && tables.length > 0) ||
       (version > 0 && !matchesSchema(this.db, version));
     this.sqliteVersion = (
@@ -81,6 +83,13 @@ export class Store {
     }
     if (version < 3)
       this.db.transaction(() => this.db.exec(evidence)).immediate();
+    if (version > 0 && version < 4) {
+      const backup = `${path}.before-v4-${randomUUID()}`;
+      this.db.prepare("VACUUM INTO ?").run(backup);
+      chmodSync(backup, 0o600);
+    }
+    if (version < 4)
+      this.db.transaction(() => this.db.exec(changesets)).immediate();
   }
   writable() {
     if (this.readOnly) throw new AppError("SCHEMA");

@@ -94,16 +94,27 @@ flowchart TD
 
 ## 6. 实施单元
 
-- [ ] **W1：提案、摘要与授权合同。** 需求 R033—R034、R036；依赖 G1—G3。文件：`packages/contracts/src/changeset.ts`、`apps/service/src/review/proposals.ts`、`apps/service/src/review/approval.ts`、`apps/service/src/storage/migrations/004-changesets.ts`；测试：`tests/security/approval-binding.test.ts`。沿用 v1 合同概念并补全路径和政策摘要。测试批准后改路径、正文、证据、权限或基线；预期旧批准全部失效。完成依据：审核所见与实际授权逐字节可比对。
+- [x] **W1：提案、摘要与授权合同。** 需求 R033—R034、R036；依赖 G1—G3。文件：`packages/contracts/src/changeset.ts`、`apps/service/src/review/proposals.ts`、`apps/service/src/review/approval.ts`、`apps/service/src/storage/migrations/004-changesets.ts`；测试：`tests/security/approval-binding.test.ts`。沿用 v1 合同概念并补全路径和政策摘要。测试批准后改路径、正文、证据、权限或基线；预期旧批准全部失效。完成依据：审核所见与实际授权逐字节可比对。
 
-- [ ] **W2：Bridge Writer。** 需求 R035—R036；依赖 W1。文件：`apps/obsidian-plugin/src/writer/guard.ts`、`apps/obsidian-plugin/src/writer/apply.ts`、`apps/service/src/review/writer-session.ts`；测试：`tests/obsidian/writer-contract.test.ts`、`tests/security/writer-paths.test.ts`。先做真实插件契约验证。测试未保存编辑缓冲、第三哈希、同名新建、目录逃逸、会话过期、迟到 grant；预期不丢人工字节。完成依据：A13 通过，失败则相应写能力关闭。
+- [x] **W2：Bridge Writer。** 需求 R035—R036；依赖 W1。文件：`apps/obsidian-plugin/src/writer/guard.ts`、`apps/obsidian-plugin/src/writer/apply.ts`、`apps/service/src/review/writer-session.ts`；测试：`tests/obsidian/writer-contract.test.ts`、`tests/security/writer-paths.test.ts`。先做真实插件契约验证。测试未保存编辑缓冲、第三哈希、同名新建、目录逃逸、会话过期、迟到 grant；预期不丢人工字节。完成依据：A13 通过，失败则相应写能力关闭。
 
-- [ ] **W3：提交回执与恢复。** 需求 R036；依赖 W2。文件：`apps/service/src/review/commit.ts`、`apps/service/src/review/recovery.ts`；测试：`tests/faults/changeset-recovery.test.ts`。测试每项写前／写后／回执前／最终提交前退出、批准中途过期、人工新编辑；预期已应用可识别、剩余可暂停、正式快照不部分推进。完成依据：A14 每个中断点有确定结果或显式冲突。此单元完成即可支持来源提交，不必等 Wiki 编译。
+- [x] **W3：提交回执与恢复。** 需求 R036；依赖 W2。文件：`apps/service/src/review/commit.ts`、`apps/service/src/review/recovery.ts`；测试：`tests/faults/changeset-recovery.test.ts`。测试每项写前／写后／回执前／最终提交前退出、批准中途过期、人工新编辑；预期已应用可识别、剩余可暂停、正式快照不部分推进。完成依据：A14 每个中断点有确定结果或显式冲突。此单元完成即可支持来源提交，不必等 Wiki 编译。
 
 - [ ] **W4：编译适配与 Review。** 需求 R032—R034、R037；依赖 W1—W3、E1、G3。文件：`apps/service/src/wiki/compiler-adapter.ts`、`apps/service/src/wiki/bounded-compiler.ts`、`apps/obsidian-plugin/src/views/review.ts`、`apps/service/src/review/candidates.ts`；测试：`tests/contracts/compiler-adapter.test.ts`、`tests/integration/wiki-review.test.ts`。两个适配路径仅择一启用。测试零新页、优先改旧页、候选截断、隐藏内部收费、恶意资料政策、保存后再提升；预期所有正式写入都经自有审核。完成依据：固定样本引用可回读、费用完整、沙盒外写入为零。
 
-- [ ] **W5：人工观察与影响清单。** 需求 R035、R038；依赖 W3、E1。文件：`apps/service/src/wiki/observations.ts`、`apps/service/src/wiki/impact.ts`；测试：`tests/integration/wiki-impact.test.ts`。测试人工修改、旧版本仍适用、来源撤回、大图截断及生成页再摄取；预期历史保留、待复审范围明确、无无限循环。完成依据：每个影响项可回到具体证据或变更。
+- [x] **W5：人工观察与影响清单。** 需求 R035、R038；依赖 W3、E1。文件：`apps/service/src/wiki/observations.ts`、`apps/service/src/wiki/impact.ts`；测试：`tests/integration/wiki-impact.test.ts`。测试人工修改、旧版本仍适用、来源撤回、大图截断及生成页再摄取；预期历史保留、待复审范围明确、无无限循环。完成依据：每个影响项可回到具体证据或变更。
 
 ## 7. 启用门槛
 
 上游 SDK 版本、内部费用钩子和候选接口需实际验证；文档里出现方法不等于它满足本系统契约。人工内容保护是硬门槛，任一次丢失阻断相应写入能力。正式文件写入与 Obsidian 同步插件可能竞争，首轮只在隔离试点单主端验收；不能以 SQLite 事务替代跨应用并发保护。
+
+## 8. 2026-09-22 实施状态
+
+操作、代码、接口与恢复见 [Wiki 使用与维护](../implementation/wiki-review-commit.md)，实际检查见 [本轮验收](../implementation/wiki-review-validation.md)。
+
+- W1—W3 已实现：固定提案、独立批准、摘要与政策绑定、公共 Writer、同步 `Vault.process` 更新、逐文件回执、数据库重开恢复及完整提交。正式 Wiki 查询只读已提交修订；来源新建沿用原有账本与接口，共用插件 Writer，避免改写历史来源提交。
+- W4 已实现无模型的原文编排与 Review，候选区保存和 Wiki 提升分别审核，允许零变更，优先匹配同类型同标题。每次最多一页、20 条主张；决定页必须填写用户确认。真实模型提取和页面生成尚未接入，费用与语义门槛未验收，W4 保持未完成。
+- SDK 在固定上游提交上检查了入口与类型，普通 compile 没有直接接入本系统逐次预算网关；没有加载、安装或以真实密钥运行。选择原生路线，第三方隔离验收不冒充已通过。
+- W5 已实现当前页面的人工观察与直接证据影响清单，最多 100 页一批。旧版本保留，来源变化仅提醒检查适用范围；更远关联留给人工复审，不递归改写。插件采用每 15 秒有界扫描和手动扫描，打开的编辑叶暂不作为稳定观察。
+- 反向恢复通过新的提案重新审核，只支持已提交的页面更新；首次新建不自动删除文件。当前原生编排一次只输出一页，多文件协议使用两文件故障用例验证。
+- 当前只在受测 macOS 的独立单主端试点验证，不承诺第三方同步工具之间的全局写入事务。计划保持 active，以区分可用本地链路与 W4 真实模型验收。

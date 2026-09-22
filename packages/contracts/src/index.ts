@@ -4,3 +4,5 @@ export * from "./runtime";
 export * from "./ingestion";
 export * from "./changeset";
 export * from "./evidence";
+
+export * from "./wiki";

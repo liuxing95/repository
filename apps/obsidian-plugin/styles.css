@@ -142,3 +142,27 @@
   appearance: auto;
   align-self: flex-start;
 }
+
+.kb-review {
+  max-width: 880px;
+  overflow-wrap: anywhere;
+}
+.kb-review label {
+  display: block;
+  margin-block: 12px;
+}
+.kb-review pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 320px;
+  overflow: auto;
+  padding: 12px;
+  background: var(--background-secondary);
+}
+.kb-review-detail details {
+  margin-block: 12px;
+}
+.kb-review-status {
+  padding: 12px;
+  border-left: 3px solid var(--interactive-accent);
+}

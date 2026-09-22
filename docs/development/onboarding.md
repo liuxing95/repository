@@ -1,6 +1,6 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-21，已实现范围为场景 01、02，以及场景 03 的本地检索、证据整理和问答工程接口。真实模型与人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-22，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复。真实模型与人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
@@ -16,7 +16,8 @@
 | 多来源获取、原件保存、解析与定位 | 已实现 | 基础解析目前仅在受测 macOS 环境开放；网页仅处理静态响应 |
 | 来源文件审核与写入 | 已实现 | 仅新建不可变来源投影；不会自动覆盖人工修改 |
 | 本地搜索、固定引用、原文整理与候选保存 | 已实现 | 首次查询或显式重建产生索引；原文摘录不等于已审核答案 |
-| 模型回答、Wiki 更新、研究、任务排程 | 部分接口及后续场景 | 模型适配器接口已实现，真实提供方与语义验收未完成；Wiki、研究和任务编排仍待实现 |
+| 候选区保存、Wiki 提升与更新、观察和影响清单 | 已实现本地流程 | 两次独立审核；打开编辑页会暂停写入；真实模型编译尚未开启 |
+| 模型回答、研究、任务排程 | 部分接口及后续场景 | 模型适配器接口已实现，真实提供方与语义验收未完成；研究和任务编排仍待实现 |
 | OCR、模型、日历、通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力 |
 
 首次收录后，可以直接进入 [检索与证据整理说明](../implementation/evidence-search-answer.md)，搜索中文短词或代码符号、回读引用，并了解模型能力当前的边界。
@@ -134,11 +135,11 @@ flowchart LR
   Fetch --> Raw[原件字节]
   Raw --> Parser[受限解析进程]
   Parser --> Service
-  Plugin -->|批准后创建来源文件| Vault[试点 Vault / KB-Sources]
+  Plugin -->|批准后创建来源和候选、更新 Wiki| Vault[试点 Vault / 三个受管目录]
   Vault -->|回读哈希与回执| Plugin
 ```
 
-服务保存资料事实、证据、索引和提交记录，插件负责正式 Vault 写入。检索与问答内部架构及流程见 [场景 03 图示](../implementation/evidence-search-answer.md#3-数据怎么流动)。解析器只接收原字节与必要配置，不能写 Vault、访问网络或启动子进程。当前 macOS 解析隔离与第三方程序的 OCI 隔离是两条不同路径。
+服务保存资料事实、证据、索引和提交记录，插件负责正式 Vault 写入。Wiki 的双重审核、同步更新和故障恢复见 [场景 04 说明](../implementation/wiki-review-commit.md)。检索与问答内部架构及流程见 [场景 03 图示](../implementation/evidence-search-answer.md#3-数据怎么流动)。解析器只接收原字节与必要配置，不能写 Vault、访问网络或启动子进程。当前 macOS 解析隔离与第三方程序的 OCI 隔离是两条不同路径。
 
 ```mermaid
 sequenceDiagram
@@ -165,7 +166,7 @@ sequenceDiagram
   S-->>P: 正式来源可见
 ```
 
-批准绑定的是文件路径、内容、来源修订、解析、政策版本与主端代次。它不是“之后随时可写”的授权：批准有效期为 10 分钟，逐文件授权最多 60 秒。中途断连可能留下部分已创建文件，但正式来源要等所有必要回执齐全才出现。
+批准绑定的是文件路径、内容、来源修订、解析、政策版本与主端代次。它不是“之后随时可写”的授权：批准有效期为 10 分钟，来源逐文件授权最多 60 秒；Wiki 和候选区最多 15 秒。中途断连可能留下部分已创建文件，但正式来源要等所有必要回执齐全才出现。
 
 ### 阅读代码的顺序
 
@@ -182,6 +183,7 @@ sequenceDiagram
 | 解析入口与格式处理 | [parser.ts](../../apps/service/src/ingestion/parser.ts) | [parser-entry.ts](../../apps/service/src/ingestion/parser-entry.ts)、[web-parser.ts](../../apps/service/src/ingestion/web-parser.ts)、[pdf-parser.ts](../../apps/service/src/ingestion/pdf-parser.ts) |
 | 本地检索、索引代、证据和问答 | [search/search.ts](../../apps/service/src/search/search.ts)、[evidence/locator.ts](../../apps/service/src/evidence/locator.ts) | [answers/answer.ts](../../apps/service/src/answers/answer.ts)、[场景 03 说明](../implementation/evidence-search-answer.md) |
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
+| Wiki 提案、批准、版本提交与人工观察 | [review/routes.ts](../../apps/service/src/review/routes.ts)、[views/review.ts](../../apps/obsidian-plugin/src/views/review.ts) | [场景 04 使用与维护](../implementation/wiki-review-commit.md) |
 | 作业租约和费用 | [jobs.ts](../../apps/service/src/runtime/jobs.ts)、[budget.ts](../../apps/service/src/runtime/budget.ts) | [worker-pool.ts](../../apps/service/src/runtime/worker-pool.ts) |
 | 出站与文件授权边界 | [security/egress.ts](../../apps/service/src/security/egress.ts)、[security/paths.ts](../../apps/service/src/security/paths.ts) | [file-reader.ts](../../apps/service/src/ingestion/file-reader.ts) |
 
@@ -194,12 +196,13 @@ app-data/
   service.lock                     当前服务 PID
   state.db.before-v2-<id>           从 schema 1 升级时才生成的数据库快照
   state.db.before-v3-<id>           迁移到证据与检索 schema 3 前的数据库快照
+  state.db.before-v4-<id>           迁移到 Wiki schema 4 前的数据库快照
   workspace-<id>/
     pilot/                         Obsidian 打开的试点
       .obsidian/plugins/knowledge-task-center/
       KB-Sources/                  批准后的不可变来源文件
-      KB-Wiki/                     预留目录
-      KB-Candidates/               预留目录
+      KB-Wiki/                     审核后的正式知识页面
+      KB-Candidates/               单独审核保存的候选投影
       KB-Plans/                    预留目录
     backup/                        接入时的原资料库副本
     backup-manifest.json           接入时逐文件哈希与目录清单
@@ -300,3 +303,5 @@ node apps/service/dist/main.js diagnose --data "/实际的/app-data"
 ### 本文核对记录
 
 2026-09-21：逐段执行第 2.2—2.4 节的样例命令，确认预览得到 1 个文件且无冲突、接入后副本内容一致、三个插件文件复制到试点、服务在 27124 启动、诊断返回 JSON、正常退出后锁文件清理。测试用临时目录已清理。本次文档变更未重跑依赖安装、Obsidian 界面或整套业务测试；真实桌面收录结果见场景 02 的既有验收记录。文档本地链接和差异格式已检查。
+
+2026-09-22：补充场景 04 的使用入口、Writer 更新与 schema 4 数据说明；本轮代码和真实桌面验证单独记录在 [Wiki 验收](../implementation/wiki-review-validation.md)，不替换上方 2026-09-21 的历史核对结果。

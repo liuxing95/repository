@@ -363,6 +363,151 @@ try {
   await page.waitForFunction(() =>
     document.querySelector(".kb-search").textContent.includes('"issues"'),
   );
+  // Scene 04: real user review, candidate save, promotion, dirty editor guard and Vault.process update.
+  const wikiTitle = `权限验收 ${Date.now()}`;
+  await page.getByLabel("Wiki 页面标题", { exact: true }).fill(wikiTitle);
+  await page
+    .getByRole("button", { name: "读取待审核候选", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "审核保存到候选区", exact: true })
+    .first()
+    .click();
+  await page.getByLabel("确认本次固定变更", { exact: true }).check();
+  await page
+    .getByRole("button", { name: "批准并应用本次变更", exact: true })
+    .click();
+  await page
+    .getByText("候选区提交完成；可创建新的 Wiki 提升提案。", { exact: true })
+    .waitFor();
+  await page
+    .getByRole("button", { name: "审核提升为 Wiki", exact: true })
+    .first()
+    .click();
+  await page
+    .getByRole("heading", { name: "07 / Wiki 候选与审核", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-wiki-review.png") });
+  const wikiPath = (
+    await page.locator(".kb-review-detail summary").first().innerText()
+  ).replace(/^新建：/, "");
+  await page.getByLabel("确认本次固定变更", { exact: true }).check();
+  await page
+    .getByRole("button", { name: "批准并应用本次变更", exact: true })
+    .click();
+  await page
+    .getByText("业务提交完成，正式 Wiki 索引就绪。", { exact: true })
+    .waitFor();
+  const committedWiki = await readFile(
+    join(workspace.vaultPath, wikiPath),
+    "utf8",
+  );
+  await vaultPage.evaluate(async (path) => {
+    const file = window.app.vault.getAbstractFileByPath(path);
+    const leaf = window.app.workspace.getLeaf(true);
+    await leaf.openFile(file);
+    leaf.view.editor.setValue("人工未保存输入 😀：不允许被提案覆盖");
+  }, wikiPath);
+  // Wait for disk flush, close, and observe the manual baseline before preparing its reviewed replacement.
+  await vaultPage.waitForFunction(
+    async (path) =>
+      (await window.app.vault.adapter.read(path)).includes("人工未保存输入"),
+    wikiPath,
+  );
+  await vaultPage.evaluate((path) => {
+    const leaves = [];
+    window.app.workspace.iterateAllLeaves((l) => {
+      if (l.view.file?.path === path) leaves.push(l);
+    });
+    for (const l of leaves) l.detach();
+  }, wikiPath);
+  await page
+    .getByRole("button", { name: "扫描人工修改与影响", exact: true })
+    .click();
+  await page.waitForFunction(() =>
+    document.querySelector(".kb-review").textContent.includes("manual-change"),
+  );
+  await page
+    .getByRole("button", { name: "读取待审核候选", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "审核提升为 Wiki", exact: true })
+    .first()
+    .click();
+  await page
+    .locator(".kb-review-detail")
+    .getByText("人工未保存输入 😀：不允许被提案覆盖", { exact: true })
+    .waitFor();
+  await vaultPage.evaluate(async (path) => {
+    const file = window.app.vault.getAbstractFileByPath(path);
+    const leaf = window.app.workspace.getLeaf(true);
+    await leaf.openFile(file);
+    leaf.view.editor.setValue("新一轮未保存缓冲 😀");
+  }, wikiPath);
+  await page.getByLabel("确认本次固定变更", { exact: true }).check();
+  await page
+    .getByRole("button", { name: "批准并应用本次变更", exact: true })
+    .click();
+  await page.waitForFunction(() =>
+    document
+      .querySelector(".kb-review-status")
+      .textContent.includes("WRITER_EDITING"),
+  );
+  const buffer = await vaultPage.evaluate((path) => {
+    let value;
+    window.app.workspace.iterateAllLeaves((l) => {
+      if (l.view.file?.path === path) value = l.view.editor.getValue();
+    });
+    return value;
+  }, wikiPath);
+  if (buffer !== "新一轮未保存缓冲 😀")
+    throw new Error("wiki writer lost editing buffer");
+  await page
+    .getByRole("heading", { name: "07 / Wiki 候选与审核", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: join(root, "obsidian-wiki-editing-blocked.png"),
+  });
+  await vaultPage.waitForFunction(
+    async (path) =>
+      (await window.app.vault.adapter.read(path)) === "新一轮未保存缓冲 😀",
+    wikiPath,
+  );
+  await vaultPage.evaluate((path) => {
+    const leaves = [];
+    window.app.workspace.iterateAllLeaves((l) => {
+      if (l.view.file?.path === path) leaves.push(l);
+    });
+    for (const l of leaves) l.detach();
+  }, wikiPath);
+  await page
+    .getByRole("button", { name: "读取待审核候选", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "审核提升为 Wiki", exact: true })
+    .first()
+    .click();
+  await page.getByLabel("确认本次固定变更", { exact: true }).check();
+  await page
+    .getByRole("button", { name: "批准并应用本次变更", exact: true })
+    .click();
+  await page
+    .getByText("业务提交完成，正式 Wiki 索引就绪。", { exact: true })
+    .waitFor();
+  if (
+    (await readFile(join(workspace.vaultPath, wikiPath), "utf8")) !==
+    committedWiki
+  )
+    throw new Error("wiki process update did not match approved bytes");
+  await page.getByLabel("搜索正式 Wiki", { exact: true }).fill(wikiTitle);
+  await page
+    .getByRole("button", { name: "检索已提交 Wiki", exact: true })
+    .click();
+  await page.locator(".kb-review details").first().waitFor();
+  await page
+    .getByRole("heading", { name: "07 / Wiki 候选与审核", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-wiki-committed.png") });
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(
@@ -382,6 +527,10 @@ try {
           "keyword-search-and-fixed-evidence",
           "extractive-answer-and-candidate",
           "model-disabled-and-knowledge-health",
+          "wiki-candidate-separate-approval",
+          "wiki-promotion-and-committed-search",
+          "wiki-dirty-editor-buffer-protected",
+          "wiki-observation-and-reviewed-process-update",
         ],
         pageErrors: errors,
       },

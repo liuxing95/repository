@@ -4,7 +4,7 @@
 
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架、[场景 01：工作区接入与运行治理](docs/plans/2026-09-21-002-feat-workspace-runtime-governance-plan.md)和[场景 02：多来源资料收录](docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md)。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。真实模型提供方和人工语义验收尚未完成；TaskNotes、Wiki 更新、通知、日历和发布仍属于后续场景。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。真实模型编译与语义验收尚未完成；TaskNotes、通知、日历和发布仍属于后续场景。
 
 ## 开发与检查
 
@@ -108,7 +108,7 @@ pnpm service serve
 
 收录上限：100 个选定条目、单原件 20 MB、范围总量最多 50 MB、最多 1000 个候选、网页发现深度 5、发现时限 120 秒。每个解析进程最多 20 秒、V8 堆 256 MB、结果 8 MB；PDF 首次最多解析 200 页。V8 堆上限不是总 RSS 上限，真实样本峰值见验收记录。
 
-数据库已升级为 schema 3。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
+数据库已升级为 schema 4。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
 
 [场景 02 实施与验收记录](docs/implementation/multi-source-ingestion-validation.md)包含 API、50 项测试、30 份真实资料、桌面截图和恢复方法。重跑真实网络样本：
 
@@ -124,3 +124,18 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 “整理本次原文证据”保留完整摘录，保存结果只会进入待审核候选，不直接写 Wiki。真实模型默认关闭。若已有自定义来源政策，本地读取需要 `routes.read` 包含 `local`；模型用途单独授权。
 
 完整流程、接口、代码入口、迁移及排障见 [场景 03 说明](docs/implementation/evidence-search-answer.md)，实际测试与性能边界见 [验收记录](docs/implementation/evidence-search-validation.md)。
+
+## 审核候选并写入 Wiki
+
+在“06 / 证据检索与问答”保存固定候选后，进入“07 / Wiki 候选与审核”：
+
+1. 填写页面标题和类型，点击“读取待审核候选”。
+2. 点击“审核保存到候选区”，核对前后内容与证据，勾选确认，再点击“批准并应用本次变更”。
+3. 候选区提交完成后，点击“审核提升为 Wiki”，对新提案再次审核和批准。同类型、同标题优先更新已有页，内容相同允许零变更。
+4. 用“检索已提交 Wiki”查正式页面；用“扫描人工修改与影响”检查修改和来源问题。打开的编辑页会阻断 Writer，保存并关闭后再核对恢复。
+
+本地编排每次最多一页、20 条主张，不需要模型密钥。它保留原文和条件，不自动生成综合结论。决定页需要用户明确填写决定；普通候选不能自动代表用户决策。
+
+页面更新使用 Obsidian 的同步 `Vault.process` 检查当前内容；回执丢失时按 afterHash 恢复，遇到第三版本则保留人工内容。只有所有必要文件核对一致，正式知识版本才推进；磁盘部分应用不等于业务提交完成。已完成的页面更新可生成反向提案，重新审核后恢复原字节；首次新建不会自动删文件。
+
+完整操作、接口、代码入口、schema 4 迁移和恢复见 [Wiki 使用与维护](docs/implementation/wiki-review-commit.md)，本次检查和真实桌面记录见 [场景 04 验收](docs/implementation/wiki-review-validation.md)。升级时服务与插件需一起重新构建部署；旧服务不能写 schema 4 数据库。

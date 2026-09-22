@@ -19,7 +19,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
     const migrated = new Store(path);
     expect(migrated.readOnly).toBe(false);
     expect(migrated.get("retained")).toBe("unchanged");
-    expect(migrated.db.pragma("user_version", { simple: true })).toBe(3);
+    expect(migrated.db.pragma("user_version", { simple: true })).toBe(4);
     migrated.close();
     const backup = (await readdir(root)).find((n) => n.includes("before-v2"))!;
     expect((await stat(join(root, backup))).mode & 0o777).toBe(0o600);
@@ -38,7 +38,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
   }
 });
 
-test("known v2 preserves source objects and a private v2 backup; reopened v3 schema remains writable", async () => {
+test("known v2 preserves source objects and a private v2 backup; reopened v4 schema remains writable", async () => {
   const { sources } =
     await import("../../apps/service/src/storage/migrations/002-sources");
   const root = await mkdtemp(join(tmpdir(), "kb-evidence-migration-"));
@@ -52,7 +52,7 @@ test("known v2 preserves source objects and a private v2 backup; reopened v3 sch
       .run("retained-hash", Buffer.from("original bytes"));
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(3);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(4);
     expect(
       upgraded.db
         .prepare("SELECT bytes FROM objects WHERE hash=?")
@@ -71,6 +71,44 @@ test("known v2 preserves source objects and a private v2 backup; reopened v3 sch
         .prepare("SELECT * FROM search_fts WHERE search_fts MATCH ?")
         .all('"test"'),
     ).not.toThrow();
+    reopened.close();
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("v3 upgrades with an exact private snapshot and v4 reopens with Wiki FTS intact", async () => {
+  const { sources } =
+    await import("../../apps/service/src/storage/migrations/002-sources");
+  const { evidence } =
+    await import("../../apps/service/src/storage/migrations/003-evidence");
+  const root = await mkdtemp(join(tmpdir(), "kb-wiki-migration-")),
+    path = join(root, "state.db");
+  try {
+    const old = new Database(path);
+    old.exec(foundation);
+    old.exec(sources);
+    old.exec(evidence);
+    old
+      .prepare("INSERT INTO answer_candidates VALUES(?,?)")
+      .run("preserved", '{"answer":"unchanged"}');
+    old.close();
+    const upgraded = new Store(path);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(4);
+    expect(
+      upgraded.db
+        .prepare("SELECT value FROM answer_candidates WHERE id='preserved'")
+        .get(),
+    ).toEqual({ value: '{"answer":"unchanged"}' });
+    upgraded.close();
+    const file = (await readdir(root)).find((n) => n.includes("before-v4"))!;
+    expect((await stat(join(root, file))).mode & 0o777).toBe(0o600);
+    const snapshot = new Database(join(root, file));
+    expect(snapshot.pragma("user_version", { simple: true })).toBe(3);
+    snapshot.close();
+    const reopened = new Store(path);
+    expect(reopened.readOnly).toBe(false);
+    expect(reopened.db.prepare("SELECT * FROM wiki_fts").all()).toEqual([]);
     reopened.close();
   } finally {
     await rm(root, { recursive: true, force: true });

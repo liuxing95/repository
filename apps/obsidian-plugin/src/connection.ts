@@ -157,6 +157,8 @@ export class Connection {
     return this.request<unknown>("/v1/diagnostics");
   }
   async disconnect() {
+    this.principal = undefined;
+    this.workspace = undefined;
     try {
       await this.request("/v1/session/revoke", "POST");
     } finally {

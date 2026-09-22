@@ -345,7 +345,7 @@ export class WorkspaceRegistry {
         id: "writer",
         available: valid,
         enabled: valid,
-        reason: "仅支持来源不可变文件新建；逐文件批准和回读，Wiki 更新尚未启用",
+        reason: "来源与候选新建、Wiki 受控更新；逐文件批准、同步基线保护与回读",
       },
       {
         id: "search",

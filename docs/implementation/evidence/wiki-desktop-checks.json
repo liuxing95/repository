@@ -1,0 +1,23 @@
+{
+  "title": "设置 - pilot - Obsidian 1.13.7",
+  "checks": [
+    "plugin-load",
+    "pair",
+    "master-claim",
+    "read-save-settings",
+    "worker-success",
+    "redacted-diagnostics",
+    "ingestion-preview-freeze-parse",
+    "writer-protects-open-editor",
+    "approval-resume-receipts-commit",
+    "source-locator-readback",
+    "keyword-search-and-fixed-evidence",
+    "extractive-answer-and-candidate",
+    "model-disabled-and-knowledge-health",
+    "wiki-candidate-separate-approval",
+    "wiki-promotion-and-committed-search",
+    "wiki-dirty-editor-buffer-protected",
+    "wiki-observation-and-reviewed-process-update"
+  ],
+  "pageErrors": []
+}

@@ -1,9 +1,11 @@
-export type Patch = {
+export type WriterPatch = {
   sequence: number;
   path: string;
   beforeHash: string | null;
   afterHash: string;
   content: string;
+};
+export type Patch = WriterPatch & {
   revisionId: string;
   parseId: string;
 };
@@ -23,7 +25,9 @@ export type WriterGrant = {
   token: string;
   changeId: string;
   digest: string;
-  patch: Patch;
+  patch: WriterPatch;
+  sessionId?: string;
+  approvalId?: string;
   vaultId: string;
   deviceId: string;
   epoch: number;

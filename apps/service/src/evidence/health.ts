@@ -127,7 +127,7 @@ export function knowledgeHealth(evidence: EvidenceStore, p: Principal) {
   return {
     issues,
     limitations: [
-      "只检查已登记来源与主张；尚未扫描未来场景 04 的 Wiki 页面。",
+      "此处检查已登记来源与主张；Wiki 页面及人工修改见场景 04 的影响清单。",
       "公开时间未知不能自动判定过期，时间晚也不代表取代旧结论。",
     ],
   };

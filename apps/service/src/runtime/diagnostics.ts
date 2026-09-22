@@ -10,7 +10,7 @@ export function diagnostics(registry: WorkspaceRegistry) {
   const base = {
     serviceVersion: "0.1.0",
     policyVersion,
-    supportedSchemaVersion: 3,
+    supportedSchemaVersion: 4,
     databaseSchemaVersion: store.db.pragma("user_version", { simple: true }),
     schemaVersion: 1,
     node: process.versions.node,

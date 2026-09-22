@@ -1,3 +1,4 @@
+import { reviewRoutes } from "../review/routes";
 import { searchRoutes } from "../search/routes";
 import { EvidenceStore } from "../evidence/locator";
 import type { AnswerProvider } from "../answers/answer";
@@ -170,5 +171,6 @@ export function createServer(
   );
   ingestionRoutes(app, new Ingestion(registry, jobs), sessions, mutate);
   searchRoutes(app, new EvidenceStore(registry), sessions, answerProviders);
+  reviewRoutes(app, new EvidenceStore(registry), sessions);
   return app;
 }

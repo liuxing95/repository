@@ -1,3 +1,4 @@
+import { renderReview, syncWikiObservations } from "./views/review";
 import { renderSearch } from "./views/search";
 import { renderIngestion } from "./views/ingestion";
 import { obsidianHost } from "./writer/apply";
@@ -41,6 +42,26 @@ export default class KnowledgeTaskPlugin extends Plugin {
           void this.connection.heartbeat().catch(() => {});
       }, 15_000),
     );
+    let observing = false;
+    this.registerInterval(
+      window.setInterval(() => {
+        if (
+          observing ||
+          !this.connection.principal ||
+          this.connection.workspace?.deviceId !== this.connection.deviceId
+        )
+          return;
+        observing = true;
+        void syncWikiObservations(
+          this.connection,
+          obsidianHost(this.app, this.connection.vaultPath),
+        )
+          .catch(() => {})
+          .finally(() => {
+            observing = false;
+          });
+      }, 15000),
+    );
     this.addCommand({
       id: "open-governance",
       name: "打开运行治理",
@@ -79,5 +100,12 @@ class GovernanceSettings extends PluginSettingTab {
     );
     this.containerEl.append(search);
     renderSearch(search, this.plugin.connection, this.plugin.searchDraft);
+    const review = document.createElement("section");
+    this.containerEl.append(review);
+    renderReview(
+      review,
+      this.plugin.connection,
+      obsidianHost(this.app, this.plugin.connection.vaultPath),
+    );
   }
 }
