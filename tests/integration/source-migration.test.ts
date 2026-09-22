@@ -19,7 +19,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
     const migrated = new Store(path);
     expect(migrated.readOnly).toBe(false);
     expect(migrated.get("retained")).toBe("unchanged");
-    expect(migrated.db.pragma("user_version", { simple: true })).toBe(5);
+    expect(migrated.db.pragma("user_version", { simple: true })).toBe(6);
     migrated.close();
     const backup = (await readdir(root)).find((n) => n.includes("before-v2"))!;
     expect((await stat(join(root, backup))).mode & 0o777).toBe(0o600);
@@ -38,7 +38,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
   }
 });
 
-test("known v2 preserves source objects and a private v2 backup; reopened v5 schema remains writable", async () => {
+test("known v2 preserves source objects and a private v2 backup; reopened v6 schema remains writable", async () => {
   const { sources } =
     await import("../../apps/service/src/storage/migrations/002-sources");
   const root = await mkdtemp(join(tmpdir(), "kb-evidence-migration-"));
@@ -52,7 +52,7 @@ test("known v2 preserves source objects and a private v2 backup; reopened v5 sch
       .run("retained-hash", Buffer.from("original bytes"));
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(5);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(6);
     expect(
       upgraded.db
         .prepare("SELECT bytes FROM objects WHERE hash=?")
@@ -77,7 +77,7 @@ test("known v2 preserves source objects and a private v2 backup; reopened v5 sch
   }
 });
 
-test("v3 upgrades with an exact private snapshot and v5 reopens with Wiki FTS intact", async () => {
+test("v3 upgrades with an exact private snapshot and v6 reopens with Wiki FTS intact", async () => {
   const { sources } =
     await import("../../apps/service/src/storage/migrations/002-sources");
   const { evidence } =
@@ -94,7 +94,7 @@ test("v3 upgrades with an exact private snapshot and v5 reopens with Wiki FTS in
       .run("preserved", '{"answer":"unchanged"}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(5);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(6);
     expect(
       upgraded.db
         .prepare("SELECT value FROM answer_candidates WHERE id='preserved'")
@@ -135,7 +135,7 @@ test("v4 research migration keeps Wiki records and a private v4 backup", async (
       .run("retained", "op", "hash", '{"retained":true}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(5);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(6);
     expect(
       upgraded.db
         .prepare("SELECT value FROM wiki_changes WHERE id='retained'")
@@ -152,6 +152,48 @@ test("v4 research migration keeps Wiki records and a private v4 backup", async (
     expect(reopened.db.prepare("SELECT * FROM research_reports").all()).toEqual(
       [],
     );
+    reopened.close();
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("v5 learning migration preserves research and creates a private v5 backup", async () => {
+  const { sources } =
+    await import("../../apps/service/src/storage/migrations/002-sources");
+  const { evidence } =
+    await import("../../apps/service/src/storage/migrations/003-evidence");
+  const { changesets } =
+    await import("../../apps/service/src/storage/migrations/004-changesets");
+  const { research } =
+    await import("../../apps/service/src/storage/migrations/005-research");
+  const root = await mkdtemp(join(tmpdir(), "kb-learning-migration-")),
+    path = join(root, "state.db");
+  try {
+    const old = new Database(path);
+    old.exec(foundation + sources + evidence + changesets + research);
+    old
+      .prepare("INSERT INTO research_jobs VALUES(?,?,?,?)")
+      .run("retained", "operation", "digest", '{"rootId":"retained-budget"}');
+    old.close();
+    const upgraded = new Store(path);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(6);
+    expect(
+      upgraded.db
+        .prepare("SELECT value FROM research_jobs WHERE id='retained'")
+        .get(),
+    ).toEqual({ value: '{"rootId":"retained-budget"}' });
+    upgraded.close();
+    const file = (await readdir(root)).find((n) => n.includes("before-v6"))!;
+    expect((await stat(join(root, file))).mode & 0o777).toBe(0o600);
+    const before = new Database(join(root, file));
+    expect(before.pragma("user_version", { simple: true })).toBe(5);
+    before.close();
+    const reopened = new Store(path);
+    expect(reopened.readOnly).toBe(false);
+    expect(
+      reopened.db.prepare("SELECT * FROM learning_attempts").all(),
+    ).toEqual([]);
     reopened.close();
   } finally {
     await rm(root, { recursive: true, force: true });

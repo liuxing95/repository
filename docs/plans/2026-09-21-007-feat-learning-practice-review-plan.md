@@ -76,14 +76,26 @@ flowchart TD
 
 ## 5. 实施单元
 
-- [ ] **L1：目标、单元与范围基线。** 需求 R045—R046；依赖 E1、T1（场景 07）。文件：`packages/contracts/src/learning.ts`、`apps/service/src/learning/goals.ts`、`apps/service/src/learning/units.ts`、`apps/service/src/storage/migrations/006-learning.ts`；测试：`tests/integration/learning-scope.test.ts`。参考学习专题的参考库／队列分离。测试归档 100 页只选两单元、跳过已熟悉部分、修改版本范围；预期不批量建任务、不改变既有通过记录。完成依据：A16 的材料增加不改变掌握证据。
+- [x] **L1：目标、单元与范围基线。** 需求 R045—R046；依赖 E1、T1（场景 07）。文件：`packages/contracts/src/learning.ts`、`apps/service/src/learning/goals.ts`、`apps/service/src/learning/units.ts`、`apps/service/src/storage/migrations/006-learning.ts`；测试：`tests/integration/learning-scope.test.ts`。参考学习专题的参考库／队列分离。测试归档 100 页只选两单元、跳过已熟悉部分、修改版本范围；预期不批量建任务、不改变既有通过记录。完成依据：A16 的材料增加不改变掌握证据。
 
 - [ ] **L2：尝试记录与恢复上下文。** 需求 R047—R048；依赖 L1、E1。文件：`apps/service/src/learning/attempts.ts`、`apps/service/src/learning/resume.ts`、`apps/obsidian-plugin/src/views/learning.ts`；测试：`tests/integration/learning-resume.test.ts`。测试首次开始、中断续学、提示使用、来源更新／撤回、模型评分与用户自报混合；预期原始尝试保留，必要资料和遗留问题可见，不自动认定掌握。完成依据：A41 从 Today 能接回实际活动。
 
 - [ ] **L3：复习建议与容量预约。** 需求 R049；依赖 L2、T2、G3。文件：`apps/service/src/learning/review-suggestions.ts`、`apps/service/src/learning/capacity.ts`；测试：`tests/integration/review-capacity.test.ts`。测试无容量设置、WIP 已满、同时确认多个建议、任务创建超时、跳过后再次生成；预期不超发、不重复创建，未知保留待核对。完成依据：建议数量、预留和正式任务可对账。
 
-- [ ] **L4：版本影响与四类进度连接。** 需求 R050，协同 R060—R061；依赖 L2、W5、T3。文件：`apps/service/src/learning/impact.ts`、`apps/service/src/learning/evidence-view.ts`；测试：`tests/integration/learning-version-impact.test.ts`。测试旧版本正确结果、目标升级、取消单元与基线扩大；预期历史不清零、补学由用户选、分母变化单列。完成依据：A17 不出现“删掉未完成项就提高进度”。
+- [x] **L4：版本影响与四类进度连接。** 需求 R050，协同 R060—R061；依赖 L2、W5、T3。文件：`apps/service/src/learning/impact.ts`、`apps/service/src/learning/evidence-view.ts`；测试：`tests/integration/learning-version-impact.test.ts`。测试旧版本正确结果、目标升级、取消单元与基线扩大；预期历史不清零、补学由用户选、分母变化单列。完成依据：A17 不出现“删掉未完成项就提高进度”。
 
 ## 6. 验证与待定参数
 
 每日容量、WIP、复习间隔、目标版本与评分规则都在启用时配置，历史示例不等于用户授权。没有参数仍能记录学习与查看证据。验证以“能继续上次活动”“用户尝试未被生成内容替代”“版本变化可解释”为主，不以学习效果提升比例作为未经实测的承诺。
+
+## 7. 2026-09-22 实施状态与依赖边界
+
+本轮完成 L1 的目标、单元与固定基线，L4 的历史范围和版本影响，以及 L2、L3 的本地记录／服务接口部分。使用、代码与恢复见[学习接手说明](../implementation/learning-practice-review.md)，实际验证见[验收记录](../implementation/learning-practice-validation.md)。
+
+- L2 的原始尝试、分开评价、受限内容隐藏与 ResumeContext 已实现；当前入口为设置页“继续学习”。场景 07 的 Today 与任务身份接口尚未落地，A41 不能完整验收，因此 L2 保持未勾选。
+- L3 的明确规则、少量建议、持久选择、事务容量预留和未知创建核对已实现，并用受信测试适配器验证并发与重启。真实 TaskNotes 适配器仍依赖 T1—T2；当前 CLI 只展示建议，不创建任务，因此 L3 保持未勾选。
+- L4 的材料、任务、学习、知识口径分开展示为说明与关联，不新建可写任务事实。当前和历史基线独立计权；新范围不自动继承旧版通过，新增加项单列。实际 TaskNotes 状态及 Today 汇总仍随 T3 接入。
+- 用户自行选材和输入单元；不自动生成解释、提示或个人笔记，不执行产物里的命令。模型评分和程序检查有受信登记合同，但没有真实提供方或自动检查器；不能把人工输入伪装成程序通过。
+- 新增 schema 6，并在旧库升级前生成私有备份。学习记录进入权威账本，当前不写学习笔记投影。
+
+最终类型检查和 lint 通过；包含 OCI 与编译后进程的回归 121 项通过、2 项真实语料跳过；真实 Obsidian 桌面 25 项检查通过。方案保持 `active`，等待真实 TaskNotes 与 Today 集成后补齐 L2、L3 验收。A16 的资料不等于掌握、A17 的历史保留和有限建议已验证；不据此声称完整 A41 或真实学习效果已验证。

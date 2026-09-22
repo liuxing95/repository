@@ -1,0 +1,31 @@
+{
+  "title": "设置 - pilot - Obsidian 1.13.7",
+  "checks": [
+    "plugin-load",
+    "pair",
+    "master-claim",
+    "read-save-settings",
+    "worker-success",
+    "redacted-diagnostics",
+    "ingestion-preview-freeze-parse",
+    "writer-protects-open-editor",
+    "approval-resume-receipts-commit",
+    "source-locator-readback",
+    "keyword-search-and-fixed-evidence",
+    "extractive-answer-and-candidate",
+    "model-disabled-and-knowledge-health",
+    "wiki-candidate-separate-approval",
+    "wiki-promotion-and-committed-search",
+    "wiki-dirty-editor-buffer-protected",
+    "wiki-observation-and-reviewed-process-update",
+    "research-brief-and-snapshot-confirmation",
+    "research-chapter-and-frozen-report",
+    "research-candidate-reviewed-writer-save",
+    "research-cancel-preserves-report",
+    "learning-confirmed-baseline-and-selected-unit",
+    "learning-actual-attempt-and-resume",
+    "learning-manual-evidence-separate-from-self-report",
+    "learning-no-rules-no-automatic-tasks"
+  ],
+  "pageErrors": []
+}

@@ -606,6 +606,109 @@ try {
     .getByRole("button", { name: "取消后续研究", exact: true })
     .click();
   await research.getByText(/状态：cancelled/).waitFor();
+  // Scene 06: a small selected unit, actual attempt, resume and a human evaluation.
+  const learning = page.locator(".kb-learning");
+  const learningTitle = `解释权限与批准边界 ${Date.now()}`;
+  const learningRef = await vaultPage.evaluate(async () => {
+    const c = window.app.plugins.plugins["knowledge-task-center"].connection;
+    const result = await c.request("/v1/search", "POST", { query: "权限" });
+    return result.hits[0].id;
+  });
+  await learning
+    .getByLabel("希望能解释、验证或完成什么", { exact: true })
+    .fill(learningTitle);
+  await learning.getByLabel("学习目标版本", { exact: true }).fill("本地试点");
+  await learning
+    .getByLabel("可观察的完成证据", { exact: true })
+    .fill("用自己的话说明未经批准不会写入");
+  await learning
+    .getByLabel("单元 1 标题", { exact: true })
+    .fill("权限边界练习");
+  await learning
+    .getByLabel("单元 1 必要 Evidence ID（逗号分隔）", { exact: true })
+    .fill(learningRef);
+  await learning
+    .getByLabel("单元 1 叶子验收项（每行 描述|权重，可留空）", { exact: true })
+    .fill("解释未批准时的行为|1");
+  await learning
+    .getByRole("button", { name: "预览学习目标与固定基线", exact: true })
+    .click();
+  await learning.getByLabel("确认学习基线", { exact: true }).check();
+  await learning
+    .getByRole("button", { name: "确认学习基线", exact: true })
+    .click();
+  await learning
+    .getByLabel("单元选择：权限边界练习", { exact: true })
+    .selectOption("selected");
+  await learning
+    .getByRole("button", { name: "保存选择：权限边界练习", exact: true })
+    .click();
+  await learning
+    .getByRole("button", { name: "继续学习：权限边界练习", exact: true })
+    .click();
+  await learning.getByText(/首次开始：先阅读必要资料/).waitFor();
+  await learning
+    .getByLabel("我的实际表达", { exact: true })
+    .fill("我的理解：没有批准不能写入。超时需要核对回执。");
+  await learning
+    .getByLabel("已使用提示层级", { exact: true })
+    .selectOption("1");
+  await learning
+    .getByLabel("我报告的结果", { exact: true })
+    .fill("自报理解，不代表程序通过");
+  await learning
+    .getByLabel("遗留问题（每行一个）", { exact: true })
+    .fill("回执丢失后怎样继续？");
+  await learning
+    .getByRole("button", { name: "保存我的实际尝试", exact: true })
+    .click();
+  await learning
+    .getByText("尝试已保存，自报不自动计为验收通过。", { exact: true })
+    .waitFor();
+  await learning
+    .getByRole("button", { name: "继续学习：权限边界练习", exact: true })
+    .click();
+  await learning.getByText(/继续上次活动/).waitFor();
+  if (
+    !(await learning.locator("pre").last().innerText()).includes(
+      "回执丢失后怎样继续",
+    )
+  )
+    throw new Error("learning resume lost unresolved question");
+  await learning
+    .getByLabel("人工核对结果", { exact: true })
+    .selectOption("passed");
+  await learning
+    .getByLabel("人工核对依据", { exact: true })
+    .fill("本次人工阅读原始尝试，确认限定条件保留");
+  await learning
+    .getByLabel("验收规则版本", { exact: true })
+    .fill("desktop-manual-1");
+  await learning
+    .getByRole("button", { name: "保存人工评价", exact: true })
+    .click();
+  await learning
+    .getByRole("button", { name: "读取学习目标", exact: true })
+    .click();
+  await learning
+    .getByRole("button", { name: `打开目标：${learningTitle}`, exact: true })
+    .click();
+  await learning.getByText(/证据通过权重 1\/1/).waitFor();
+  await learning
+    .getByRole("button", { name: "继续学习：权限边界练习", exact: true })
+    .click();
+  await learning.getByText(/继续上次活动/).waitFor();
+  await learning
+    .locator(".kb-learning-context")
+    .screenshot({ path: join(root, "obsidian-learning-resume.png") });
+  await learning
+    .getByRole("button", { name: "生成少量复习建议", exact: true })
+    .click();
+  await learning
+    .getByText("先明确复习间隔、窗口和预计时长；不猜测用户参数。", {
+      exact: true,
+    })
+    .waitFor();
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(
@@ -633,6 +736,10 @@ try {
           "research-chapter-and-frozen-report",
           "research-candidate-reviewed-writer-save",
           "research-cancel-preserves-report",
+          "learning-confirmed-baseline-and-selected-unit",
+          "learning-actual-attempt-and-resume",
+          "learning-manual-evidence-separate-from-self-report",
+          "learning-no-rules-no-automatic-tasks",
         ],
         pageErrors: errors,
       },

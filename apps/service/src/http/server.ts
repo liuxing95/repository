@@ -1,4 +1,6 @@
 import { researchRoutes } from "../research/routes";
+import { learningRoutes } from "../learning/routes";
+import type { LearningTaskAdapter } from "../learning/capacity";
 import type { ResearchProvider } from "../research/chapters";
 import { reviewRoutes } from "../review/routes";
 import { searchRoutes } from "../search/routes";
@@ -23,6 +25,7 @@ export function createServer(
   port = 27124,
   answerProviders?: ReadonlyMap<string, AnswerProvider>,
   researchProviders?: ReadonlyMap<string, ResearchProvider>,
+  learningTaskAdapter?: LearningTaskAdapter,
 ) {
   const app = Fastify({
     logger: false,
@@ -176,5 +179,6 @@ export function createServer(
   searchRoutes(app, new EvidenceStore(registry), sessions, answerProviders);
   reviewRoutes(app, new EvidenceStore(registry), sessions);
   researchRoutes(app, new EvidenceStore(registry), sessions, researchProviders);
+  learningRoutes(app, new EvidenceStore(registry), sessions, learningTaskAdapter);
   return app;
 }

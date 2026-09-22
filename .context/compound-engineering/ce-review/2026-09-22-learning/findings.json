@@ -1,0 +1,23 @@
+{
+  "reviewer": "sequential-main-thread-review",
+  "mode": "autofix",
+  "base": "4955ad8",
+  "findings": [
+    {
+      "title": "真实 TaskNotes 与 Today 依赖未完成",
+      "severity": "P1",
+      "file": "apps/service/src/learning/capacity.ts",
+      "status": "open",
+      "owner": "release",
+      "autofix_class": "advisory",
+      "confidence": 1,
+      "pre_existing": true,
+      "requires_verification": true,
+      "why_it_matters": "测试适配器不能证明真实任务身份、最终未创建语义或跨应用并发；当前只有设置页恢复入口，A41 的 Today 路径未验收。",
+      "evidence": ["CLI 未向 createServer 安装 LearningTaskAdapter", "场景 07 的 T1—T3 仍未实施", "没有适配器时只保留建议"]
+    }
+  ],
+  "fixed_findings": "见 review.md 中五项先失败后修复的回归记录",
+  "residual_risks": ["任务容量基于受信完整观察与本服务预留，跨应用并发待真实集成验证", "未知创建继续占容量，不能盲目重试", "新范围不自动继承旧范围的验收结果，历史单列"],
+  "testing_gaps": ["真实 TaskNotes / Today", "实际程序检查器与模型评分提供方", "本轮未运行真实语料专项"]
+}

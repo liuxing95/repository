@@ -203,3 +203,35 @@
   width: auto;
   margin-right: 8px;
 }
+.kb-learning label {
+  display: block;
+  margin: 10px 0;
+}
+.kb-learning input,
+.kb-learning textarea {
+  display: block;
+  width: 100%;
+}
+.kb-learning input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+  margin-right: 8px;
+}
+.kb-learning textarea {
+  min-height: 70px;
+}
+.kb-learning pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 280px;
+  overflow: auto;
+  padding: 12px;
+  background: var(--background-secondary);
+}
+.kb-learning fieldset {
+  margin: 14px 0;
+  border: 1px solid var(--background-modifier-border);
+}
+.kb-learning button {
+  margin: 6px 8px 6px 0;
+}

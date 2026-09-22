@@ -11,6 +11,7 @@ import {
 } from "obsidian";
 import { Connection } from "./connection";
 import { renderSettings } from "./views/settings";
+import { renderLearning } from "./views/learning";
 export default class KnowledgeTaskPlugin extends Plugin {
   connection!: Connection;
   drafts = { budget: "" };
@@ -106,6 +107,9 @@ class GovernanceSettings extends PluginSettingTab {
     const research = document.createElement("section");
     this.containerEl.append(research);
     renderResearch(research, this.plugin.connection);
+    const learning = document.createElement("section");
+    this.containerEl.append(learning);
+    renderLearning(learning, this.plugin.connection);
     renderReview(
       review,
       this.plugin.connection,

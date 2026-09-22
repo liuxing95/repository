@@ -1,6 +1,6 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-22，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告。真实模型与人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-22，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议。真实模型与人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
@@ -18,6 +18,7 @@
 | 本地搜索、固定引用、原文整理与候选保存 | 已实现 | 首次查询或显式重建产生索引；原文摘录不等于已审核答案 |
 | 候选区保存、Wiki 提升与更新、观察和影响清单 | 已实现本地流程 | 两次独立审核；打开编辑页会暂停写入；真实模型编译尚未开启 |
 | 库内课题、历史资格、快照更新与研究报告 | 已实现原文流程 | [研究接手说明](../implementation/topic-research-report.md)；真实模型及语义验收未完成 |
+| 学习目标、尝试、续学与复习建议 | 已实现本地流程 | [学习接手说明](../implementation/learning-practice-review.md)；TaskNotes / Today 仍待接入，当前不创建复习任务 |
 | 模型回答、任务排程 | 部分接口及后续场景 | 模型适配器接口已实现，真实提供方与语义验收未完成；任务编排仍待实现 |
 | OCR、模型、日历、通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力 |
 
@@ -138,6 +139,8 @@ flowchart LR
   Parser --> Service
   Service --> Research[课题、固定快照与报告候选]
   Research --> DB
+  Service --> Learning[目标、原始尝试与复习建议]
+  Learning --> DB
   Plugin -->|批准后创建来源和候选、更新 Wiki| Vault[试点 Vault / 三个受管目录]
   Vault -->|回读哈希与回执| Plugin
 ```
@@ -188,6 +191,7 @@ sequenceDiagram
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
 | Wiki 提案、批准、版本提交与人工观察 | [review/routes.ts](../../apps/service/src/review/routes.ts)、[views/review.ts](../../apps/obsidian-plugin/src/views/review.ts) | [场景 04 使用与维护](../implementation/wiki-review-commit.md) |
 | 课题、覆盖、快照与报告 | [research/routes.ts](../../apps/service/src/research/routes.ts)、[views/research.ts](../../apps/obsidian-plugin/src/views/research.ts) | [场景 05 使用与维护](../implementation/topic-research-report.md) |
+| 学习目标、尝试、容量与版本影响 | [learning/routes.ts](../../apps/service/src/learning/routes.ts)、[views/learning.ts](../../apps/obsidian-plugin/src/views/learning.ts) | [场景 06 接手说明](../implementation/learning-practice-review.md) |
 | 作业租约和费用 | [jobs.ts](../../apps/service/src/runtime/jobs.ts)、[budget.ts](../../apps/service/src/runtime/budget.ts) | [worker-pool.ts](../../apps/service/src/runtime/worker-pool.ts) |
 | 出站与文件授权边界 | [security/egress.ts](../../apps/service/src/security/egress.ts)、[security/paths.ts](../../apps/service/src/security/paths.ts) | [file-reader.ts](../../apps/service/src/ingestion/file-reader.ts) |
 
@@ -202,6 +206,7 @@ app-data/
   state.db.before-v3-<id>           迁移到证据与检索 schema 3 前的数据库快照
   state.db.before-v4-<id>           迁移到 Wiki schema 4 前的数据库快照
   state.db.before-v5-<id>           迁移到研究 schema 5 前的数据库快照
+  state.db.before-v6-<id>           迁移到学习 schema 6 前的数据库快照
   workspace-<id>/
     pilot/                         Obsidian 打开的试点
       .obsidian/plugins/knowledge-task-center/
@@ -312,3 +317,5 @@ node apps/service/dist/main.js diagnose --data "/实际的/app-data"
 2026-09-22：补充场景 04 的使用入口、Writer 更新与 schema 4 数据说明；本轮代码和真实桌面验证单独记录在 [Wiki 验收](../implementation/wiki-review-validation.md)，不替换上方 2026-09-21 的历史核对结果。
 
 2026-09-22（场景 05）：补充课题研究、schema 5 和报告保存入口；本轮验证见[研究验收记录](../implementation/topic-research-validation.md)，不改写上方历史验收。
+
+2026-09-22（场景 06）：增加学习目标、实际尝试与 schema 6 入口；TaskNotes / Today 明确保留集成门槛。本轮命令与桌面结果见[学习验收记录](../implementation/learning-practice-validation.md)，不替换历史验证。
