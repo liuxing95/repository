@@ -1,3 +1,5 @@
+import { TaskNotesAdapter } from "./tasknotes/adapter";
+import { renderToday } from "./views/today";
 import { renderResearch } from "./views/research";
 import { renderReview, syncWikiObservations } from "./views/review";
 import { renderSearch } from "./views/search";
@@ -14,6 +16,7 @@ import { renderSettings } from "./views/settings";
 import { renderLearning } from "./views/learning";
 export default class KnowledgeTaskPlugin extends Plugin {
   connection!: Connection;
+  tasks!: TaskNotesAdapter;
   drafts = { budget: "" };
   searchDraft = { query: "", version: "", collection: "" };
   ingestionDraft = {
@@ -36,6 +39,16 @@ export default class KnowledgeTaskPlugin extends Plugin {
       },
       this.app.vault.adapter.getBasePath(),
       deviceId,
+    );
+    this.tasks = new TaskNotesAdapter(this.app, this.connection);
+    this.registerEvent(this.app.vault.on("create", () => this.tasks.changed()));
+    this.registerEvent(this.app.vault.on("modify", () => this.tasks.changed()));
+    this.registerEvent(this.app.vault.on("delete", () => this.tasks.changed()));
+    this.registerEvent(this.app.vault.on("rename", () => this.tasks.changed()));
+    this.registerInterval(
+      window.setInterval(() => {
+        void this.tasks.sync();
+      }, 1500),
     );
     this.addSettingTab(new GovernanceSettings(this));
     this.registerInterval(
@@ -109,7 +122,15 @@ class GovernanceSettings extends PluginSettingTab {
     renderResearch(research, this.plugin.connection);
     const learning = document.createElement("section");
     this.containerEl.append(learning);
-    renderLearning(learning, this.plugin.connection);
+    const learningView = renderLearning(learning, this.plugin.connection);
+    const today = document.createElement("section");
+    this.containerEl.append(today);
+    renderToday(
+      today,
+      this.plugin.connection,
+      this.plugin.tasks,
+      learningView.resume,
+    );
     renderReview(
       review,
       this.plugin.connection,

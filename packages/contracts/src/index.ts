@@ -9,3 +9,4 @@ export * from "./wiki";
 
 export * from "./research";
 export * from "./learning";
+export * from "./tasks";

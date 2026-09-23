@@ -104,14 +104,26 @@ flowchart TD
 
 ## 7. 实施单元
 
-- [ ] **T1：TaskNotes 契约与身份。** 需求 R051、R054—R056、R071；依赖 G1。文件：`apps/obsidian-plugin/src/tasknotes/adapter.ts`、`packages/contracts/src/tasks.ts`、`apps/service/src/tasks/identity.ts`；测试：`tests/obsidian/tasknotes-contract.test.ts`、`tests/integration/task-identity.test.ts`。先在真实插件验证 ID、未知字段、正文、改名、移动、重复副本与循环实例。完成依据：A18—A20 的身份稳定；失败保留只读并记录阻断，不伪造 TaskNotes 已兼容。
+- [x] **T1：TaskNotes 契约与身份。** 需求 R051、R054—R056、R071；依赖 G1。文件：`apps/obsidian-plugin/src/tasknotes/adapter.ts`、`packages/contracts/src/tasks.ts`、`apps/service/src/tasks/identity.ts`；测试：`tests/obsidian/tasknotes-contract.test.ts`、`tests/integration/task-identity.test.ts`。先在真实插件验证 ID、未知字段、正文、改名、移动、重复副本与循环实例。完成依据：A18—A20 的身份稳定；失败保留只读并记录阻断，不伪造 TaskNotes 已兼容。
 
-- [ ] **T2：候选与命令账本。** 需求 R051—R055、R058、R074；依赖 T1、G3。文件：`apps/service/src/tasks/commands.ts`、`apps/service/src/tasks/capture.ts`、`apps/obsidian-plugin/src/views/task-capture.ts`；测试：`tests/faults/task-command-retry.test.ts`。测试双击创建、回执丢失、toggle 超时后用户反向修改、自然语言日期误推断、离线远程输入；预期不重复、不盲重试、不提前宣称正式任务。完成依据：每个命令有明确完成、未知或冲突状态。
+- [x] **T2：候选与命令账本。** 需求 R051—R055、R058、R074；依赖 T1、G3。文件：`apps/service/src/tasks/commands.ts`、`apps/service/src/tasks/capture.ts`、`apps/obsidian-plugin/src/views/task-capture.ts`；测试：`tests/faults/task-command-retry.test.ts`。测试双击创建、回执丢失、toggle 超时后用户反向修改、自然语言日期误推断、离线远程输入；预期不重复、不盲重试、不提前宣称正式任务。完成依据：每个命令有明确完成、未知或冲突状态。
 
-- [ ] **T3：最新事实核对与进度。** 需求 R053—R054、R057—R058、R060—R062、R071；依赖 T1、T2。文件：`apps/service/src/tasks/reconcile.ts`、`apps/service/src/tasks/progress.ts`、`apps/service/src/storage/migrations/007-tasks.ts`；测试：`tests/integration/task-reconciliation.test.ts`、`tests/integration/progress-baseline.test.ts`。测试三种完成事件、离线旧事件、全量清点中改名、未知读取、确认删除、依赖环、基线增减；预期事实只计一次、分母可解释、删除不复活。完成依据：A19、A20、A42 的取消意图可追到 outbox。
+- [x] **T3：最新事实核对与进度。** 需求 R053—R054、R057—R058、R060—R062、R071；依赖 T1、T2。文件：`apps/service/src/tasks/reconcile.ts`、`apps/service/src/tasks/progress.ts`、`apps/service/src/storage/migrations/007-tasks.ts`；测试：`tests/integration/task-reconciliation.test.ts`、`tests/integration/progress-baseline.test.ts`。测试三种完成事件、离线旧事件、全量清点中改名、未知读取、确认删除、依赖环、基线增减；预期事实只计一次、分母可解释、删除不复活。完成依据：A19、A20、A42 的取消意图可追到 outbox。
 
 - [ ] **T4：Today 与投影回执。** 需求 R059、R070—R072；依赖 T3，排程后接 P3（场景 08）。文件：`apps/service/src/tasks/today.ts`、`apps/obsidian-plugin/src/views/today.ts`、`apps/service/src/projections/receipts.ts`；测试：`tests/integration/today-state.test.ts`、`tests/obsidian/plan-projection.test.ts`。测试空任务、未排项、学习续接、计划采用但文件在编辑、日历失败、批处理高负载；预期当前计划可见且各副本状态独立。完成依据：A26、A35、A41 及在线反馈 p95 <2 秒目标通过。
 
 ## 8. 风险与上线条件
 
 自动任务字段回写保持关闭，除非锁定上游版本通过真实并发与字段保留测试；仅靠 UI 的一次成功不能开放后台自动化。基础任务契约失败时先记录差异和替代成本，再调整 TaskNotes 路线，不偷偷建立另一个任务主库。
+
+
+## 9. 2026-09-23 实施与依赖状态
+
+使用、代码入口、架构与恢复见[TaskNotes / Today 接手说明](../implementation/task-today-reconciliation.md)，本轮命令、真实契约、桌面与性能见[验收记录](../implementation/task-today-validation.md)。
+
+- T1：固定 TaskNotes 4.13.4 / Runtime API v1，已在真实 Obsidian 验证创建标记、未知字段与正文、改名、副本及循环操作。自定义 ID 通过明确接管写入；现有任务字段自动更新仍关闭。
+- T2：普通表单与有限本地短句候选已实现。短句仅建议相对日期和分钟数，硬截止须人工填写；固定操作 ID、摘要、一次领取和结果未知核对落地。状态操作返回 TaskNotes 原生入口，因此不发出需要重试的循环 toggle。P6 远程入口为可选，未启用。
+- T3：schema 7、历史观察、分批一致清点、循环实例映射、旧线索核对、墓碑、独立失效与取消 outbox、冻结叶子权重已实现。真实文件仍在而缓存漏项会阻断删除，完整清点才能形成确认删除。
+- T4：Today 可读任务事实、待创建回执、风险和学习续接；已接受计划与四类回执有内部只读集成边界。A41 的 TaskNotes 正式任务到原尝试链路通过真实桌面测试。真实 PlanRevision 生产者、固定安排／空闲窗口／日历覆盖依赖场景 08，提醒提供方依赖场景 09；未用测试夹具替代实际提供方验收，T4 保持未勾选。
+
+本轮包括 OCI 和编译后进程的 139 项回归通过，2 项真实语料跳过；类型和 lint 通过。服务端 1,000 任务、25 样本的完整核对加 Today HTTP 读取 p95 约 363 ms，不包括桌面全量磁盘扫描。上线仅开放已验证的本地任务试点，方案继续 active 等待 T4 外部依赖；跨插件 CAS、自动字段更新、真实模型和既有语料门槛没有宣称完成。

@@ -1,7 +1,7 @@
 ---
 title: 场景 06：学习目标、实际尝试与复习
 type: feat
-status: active
+status: completed
 date: 2026-09-21
 origin: docs/brainstorms/2026-09-21-obsidian-knowledge-and-task-center-requirements.md
 ---
@@ -78,9 +78,9 @@ flowchart TD
 
 - [x] **L1：目标、单元与范围基线。** 需求 R045—R046；依赖 E1、T1（场景 07）。文件：`packages/contracts/src/learning.ts`、`apps/service/src/learning/goals.ts`、`apps/service/src/learning/units.ts`、`apps/service/src/storage/migrations/006-learning.ts`；测试：`tests/integration/learning-scope.test.ts`。参考学习专题的参考库／队列分离。测试归档 100 页只选两单元、跳过已熟悉部分、修改版本范围；预期不批量建任务、不改变既有通过记录。完成依据：A16 的材料增加不改变掌握证据。
 
-- [ ] **L2：尝试记录与恢复上下文。** 需求 R047—R048；依赖 L1、E1。文件：`apps/service/src/learning/attempts.ts`、`apps/service/src/learning/resume.ts`、`apps/obsidian-plugin/src/views/learning.ts`；测试：`tests/integration/learning-resume.test.ts`。测试首次开始、中断续学、提示使用、来源更新／撤回、模型评分与用户自报混合；预期原始尝试保留，必要资料和遗留问题可见，不自动认定掌握。完成依据：A41 从 Today 能接回实际活动。
+- [x] **L2：尝试记录与恢复上下文。** 需求 R047—R048；依赖 L1、E1。文件：`apps/service/src/learning/attempts.ts`、`apps/service/src/learning/resume.ts`、`apps/obsidian-plugin/src/views/learning.ts`；测试：`tests/integration/learning-resume.test.ts`。测试首次开始、中断续学、提示使用、来源更新／撤回、模型评分与用户自报混合；预期原始尝试保留，必要资料和遗留问题可见，不自动认定掌握。完成依据：A41 从 Today 能接回实际活动。
 
-- [ ] **L3：复习建议与容量预约。** 需求 R049；依赖 L2、T2、G3。文件：`apps/service/src/learning/review-suggestions.ts`、`apps/service/src/learning/capacity.ts`；测试：`tests/integration/review-capacity.test.ts`。测试无容量设置、WIP 已满、同时确认多个建议、任务创建超时、跳过后再次生成；预期不超发、不重复创建，未知保留待核对。完成依据：建议数量、预留和正式任务可对账。
+- [x] **L3：复习建议与容量预约。** 需求 R049；依赖 L2、T2、G3。文件：`apps/service/src/learning/review-suggestions.ts`、`apps/service/src/learning/capacity.ts`；测试：`tests/integration/review-capacity.test.ts`。测试无容量设置、WIP 已满、同时确认多个建议、任务创建超时、跳过后再次生成；预期不超发、不重复创建，未知保留待核对。完成依据：建议数量、预留和正式任务可对账。
 
 - [x] **L4：版本影响与四类进度连接。** 需求 R050，协同 R060—R061；依赖 L2、W5、T3。文件：`apps/service/src/learning/impact.ts`、`apps/service/src/learning/evidence-view.ts`；测试：`tests/integration/learning-version-impact.test.ts`。测试旧版本正确结果、目标升级、取消单元与基线扩大；预期历史不清零、补学由用户选、分母变化单列。完成依据：A17 不出现“删掉未完成项就提高进度”。
 
@@ -99,3 +99,10 @@ flowchart TD
 - 新增 schema 6，并在旧库升级前生成私有备份。学习记录进入权威账本，当前不写学习笔记投影。
 
 最终类型检查和 lint 通过；包含 OCI 与编译后进程的回归 121 项通过、2 项真实语料跳过；真实 Obsidian 桌面 25 项检查通过。方案保持 `active`，等待真实 TaskNotes 与 Today 集成后补齐 L2、L3 验收。A16 的资料不等于掌握、A17 的历史保留和有限建议已验证；不据此声称完整 A41 或真实学习效果已验证。
+
+
+## 8. 2026-09-23 场景 07 接入补验
+
+保留第 7 节的首次交付事实。本次补齐 L2、L3：固定 TaskNotes 4.13.4 真实创建任务、标记核对、明确规则与服务容量预留，以及 Today 继续同一学习单元。服务集成测试核对原尝试身份，真实桌面验证到期建议、正式任务与继续入口。因此本学习场景的 L1—L4 完成并更新为 completed，详细证据见[场景 07 验收](../implementation/task-today-validation.md)。
+
+到期桌面测试只把本次合成尝试时间设为两天前；不是等待真实两天或宣称学习效果提高。跨插件原子容量、自动模型评价和程序自动检查仍不在本轮开放范围；TaskNotes 未安装或清点不可靠时继续保留建议。

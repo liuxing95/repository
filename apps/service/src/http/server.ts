@@ -1,3 +1,7 @@
+import { taskRoutes } from "../tasks/routes";
+import { Reconciliation } from "../tasks/reconcile";
+import { TaskLearningAdapter } from "../tasks/learning-adapter";
+import { Proposals } from "../review/proposals";
 import { researchRoutes } from "../research/routes";
 import { learningRoutes } from "../learning/routes";
 import type { LearningTaskAdapter } from "../learning/capacity";
@@ -179,6 +183,13 @@ export function createServer(
   searchRoutes(app, new EvidenceStore(registry), sessions, answerProviders);
   reviewRoutes(app, new EvidenceStore(registry), sessions);
   researchRoutes(app, new EvidenceStore(registry), sessions, researchProviders);
-  learningRoutes(app, new EvidenceStore(registry), sessions, learningTaskAdapter);
+  const taskDb = new Reconciliation(new Proposals(new EvidenceStore(registry)));
+  taskRoutes(app, taskDb, sessions);
+  learningRoutes(
+    app,
+    new EvidenceStore(registry),
+    sessions,
+    learningTaskAdapter ?? new TaskLearningAdapter(taskDb),
+  );
   return app;
 }

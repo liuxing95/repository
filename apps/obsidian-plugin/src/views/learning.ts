@@ -660,4 +660,11 @@ export function renderLearning(root: HTMLElement, connection: Connection) {
         });
     }
   }
+  return {
+    resume: async (goalId: string, unitId: string) => {
+      await loadGoal(goalId);
+      await loadUnit(goalId, unitId);
+      root.scrollIntoView({ block: "start" });
+    },
+  };
 }

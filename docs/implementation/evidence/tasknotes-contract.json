@@ -1,0 +1,26 @@
+{
+  "version": "4.13.4",
+  "apiVersion": 1,
+  "assetSha256": "ae394af31dbad2566bc4a1635c354f669f23fc820e22e4eaf2f6239dfa89f4ca",
+  "checks": {
+    "createMarker": true,
+    "unknownField": true,
+    "body": true,
+    "moveIdentity": true,
+    "duplicateIdentity": true
+  },
+  "recurringMethods": [
+    "toggleCompleteInstance",
+    "toggleSkippedInstance",
+    "materializeOccurrence"
+  ],
+  "releaseCommit": "153a107e5f1f215c24832d30d057f71b35365ae4",
+  "recurringProof": {
+    "once": [
+      "2026-09-22"
+    ],
+    "twice": []
+  },
+  "testHarness": "scripts/tasknotes-contract.mjs",
+  "date": "2026-09-22"
+}

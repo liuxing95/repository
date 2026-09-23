@@ -25,9 +25,11 @@ export interface LearningTaskAdapter {
       unitId: string;
       baselineId: string;
       day: string;
+      timezone?: string;
       minutes: number;
     },
     signal: AbortSignal,
+    principal?: Principal,
   ): Promise<TaskCreationResult>;
   lookup(taskId: string, operationId: string): Promise<TaskCreationResult>;
 }
@@ -223,6 +225,7 @@ export class Capacity {
             unitId: intent.unitId,
             baselineId: intent.baselineId,
             day: intent.day,
+            timezone: intent.timezone,
             minutes: intent.minutes,
             title: this.db.unit(
               this.db.baseline(intent.baselineId),
@@ -230,6 +233,7 @@ export class Capacity {
             ).title,
           },
           controller.signal,
+          p,
         ),
         new Promise<TaskCreationResult>((resolve) => {
           timer = setTimeout(() => {

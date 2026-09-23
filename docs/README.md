@@ -2,7 +2,7 @@
 
 ## 接手当前工程
 
-仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据和问答工程接口，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试；真实模型与人工语义验收仍待完成。开发入口如下：
+仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据和问答工程接口，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试、场景 07 的 TaskNotes 和 Today；真实模型与人工语义验收仍待完成。开发入口如下：
 
 | 需要了解什么 | 入口 |
 |---|---|
@@ -14,6 +14,7 @@
 | 本地检索、证据整理、问答接口和边界 | [场景 03 使用与维护](implementation/evidence-search-answer.md)、[验收记录](implementation/evidence-search-validation.md) |
 | 候选保存、Wiki 审核与写入、人工观察和恢复 | [场景 04 使用与维护](implementation/wiki-review-commit.md)、[验收记录](implementation/wiki-review-validation.md) |
 | 课题、历史时点、分章报告、快照更新与审核保存 | [场景 05 使用与维护](implementation/topic-research-report.md)、[验收记录](implementation/topic-research-validation.md) |
+| TaskNotes、候选创建、Today 与离线核对 | [场景 07 使用与维护](implementation/task-today-reconciliation.md)、[验收记录](implementation/task-today-validation.md) |
 | 学习目标、续学、复习建议与版本影响 | [场景 06 使用与维护](implementation/learning-practice-review.md)、[验收记录](implementation/learning-practice-validation.md) |
 | 后续每次开发需要补什么说明 | [贡献与交付约定](../CONTRIBUTING.md) |
 
@@ -59,6 +60,6 @@
 
 ## 原始资料整理时的未完成项
 
-本节描述原始资料整理时的状态，不代表当前工程进度。当时没有现成 Knowledge Bridge/计划服务代码、编译产物、真实全站归档或完整上游源码，TaskNotes 集成、模型效果、手机提醒、跨端同步、真实来源解析仍待开发。原始配置、TS/SQL 示例和虚构用例是参考材料。后续已完成的工作区治理和真实来源解析见上方场景验收记录；TaskNotes、模型、提醒等仍未实现。
+本节描述原始资料整理时的状态，不代表当前工程进度。当时没有现成 Knowledge Bridge/计划服务代码、编译产物、真实全站归档或完整上游源码，TaskNotes 集成、模型效果、手机提醒、跨端同步、真实来源解析仍待开发。原始配置、TS/SQL 示例和虚构用例是参考材料。后续已完成的工作区治理和真实来源解析见上方场景验收记录；TaskNotes 当前进度见上方场景 07；真实模型与提醒仍待验收。
 
 未安装插件，未读取或修改真实日历/待办，未创建提醒，未上传回持久 Library。

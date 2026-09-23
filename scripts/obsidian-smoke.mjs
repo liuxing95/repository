@@ -1,10 +1,15 @@
+import { taskTodaySmoke } from "./task-today-smoke.mjs";
 import { chromium } from "@playwright/test";
 import { mkdir, writeFile, cp, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { spawnSync, spawn } from "node:child_process";
 
 // Uses a synthetic vault and separate application profile; never opens the user's vault.
-const root = resolve(".context/runtime-validation");
+const root = resolve(
+  process.env.KB_TEST_TASKNOTES === "1"
+    ? ".context/runtime-validation/tasknotes-v7"
+    : ".context/runtime-validation",
+);
 await mkdir(join(root, "source"), { recursive: true });
 await writeFile(
   join(root, "source", "welcome.md"),
@@ -43,9 +48,17 @@ await cp(
   join(config, "plugins", "knowledge-task-center"),
   { recursive: true },
 );
+if (process.env.KB_TEST_TASKNOTES === "1")
+  await cp(".context/tasknotes/plugin", join(config, "plugins", "tasknotes"), {
+    recursive: true,
+  });
 await writeFile(
   join(config, "community-plugins.json"),
-  JSON.stringify(["knowledge-task-center"]),
+  JSON.stringify(
+    process.env.KB_TEST_TASKNOTES === "1"
+      ? ["tasknotes", "knowledge-task-center"]
+      : ["knowledge-task-center"],
+  ),
 );
 await writeFile(
   join(config, "app.json"),
@@ -188,8 +201,14 @@ try {
     .scrollIntoViewIfNeeded();
   await page.screenshot({ path: join(root, "obsidian-governance.png") });
   await page.getByRole("button", { name: "查看脱敏诊断", exact: true }).click();
-  await page.locator(".kb-settings pre").waitFor();
-  const diagnostics = await page.locator(".kb-settings pre").innerText();
+  await page
+    .locator(".kb-settings pre")
+    .filter({ hasText: "supportedSchemaVersion" })
+    .waitFor();
+  const diagnostics = await page
+    .locator(".kb-settings pre")
+    .filter({ hasText: "supportedSchemaVersion" })
+    .innerText();
   if (diagnostics.includes(workspace.vaultPath) || diagnostics.includes(code))
     throw new Error("diagnostic leak");
   await page
@@ -249,7 +268,8 @@ try {
   const protectedEditor = await vaultPage.evaluate((path) => {
     let value = null;
     window.app.workspace.iterateAllLeaves((leaf) => {
-      if (leaf.view.file?.path === path) value = leaf.view.editor.getValue();
+      if (leaf.view.file?.path === path && leaf.view.editor)
+        value = leaf.view.editor.getValue();
     });
     return value;
   }, patchPath);
@@ -456,7 +476,8 @@ try {
   const buffer = await vaultPage.evaluate((path) => {
     let value;
     window.app.workspace.iterateAllLeaves((l) => {
-      if (l.view.file?.path === path) value = l.view.editor.getValue();
+      if (l.view.file?.path === path && l.view.editor)
+        value = l.view.editor.getValue();
     });
     return value;
   }, wikiPath);
@@ -709,6 +730,8 @@ try {
       exact: true,
     })
     .waitFor();
+  if (process.env.KB_TEST_TASKNOTES === "1")
+    await taskTodaySmoke({ page, vaultPage, root });
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(

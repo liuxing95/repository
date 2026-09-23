@@ -353,8 +353,25 @@ export class WorkspaceRegistry {
         enabled: valid,
         reason: "本地中文、别名与代码符号检索；固定引用、原文整理和知识检查",
       },
+      {
+        id: "tasknotes",
+        available: valid,
+        enabled:
+          valid &&
+          !!(
+            this.store.get("tasks.inventory") as
+              { complete?: boolean; observedAt?: number } | undefined
+          )?.complete &&
+          Date.now() -
+            ((
+              this.store.get("tasks.inventory") as
+                { observedAt: number } | undefined
+            )?.observedAt ?? 0) <
+            30000,
+        reason:
+          "TaskNotes 4.13.4 Runtime 接入；完整核对后开放候选创建，自动字段更新关闭",
+      },
       ...[
-        "tasknotes",
         "model",
         "ocr",
         "embedding",

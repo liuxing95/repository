@@ -1,0 +1,6 @@
+{
+  "tasks": 1000,
+  "samples": 25,
+  "p95Ms": 362.56558399999994,
+  "scope": "service full reconciliation transaction plus HTTP read; no TaskNotes browser disk scan"
+}
