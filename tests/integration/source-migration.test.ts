@@ -19,7 +19,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
     const migrated = new Store(path);
     expect(migrated.readOnly).toBe(false);
     expect(migrated.get("retained")).toBe("unchanged");
-    expect(migrated.db.pragma("user_version", { simple: true })).toBe(7);
+    expect(migrated.db.pragma("user_version", { simple: true })).toBe(8);
     migrated.close();
     const backup = (await readdir(root)).find((n) => n.includes("before-v2"))!;
     expect((await stat(join(root, backup))).mode & 0o777).toBe(0o600);
@@ -38,7 +38,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
   }
 });
 
-test("known v2 preserves source objects and a private v2 backup; reopened v7 schema remains writable", async () => {
+test("known v2 preserves source objects and a private v2 backup; reopened v8 schema remains writable", async () => {
   const { sources } =
     await import("../../apps/service/src/storage/migrations/002-sources");
   const root = await mkdtemp(join(tmpdir(), "kb-evidence-migration-"));
@@ -52,7 +52,7 @@ test("known v2 preserves source objects and a private v2 backup; reopened v7 sch
       .run("retained-hash", Buffer.from("original bytes"));
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(7);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
     expect(
       upgraded.db
         .prepare("SELECT bytes FROM objects WHERE hash=?")
@@ -77,7 +77,7 @@ test("known v2 preserves source objects and a private v2 backup; reopened v7 sch
   }
 });
 
-test("v3 upgrades with an exact private snapshot and v7 reopens with Wiki FTS intact", async () => {
+test("v3 upgrades with an exact private snapshot and v8 reopens with Wiki FTS intact", async () => {
   const { sources } =
     await import("../../apps/service/src/storage/migrations/002-sources");
   const { evidence } =
@@ -94,7 +94,7 @@ test("v3 upgrades with an exact private snapshot and v7 reopens with Wiki FTS in
       .run("preserved", '{"answer":"unchanged"}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(7);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
     expect(
       upgraded.db
         .prepare("SELECT value FROM answer_candidates WHERE id='preserved'")
@@ -135,7 +135,7 @@ test("v4 research migration keeps Wiki records and a private v4 backup", async (
       .run("retained", "op", "hash", '{"retained":true}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(7);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
     expect(
       upgraded.db
         .prepare("SELECT value FROM wiki_changes WHERE id='retained'")
@@ -177,7 +177,7 @@ test("v5 learning migration preserves research and creates a private v5 backup",
       .run("retained", "operation", "digest", '{"rootId":"retained-budget"}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(7);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
     expect(
       upgraded.db
         .prepare("SELECT value FROM research_jobs WHERE id='retained'")
@@ -223,7 +223,7 @@ test("v6 tasks migration preserves learning attempts and private recoverable sna
       .run("attempt", "goal", "unit", "baseline", '{"expression":"retained"}');
     old.close();
     const current = new Store(path);
-    expect(current.db.pragma("user_version", { simple: true })).toBe(7);
+    expect(current.db.pragma("user_version", { simple: true })).toBe(8);
     expect(
       current.db
         .prepare("SELECT value FROM learning_attempts WHERE id='attempt'")
@@ -240,6 +240,57 @@ test("v6 tasks migration preserves learning attempts and private recoverable sna
     expect(
       reopened.db.prepare("SELECT * FROM task_observations").all(),
     ).toEqual([]);
+    reopened.close();
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("v7 planning migration preserves task observations and a private v7 snapshot", async () => {
+  const { sources } =
+    await import("../../apps/service/src/storage/migrations/002-sources");
+  const { evidence } =
+    await import("../../apps/service/src/storage/migrations/003-evidence");
+  const { changesets } =
+    await import("../../apps/service/src/storage/migrations/004-changesets");
+  const { research } =
+    await import("../../apps/service/src/storage/migrations/005-research");
+  const { learning } =
+    await import("../../apps/service/src/storage/migrations/006-learning");
+  const { tasks } =
+    await import("../../apps/service/src/storage/migrations/007-tasks");
+  const root = await mkdtemp(join(tmpdir(), "kb-planning-migration-")),
+    path = join(root, "state.db");
+  try {
+    const old = new Database(path);
+    old.exec(
+      foundation +
+        sources +
+        evidence +
+        changesets +
+        research +
+        learning +
+        tasks,
+    );
+    old
+      .prepare("INSERT INTO task_observations VALUES(?,?)")
+      .run("task", '{"revision":"retained"}');
+    old.close();
+    const upgraded = new Store(path);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(
+      upgraded.db
+        .prepare("SELECT value FROM task_observations WHERE task_id='task'")
+        .get(),
+    ).toEqual({ value: '{"revision":"retained"}' });
+    upgraded.close();
+    const backup = (await readdir(root)).find((n) => n.includes("before-v8"))!;
+    expect((await stat(join(root, backup))).mode & 0o777).toBe(0o600);
+    const snapshot = new Database(join(root, backup));
+    expect(snapshot.pragma("user_version", { simple: true })).toBe(7);
+    snapshot.close();
+    const reopened = new Store(path);
+    expect(reopened.readOnly).toBe(false);
     reopened.close();
   } finally {
     await rm(root, { recursive: true, force: true });

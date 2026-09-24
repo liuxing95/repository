@@ -92,11 +92,11 @@ flowchart TD
 
 ## 8. 实施单元
 
-- [ ] **P1：规划快照与忙闲适配。** 需求 R063、R073，协同 R056—R057；依赖 T1、T3、G2。文件：`packages/contracts/src/planning.ts`、`apps/service/src/planning/snapshot.ts`、`apps/service/src/calendar/freebusy.ts`、`apps/service/src/planning/time.ts`；测试：`tests/integration/planning-input.test.ts`、`tests/unit/planning-timezones.test.ts`。测试空可用时间、配置日历单项报错、未接日历、仅日期截止、夏令时缺失／重复小时；预期不把未知当空闲，时间含义一致。完成依据：A21、A27 有明确覆盖状态。
+- [x] **P1：规划快照与忙闲适配。** 需求 R063、R073，协同 R056—R057；依赖 T1、T3、G2。文件：`packages/contracts/src/planning.ts`、`apps/service/src/planning/snapshot.ts`、`apps/service/src/calendar/freebusy.ts`、`apps/service/src/planning/time.ts`；测试：`tests/integration/planning-input.test.ts`、`tests/unit/planning-timezones.test.ts`。测试空可用时间、配置日历单项报错、未接日历、仅日期截止、夏令时缺失／重复小时；预期不把未知当空闲，时间含义一致。完成依据：A21、A27 有明确覆盖状态。
 
-- [ ] **P2：有限求解与独立验证。** 需求 R064—R066；依赖 P1。文件：`apps/service/src/planning/solver.ts`、`apps/service/src/planning/validator.ts`、`apps/service/src/planning/diff.ts`；测试：`tests/unit/planning-constraints.test.ts`、`tests/performance/replanning.test.ts`。测试紧急插入、容量不足、不可拆、锁定、依赖环、地点冲突、搜索预算耗尽与无变化；预期所有已排块过硬约束，未排项不消失。完成依据：A22—A23 通过，轻量重排目标 p95 <5 秒。
+- [x] **P2：有限求解与独立验证。** 需求 R064—R066；依赖 P1。文件：`apps/service/src/planning/solver.ts`、`apps/service/src/planning/validator.ts`、`apps/service/src/planning/diff.ts`；测试：`tests/unit/planning-constraints.test.ts`、`tests/performance/replanning.test.ts`。测试紧急插入、容量不足、不可拆、锁定、依赖环、地点冲突、搜索预算耗尽与无变化；预期所有已排块过硬约束，未排项不消失。完成依据：A22—A23 通过，轻量重排目标 p95 <5 秒。
 
-- [ ] **P3：采用事务与撤销。** 需求 R067、R069—R070；依赖 P2、T3、G3。文件：`apps/service/src/planning/accept.ts`、`apps/service/src/planning/undo.ts`、`apps/service/src/storage/migrations/008-planning.ts`、`apps/obsidian-plugin/src/views/plan-review.ts`；测试：`tests/faults/plan-acceptance.test.ts`。测试两个旧候选、采用前后任务改动、新会议、进程退出、撤销遇到已完成任务；预期计划不互相覆盖、事实不回滚、outbox 不丢。完成依据：A24、A26 的账本和 UI 一致。
+- [x] **P3：采用事务与撤销。** 需求 R067、R069—R070；依赖 P2、T3、G3。文件：`apps/service/src/planning/accept.ts`、`apps/service/src/planning/undo.ts`、`apps/service/src/storage/migrations/008-planning.ts`、`apps/obsidian-plugin/src/views/plan-review.ts`；测试：`tests/faults/plan-acceptance.test.ts`。测试两个旧候选、采用前后任务改动、新会议、进程退出、撤销遇到已完成任务；预期计划不互相覆盖、事实不回滚、outbox 不丢。完成依据：A24、A26 的账本和 UI 一致。
 
 - [ ] **P4：受限自动采用。** 需求 R068；依赖 P3、G1 主端协议；P6 启用。文件：`apps/service/src/planning/delegation.ts`；测试：`tests/security/planning-delegation.test.ts`。测试跨天、冻结、超移动额度、策略撤销、未知任务命令和双主端；预期全部退回建议而不是扩大授权。完成依据：A25、A28 通过才开放开关。
 
@@ -105,3 +105,7 @@ flowchart TD
 ## 9. 实施待验证项
 
 求解时域、搜索预算、冻结窗口、拆分参数和移动上限是配置，不沿用历史示例当用户意愿。其他日历提供商不是首个适配器的免费兼容范围，后续用相同合同另测。排程正确性要求所有已接受计划通过独立硬约束检查；可以不完美优化，但不能靠遗漏未排项达标。
+
+## 10. 实施进度（2026-09-24）
+
+P1—P3 已交付本地建议、人工采用、撤销候选和不可变计划笔记，代码入口、界面操作与验证见[场景 08 接手说明](../implementation/scheduling-calendar-sync.md)及[验证记录](../implementation/scheduling-calendar-sync-validation.md)。P1 的忙闲适配合同和逐日历错误判定已测试，但正常服务启动未注入 Google 提供方；无外部授权时显示“未核对”，显式请求却读取失败时显示“未知”。P4 自动委托和 P5 Google 日历写入属于总体方案 P6 选用能力，尚未启用；待确定授权范围、凭据、目标日历并做真实日历验收后才能勾选。方案状态继续保持 `active`，不把本地合同测试记为外部日历完成。

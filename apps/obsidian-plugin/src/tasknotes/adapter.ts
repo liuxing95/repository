@@ -146,6 +146,10 @@ export class TaskNotesAdapter {
           timezone:
             nullable(fm.kbTimezone) ??
             Intl.DateTimeFormat().resolvedOptions().timeZone,
+          planLocation: nullable(fm.kbPlanLocation),
+          planDevice: nullable(fm.kbPlanDevice),
+          planPriority:
+            typeof fm.kbPlanPriority === "number" ? fm.kbPlanPriority : null,
           minutes: row.timeEstimate ?? null,
           timeEntries: (row.timeEntries ?? []).map((e) => ({
             startTime: e.startTime,

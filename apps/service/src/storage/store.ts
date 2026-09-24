@@ -1,5 +1,6 @@
 import { research } from "./migrations/005-research";
 import { tasks } from "./migrations/007-tasks";
+import { planning } from "./migrations/008-planning";
 import { learning } from "./migrations/006-learning";
 import { randomUUID } from "node:crypto";
 import { sources } from "./migrations/002-sources";
@@ -26,6 +27,7 @@ function matchesSchema(db: Database.Database, version: number) {
     if (version >= 5) expected.exec(research);
     if (version >= 6) expected.exec(learning);
     if (version >= 7) expected.exec(tasks);
+    if (version >= 8) expected.exec(planning);
     return JSON.stringify(schema(db)) === JSON.stringify(schema(expected));
   } finally {
     expected.close();
@@ -45,7 +47,7 @@ export class Store {
       .prepare("SELECT name FROM sqlite_master WHERE type='table'")
       .all();
     this.readOnly =
-      ![0, 1, 2, 3, 4, 5, 6, 7].includes(version) ||
+      ![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(version) ||
       (version === 0 && tables.length > 0) ||
       (version > 0 && !matchesSchema(this.db, version));
     this.sqliteVersion = (
@@ -116,6 +118,13 @@ export class Store {
       chmodSync(backup, 0o600);
     }
     if (version < 7) this.db.transaction(() => this.db.exec(tasks)).immediate();
+    if (version > 0 && version < 8) {
+      const backup = `${path}.before-v8-${randomUUID()}`;
+      this.db.prepare("VACUUM INTO ?").run(backup);
+      chmodSync(backup, 0o600);
+    }
+    if (version < 8)
+      this.db.transaction(() => this.db.exec(planning)).immediate();
   }
   writable() {
     if (this.readOnly) throw new AppError("SCHEMA");

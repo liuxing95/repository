@@ -1,6 +1,6 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-22，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议，以及场景 07 的 TaskNotes 候选创建与 Today 核对。真实模型与人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-24，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对，以及场景 08 的本地时间排程与人工采用。真实模型、外部日历和人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
@@ -19,8 +19,9 @@
 | 候选区保存、Wiki 提升与更新、观察和影响清单 | 已实现本地流程 | 两次独立审核；打开编辑页会暂停写入；真实模型编译尚未开启 |
 | 库内课题、历史资格、快照更新与研究报告 | 已实现原文流程 | [研究接手说明](../implementation/topic-research-report.md)；真实模型及语义验收未完成 |
 | 学习目标、尝试、续学与复习建议 | 已实现本地流程 | [学习接手说明](../implementation/learning-practice-review.md)；TaskNotes 4.13.4 完整清点后可确认创建，Today 回到同一单元 |
-| TaskNotes 与 Today | 已接入固定版本 | [任务接手说明](../implementation/task-today-reconciliation.md)；自动字段更新关闭，排程和外部回执仍待后续场景 |
-| 模型回答、任务排程 | 部分接口及后续场景 | 模型适配器接口已实现，真实提供方与语义验收未完成；任务编排仍待实现 |
+| TaskNotes 与 Today | 已接入固定版本 | [任务接手说明](../implementation/task-today-reconciliation.md)；自动字段更新关闭，Today 可读取本地正式计划 |
+| 本地约束排程与计划采用 | 已实现首期 | [排程接手说明](../implementation/scheduling-calendar-sync.md)；用户明确输入可用时间后预览、人工采用，未核对外部日历 |
+| 模型回答 | 部分接口 | 模型适配器接口已实现，真实提供方与语义验收未完成 |
 | OCR、模型、日历、通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力 |
 
 首次收录后，可以直接进入 [检索与证据整理说明](../implementation/evidence-search-answer.md)，搜索中文短词或代码符号、回读引用，并了解模型能力当前的边界。
@@ -142,7 +143,13 @@ flowchart LR
   Research --> DB
   Service --> Learning[目标、原始尝试与复习建议]
   Learning --> DB
-  Plugin -->|批准后创建来源和候选、更新 Wiki| Vault[试点 Vault / 三个受管目录]
+  Service --> Planning[本地约束排程与独立校验]
+  Planning --> DB
+  DB --> Today[Today 正式计划读模型]
+  DB --> PlanOutbox[计划笔记投影意图]
+  PlanOutbox --> Plugin
+  Plugin -->|批准后创建来源和候选、更新 Wiki| Vault[试点 Vault / 来源、候选与 Wiki]
+  Plugin -->|计划采用后受控写入| PlanFiles[试点 Vault / KB-Plans]
   Vault -->|回读哈希与回执| Plugin
 ```
 
@@ -208,6 +215,7 @@ app-data/
   state.db.before-v4-<id>           迁移到 Wiki schema 4 前的数据库快照
   state.db.before-v5-<id>           迁移到研究 schema 5 前的数据库快照
   state.db.before-v7-<id>           迁移到任务 schema 7 前的数据库快照
+  state.db.before-v8-<id>           迁移到排程 schema 8 前的数据库快照
   state.db.before-v6-<id>           迁移到学习 schema 6 前的数据库快照
   workspace-<id>/
     pilot/                         Obsidian 打开的试点
@@ -215,7 +223,7 @@ app-data/
       KB-Sources/                  批准后的不可变来源文件
       KB-Wiki/                     审核后的正式知识页面
       KB-Candidates/               单独审核保存的候选投影
-      KB-Plans/                    预留目录
+      KB-Plans/                    已采用计划的不可变笔记投影
     backup/                        接入时的原资料库副本
     backup-manifest.json           接入时逐文件哈希与目录清单
 ```
@@ -324,3 +332,5 @@ node apps/service/dist/main.js diagnose --data "/实际的/app-data"
 
 
 2026-09-23（场景 07）：新增 TaskNotes 4.13.4 Runtime 适配器、任务候选与观察账本、Today 和 schema 7。先读[任务与 Today 接手说明](../implementation/task-today-reconciliation.md)，再看[本轮验收](../implementation/task-today-validation.md)。普通任务入口不需要资料或模型；配对后仍要启用 TaskNotes 并完成清点。此项补充不改变场景 06 当时未接入 TaskNotes 的历史验收记录。
+
+2026-09-24（场景 08）：新增本地可用时间排程、人工采用、撤销候选和 schema 8。操作、实现边界、故障恢复见[排程接手说明](../implementation/scheduling-calendar-sync.md)，本次验证见[场景 08 验证记录](../implementation/scheduling-calendar-sync-validation.md)。Google 日历与自动委托仍需独立授权和验收；不改写上方历史记录。

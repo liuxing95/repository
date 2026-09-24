@@ -2,6 +2,8 @@
 
 本功能对应[场景 07 方案](../plans/2026-09-21-008-feat-task-today-reconciliation-plan.md)。首次运行先看[开发者接手指南](../development/onboarding.md)。验证结果单独放在[场景 07 验收记录](task-today-validation.md)。
 
+2026-09-24 补充：下文“排程未开放”是场景 07 当时的验收边界。当前已交付场景 08 的本地排程与人工采用，详见[排程接手说明](scheduling-calendar-sync.md)；真实 Google 日历仍未接入。
+
 ## 先理解两份数据各管什么
 
 TaskNotes 的 Markdown 文件保存正式任务，包括标题、状态、截止、循环和工作日志。本服务的 SQLite 保存稳定身份、最近观察、候选创建命令、学习关联和同步结果。Today 读取这些已确认事实，不提供另一组任务完成勾选。

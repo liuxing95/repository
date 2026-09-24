@@ -1,5 +1,7 @@
 import { TaskNotesAdapter } from "./tasknotes/adapter";
 import { renderToday } from "./views/today";
+import { renderPlanReview } from "./views/plan-review";
+import { syncPlanNotes } from "./views/plan-notes";
 import { renderResearch } from "./views/research";
 import { renderReview, syncWikiObservations } from "./views/review";
 import { renderSearch } from "./views/search";
@@ -49,6 +51,26 @@ export default class KnowledgeTaskPlugin extends Plugin {
       window.setInterval(() => {
         void this.tasks.sync();
       }, 1500),
+    );
+    let projectingPlan = false;
+    this.registerInterval(
+      window.setInterval(() => {
+        if (
+          projectingPlan ||
+          !this.connection.principal ||
+          this.connection.workspace?.deviceId !== this.connection.deviceId
+        )
+          return;
+        projectingPlan = true;
+        void syncPlanNotes(
+          this.connection,
+          obsidianHost(this.app, this.connection.vaultPath),
+        )
+          .catch(() => {})
+          .finally(() => {
+            projectingPlan = false;
+          });
+      }, 15000),
     );
     this.addSettingTab(new GovernanceSettings(this));
     this.registerInterval(
@@ -131,6 +153,9 @@ class GovernanceSettings extends PluginSettingTab {
       this.plugin.tasks,
       learningView.resume,
     );
+    const planning = document.createElement("section");
+    this.containerEl.append(planning);
+    renderPlanReview(planning, this.plugin.connection, this.plugin.tasks);
     renderReview(
       review,
       this.plugin.connection,

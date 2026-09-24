@@ -67,14 +67,14 @@ export function renderToday(
       content.append(
         el("p", "暂无受管任务；可确认一个新候选，或预览接管已有 TaskNotes。"),
       );
-    content.append(el("h4", "未排项与任务事实"));
+    content.append(el("h4", "任务事实与时间安排"));
     for (const t of state.tasks) {
       const row = document.createElement("article");
       row.append(
         el("strong", t.fact.title),
         el(
           "p",
-          `${labels[t.fact.lifecycle]} · ${{ current: "已核对", conflict: "身份冲突", unknown: "读取未知", deleted: "已确认删除" }[t.sync]} · ${t.fact.minutes ?? "未知"} 分钟 · 期望 ${t.fact.desiredDay ?? "未填"} · 硬截止 ${t.fact.due ?? "未填"} · ${t.fact.timeEntries.length} 条工作日志`,
+          `${labels[t.fact.lifecycle]} · ${{ current: "已核对", conflict: "身份冲突", unknown: "读取未知", deleted: "已确认删除" }[t.sync]} · ${state.plan?.blocks.some((b) => b.taskId === t.taskId) ? "已排时间" : "未排时间"} · ${t.fact.minutes ?? "未知"} 分钟 · 期望 ${t.fact.desiredDay ?? "未填"} · 硬截止 ${t.fact.due ?? "未填"} · ${t.fact.timeEntries.length} 条工作日志`,
         ),
       );
       if (t.sync !== "deleted")
@@ -124,6 +124,12 @@ export function renderToday(
     }
     if (state.plan) {
       content.append(el("h4", "已采用计划"));
+      content.append(
+        el(
+          "p",
+          `采用于 ${state.plan.acceptedAt ? new Date(state.plan.acceptedAt).toLocaleString() : "未记录"}；${state.plan.coverage?.reason ?? "日历覆盖信息未记录"}`,
+        ),
+      );
       for (const b of state.plan.blocks)
         content.append(
           el(
@@ -132,7 +138,19 @@ export function renderToday(
           ),
         );
       for (const r of state.receipts)
-        content.append(el("p", `${r.target}：${r.state}，版本 ${r.revision}`));
+        content.append(
+          el(
+            "p",
+            `${{ note: "计划笔记", task: "任务字段", calendar: "日历", reminder: "提醒" }[r.target]}：${{ pending: "待同步", applied: "已同步", failed: "失败", disabled: "未启用" }[r.state]}，版本 ${r.revision}`,
+          ),
+        );
+      for (const u of state.plan.unscheduled ?? [])
+        content.append(
+          el(
+            "p",
+            `未排：${state.tasks.find((t) => t.taskId === u.taskId)?.fact.title ?? u.taskId}；${u.reason}`,
+          ),
+        );
     }
     content.append(
       el(

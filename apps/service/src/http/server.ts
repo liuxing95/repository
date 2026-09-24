@@ -1,4 +1,6 @@
 import { taskRoutes } from "../tasks/routes";
+import { planningRoutes } from "../planning/routes";
+import type { BusyProvider } from "../calendar/freebusy";
 import { Reconciliation } from "../tasks/reconcile";
 import { TaskLearningAdapter } from "../tasks/learning-adapter";
 import { Proposals } from "../review/proposals";
@@ -30,6 +32,7 @@ export function createServer(
   answerProviders?: ReadonlyMap<string, AnswerProvider>,
   researchProviders?: ReadonlyMap<string, ResearchProvider>,
   learningTaskAdapter?: LearningTaskAdapter,
+  busyProvider?: BusyProvider,
 ) {
   const app = Fastify({
     logger: false,
@@ -185,6 +188,7 @@ export function createServer(
   researchRoutes(app, new EvidenceStore(registry), sessions, researchProviders);
   const taskDb = new Reconciliation(new Proposals(new EvidenceStore(registry)));
   taskRoutes(app, taskDb, sessions);
+  planningRoutes(app, taskDb, sessions, busyProvider);
   learningRoutes(
     app,
     new EvidenceStore(registry),

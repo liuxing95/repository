@@ -7,7 +7,7 @@ import type { WriterGrant } from "@kb/contracts";
 export const writerHash = (text: string) =>
   createHash("sha256").update(text).digest("hex");
 export async function guardPath(root: string, path: string) {
-  if (!/^KB-(Sources|Wiki|Candidates)\/[a-f0-9-]{36}\.md$/.test(path))
+  if (!/^KB-(Sources|Wiki|Candidates|Plans)\/[a-f0-9-]{36}\.md$/.test(path))
     throw new Error("WRITER_PATH");
   const base = await realpath(root);
   const name = path.split("/")[0]!;
@@ -47,7 +47,7 @@ export function guardGrant(connection: Connection, grant: WriterGrant) {
 
 // Recheck synchronously inside Vault.process; asynchronous checks alone leave a stale baseline window.
 export function guardPathSync(root: string, path: string) {
-  if (!/^KB-(Sources|Wiki|Candidates)\/[a-f0-9-]{36}\.md$/.test(path))
+  if (!/^KB-(Sources|Wiki|Candidates|Plans)\/[a-f0-9-]{36}\.md$/.test(path))
     throw new Error("WRITER_PATH");
   const base = realpathSync(root),
     name = path.split("/")[0]!;

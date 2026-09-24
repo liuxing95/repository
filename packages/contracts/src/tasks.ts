@@ -53,6 +53,9 @@ export const TaskFact = z
     earliestDay: TaskDay.nullable(),
     due: z.string().max(100).nullable(),
     timezone: TaskZone,
+    planLocation: z.string().max(100).nullable().optional(),
+    planDevice: z.string().max(100).nullable().optional(),
+    planPriority: z.number().int().min(0).max(5).nullable().optional(),
     minutes: z.number().int().min(0).max(1440).nullable(),
     timeEntries: z
       .array(
@@ -140,7 +143,14 @@ export type TaskToday = {
   commands: TaskCommand[];
   risks: string[];
   learningLinks: { taskId: string; goalId: string; unitId: string }[];
-  plan: null | { id: string; blocks: TodayBlock[] };
+  plan: null | {
+    id: string;
+    acceptedAt: number;
+    blocks: TodayBlock[];
+    taskRevisions?: Record<string, string>;
+    coverage?: { state: string; reason: string };
+    unscheduled?: { taskId: string; reason: string }[];
+  };
   receipts: ProjectionReceipt[];
 };
 export type TodayBlock = {
@@ -155,5 +165,5 @@ export type ProjectionReceipt = {
   planId: string;
   target: "note" | "task" | "calendar" | "reminder";
   revision: string;
-  state: "pending" | "applied" | "failed";
+  state: "pending" | "applied" | "failed" | "disabled";
 };

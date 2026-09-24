@@ -4,7 +4,9 @@
 
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架、[场景 01：工作区接入与运行治理](docs/plans/2026-09-21-002-feat-workspace-runtime-governance-plan.md)和[场景 02：多来源资料收录](docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md)。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。精确排程、通知、日历和发布仍属于后续场景。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。外部日历、自动委托、通知和发布尚未启用。
+
+要试用排程，请先按场景 07 说明连接 TaskNotes 并完成清点，再在插件设置页 **11 / 安排时间** 填写时区、带 `Z` 或 `+08:00` 等偏移的可用起止时间，以及节点上限、冻结分钟数和日历有效毫秒数。点击“核对任务并预览”，检查已排与未排、移动差异；确认后点击“核对后采用此计划”。采用后的时间块在 Today 查看，主端稍后把不可变笔记写到 `KB-Plans`。真实 Google 日历当前未连接，不要把本地窗口当成已查过会议。
 
 ## 开发与检查
 
@@ -108,7 +110,7 @@ pnpm service serve
 
 收录上限：100 个选定条目、单原件 20 MB、范围总量最多 50 MB、最多 1000 个候选、网页发现深度 5、发现时限 120 秒。每个解析进程最多 20 秒、V8 堆 256 MB、结果 8 MB；PDF 首次最多解析 200 页。V8 堆上限不是总 RSS 上限，真实样本峰值见验收记录。
 
-数据库已升级为 schema 7。schema 6 升级前创建 `state.db.before-v7-<id>` 私有快照，再增加任务观察、命令、循环映射、失效与回执账本。schema 5 升级前创建 `state.db.before-v6-<id>` 私有快照，再事务增加学习目标、基线、尝试、评价、建议与任务创建意图表。schema 4 升级前创建 `state.db.before-v5-<id>` 私有快照，再事务增加研究清单、证据快照、章节与报告表。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源、尝试或费用的数据库。
+数据库已升级为 schema 8。schema 7 升级前创建 `state.db.before-v8-<id>` 私有快照，再增加排程候选、正式计划版本、采用与投影意图账本。schema 6 升级前创建 `state.db.before-v7-<id>` 私有快照，再增加任务观察、命令、循环映射、失效与回执账本。schema 5 升级前创建 `state.db.before-v6-<id>` 私有快照，再事务增加学习目标、基线、尝试、评价、建议与任务创建意图表。schema 4 升级前创建 `state.db.before-v5-<id>` 私有快照，再事务增加研究清单、证据快照、章节与报告表。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源、尝试或费用的数据库。
 
 [场景 02 实施与验收记录](docs/implementation/multi-source-ingestion-validation.md)包含 API、50 项测试、30 份真实资料、桌面截图和恢复方法。重跑真实网络样本：
 
@@ -138,7 +140,7 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 
 页面更新使用 Obsidian 的同步 `Vault.process` 检查当前内容；回执丢失时按 afterHash 恢复，遇到第三版本则保留人工内容。只有所有必要文件核对一致，正式知识版本才推进；磁盘部分应用不等于业务提交完成。已完成的页面更新可生成反向提案，重新审核后恢复原字节；首次新建不会自动删文件。
 
-完整操作、接口、代码入口、当时的 schema 4 迁移和恢复见 [Wiki 使用与维护](docs/implementation/wiki-review-commit.md)，该场景的检查和真实桌面记录见 [场景 04 验收](docs/implementation/wiki-review-validation.md)。当前数据库已随任务场景升级至 schema 7，服务与插件需一起重新构建部署；旧服务不能写新版本数据库。
+完整操作、接口、代码入口、当时的 schema 4 迁移和恢复见 [Wiki 使用与维护](docs/implementation/wiki-review-commit.md)，该场景的检查和真实桌面记录见 [场景 04 验收](docs/implementation/wiki-review-validation.md)。当前数据库已随排程场景升级至 schema 8，服务与插件需一起重新构建部署；旧服务不能写新版本数据库。
 
 ## 生成一份课题研究报告
 
@@ -174,4 +176,4 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 3. 等待创建标记被完整清点确认，再看到正式任务。未知结果只核对，不自动重发。
 4. 用“打开 TaskNotes 任务”进行原生状态修改和计时；学习任务用“继续这项学习”恢复原尝试。
 
-Today 当前提供任务事实和未排项；精确排程、日历覆盖与通知发送仍待后续场景。自动修改已有任务字段保持关闭。完整步骤、代码入口、schema 7、故障恢复和测试命令见[场景 07 接手说明](docs/implementation/task-today-reconciliation.md)，实际验证范围见[验收记录](docs/implementation/task-today-validation.md)。
+Today 当前提供任务事实、已采用本地计划和未排项；外部日历覆盖与通知发送仍待后续场景。自动修改已有任务字段保持关闭。场景 07 的 TaskNotes 步骤见[任务接手说明](docs/implementation/task-today-reconciliation.md)，本地排程与 schema 8 的操作见[场景 08 接手说明](docs/implementation/scheduling-calendar-sync.md)。

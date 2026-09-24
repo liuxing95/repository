@@ -1,4 +1,5 @@
 import { taskTodaySmoke } from "./task-today-smoke.mjs";
+import { planningSmoke } from "./planning-smoke.mjs";
 import { chromium } from "@playwright/test";
 import { mkdir, writeFile, cp, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
@@ -730,8 +731,15 @@ try {
       exact: true,
     })
     .waitFor();
-  if (process.env.KB_TEST_TASKNOTES === "1")
+  if (process.env.KB_TEST_TASKNOTES === "1") {
     await taskTodaySmoke({ page, vaultPage, root });
+    await planningSmoke({
+      page,
+      vaultPage,
+      root,
+      vaultPath: workspace.vaultPath,
+    });
+  }
   await writeFile(
     join(root, "app-info.json"),
     JSON.stringify(
