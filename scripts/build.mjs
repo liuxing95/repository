@@ -17,6 +17,17 @@ await build({
 });
 await mkdir("apps/obsidian-plugin/dist", { recursive: true });
 await build({
+  entryPoints: ["apps/agent-gateway/src/stdio.ts"],
+  outfile: "apps/agent-gateway/dist/stdio.js",
+  bundle: true,
+  platform: "node",
+  target: "node24",
+  format: "esm",
+  packages: "external",
+  alias: { "@kb/contracts": "./packages/contracts/src/index.ts" },
+  sourcemap: true,
+});
+await build({
   entryPoints: ["apps/obsidian-plugin/src/main.ts"],
   outfile: "apps/obsidian-plugin/dist/main.js",
   bundle: true,

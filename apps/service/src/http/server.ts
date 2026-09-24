@@ -25,6 +25,8 @@ import { diagnostics } from "../runtime/diagnostics";
 import { Policy } from "../security/policy";
 import { ReminderRules } from "../reminders/rules";
 import { Retraction } from "../lifecycle/retraction";
+import { AgentClients } from "../agents/clients";
+import { AgentOperations } from "../agents/operations";
 
 export function createServer(
   registry: WorkspaceRegistry,
@@ -225,6 +227,28 @@ export function createServer(
       return { workspace };
     }),
   );
+  const agentClients = new AgentClients(registry);
+  const agentOperations = new AgentOperations(agentClients, answerProviders);
+  app.get("/v1/agents/clients", (req) => {
+    authorize(registry, sessions.authenticate(bearer(req)), ["admin"]);
+    return agentClients.list();
+  });
+  app.post("/v1/agents/clients", (req) => {
+    const actor = sessions.authenticate(bearer(req));
+    authorize(registry, actor, ["admin"], version(req), true);
+    const operationKey = Id.parse(req.headers["x-operation-key"]);
+    return agentClients.create(req.body, actor, operationKey);
+  });
+  app.post("/v1/agents/clients/:id/revoke", (req) =>
+    mutate(req, ["admin"], true, () => {
+      const { id } = z.object({ id: Id }).parse(req.params);
+      return agentClients.revoke(id);
+    }),
+  );
+  app.post("/v1/agents/invoke", (req) => {
+    const id = Id.parse(req.headers["x-agent-id"]);
+    return agentOperations.invoke(id, bearer(req), req.body);
+  });
   app.get("/v1/jobs", async (req) => {
     sessions.authenticate(bearer(req));
     return jobs.list();

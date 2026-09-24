@@ -64,12 +64,16 @@ flowchart TD
 
 ## 6. 实施单元
 
-- [ ] **A1：客户端配对与授权。** 需求 R092、R083—R085；依赖 G2、E3。文件：`packages/contracts/src/agent-access.ts`、`apps/service/src/agents/clients.ts`、`apps/obsidian-plugin/src/views/agent-access.ts`；测试：`tests/security/agent-client-policy.test.ts`。参考已有权限服务，不新增一套 ACL。测试未配对、过期、跨 Vault、Agent 接收方未授权、撤销在途读取；预期无正文泄漏。完成依据：只读范围真实限制输出。
+- [x] **A1：客户端配对与授权。** 需求 R092、R083—R085；依赖 G2、E3。文件：`packages/contracts/src/agent-access.ts`、`apps/service/src/agents/clients.ts`、`apps/obsidian-plugin/src/views/agent-access.ts`；测试：`tests/security/agent-client-policy.test.ts`。参考已有权限服务，不新增一套 ACL。测试未配对、过期、跨 Vault、Agent 接收方未授权、撤销在途读取；预期无正文泄漏。完成依据：只读范围真实限制输出。
 
-- [ ] **A2：stdio 工具适配。** 需求 R092；依赖 A1、E2—E3。文件：`apps/agent-gateway/src/stdio.ts`、`apps/agent-gateway/src/tools.ts`；测试：`tests/contracts/mcp-tools.test.ts`。测试协议协商、schema 错误、分页、结果大小、任意路径和伪造审批工具；预期只有登记能力可调用，stdout 仅含协议数据。完成依据：用真实目标客户端完成搜索和固定证据回读。
+- [x] **A2：stdio 工具适配。** 需求 R092；依赖 A1、E2—E3。文件：`apps/agent-gateway/src/stdio.ts`、`apps/agent-gateway/src/tools.ts`；测试：`tests/contracts/mcp-tools.test.ts`。测试协议协商、schema 错误、分页、结果大小、任意路径和伪造审批工具；预期只有登记能力可调用，stdout 仅含协议数据。完成依据：用真实目标客户端完成搜索和固定证据回读。
 
-- [ ] **A3：重试、费用与可选候选入口。** 需求 R092、R086；依赖 A2；候选写入另需 W4／T2。文件：`apps/service/src/agents/operations.ts`；测试：`tests/faults/agent-operation-retry.test.ts`。测试重试、断连、相同 key 不同正文、未知模型费用、离线任务输入；预期副作用不重复、结果状态准确，未授写权限时无候选产生。完成依据：A38 拒绝审批／发布且问答仍受根预算约束。
+- [x] **A3：重试、费用与可选候选入口。** 需求 R092、R086；依赖 A2；候选写入另需 W4／T2。文件：`apps/service/src/agents/operations.ts`；测试：`tests/faults/agent-operation-retry.test.ts`。测试重试、断连、相同 key 不同正文、未知模型费用、离线任务输入；预期副作用不重复、结果状态准确，未授写权限时无候选产生。完成依据：A38 拒绝审批／发布且问答仍受根预算约束。
 
 ## 7. 开放条件
 
 实际客户端、协议 SDK 与运行时版本在 P7 实施时固定并验收，不承诺所有 Agent 自动兼容。远端访问、共享知识库、多用户权限体系均不属于这份本机单用户接入方案。
+
+## 8. 实施记录（2026-09-24）
+
+首期只读接入已实现，实际入口、权限边界、重试与测试见[场景 11 接手说明](../implementation/external-agent-access.md)和[验证记录](../implementation/external-agent-access-validation.md)。A3 中的候选／任务输入是可选扩展，本次未注册写入工具；真实模型提供方与第三方桌面客户端人工兼容验收仍未完成。

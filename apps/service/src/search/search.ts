@@ -45,9 +45,15 @@ export class SearchService {
         "证据范围或来源关系已变化，请重新搜索。",
       );
   }
-  async search(value: unknown, p: Principal): Promise<SearchResult> {
+  async search(
+    value: unknown,
+    p: Principal,
+    allowedSourceIds?: readonly string[],
+  ): Promise<SearchResult> {
     this.evidence.checkPrincipal(p);
     const input = SearchInput.parse(value);
+    if (allowedSourceIds && input.snapshotId)
+      throw new AppError("VALIDATION", 400);
     let snapshot = input.snapshotId
       ? this.snapshot(input.snapshotId, p)
       : undefined;
@@ -86,17 +92,21 @@ export class SearchService {
     }
     const expression = matchExpression(input.query);
     // Filter current local-read policy inside the candidate query, before ranking/truncation.
+    const sourceFilter = allowedSourceIds
+      ? ` AND d.source_id IN (${allowedSourceIds.map(() => "?").join(",")})`
+      : "";
     const rows = expression
       ? (this.store.db
           .prepare(
             `SELECT d.evidence_id, d.parse_id, bm25(search_fts,4,1,8) score
       FROM search_fts JOIN search_documents d ON d.id=search_fts.rowid
       WHERE search_fts MATCH ? AND d.generation=?
+      ${sourceFilter}
       AND NOT EXISTS (SELECT 1 FROM kv WHERE key='source:'||d.source_id AND
         (json_extract(value,'$.retracted')!=0 OR NOT EXISTS (SELECT 1 FROM json_each(kv.value,'$.routes.read') allowed WHERE allowed.value='local')))
       ORDER BY score,d.evidence_id`,
           )
-          .all(expression, generation.id) as {
+          .all(expression, generation.id, ...(allowedSourceIds ?? [])) as {
           evidence_id: string;
           parse_id: string;
           score: number;

@@ -12,3 +12,4 @@ export * from "./learning";
 export * from "./tasks";
 export * from "./planning";
 export * from "./reminders";
+export * from "./agent-access";

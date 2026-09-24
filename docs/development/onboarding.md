@@ -1,6 +1,6 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-24，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对、场景 08 的本地时间排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地撤回、备份、隔离恢复和退出导出。真实模型、外部日历、关机后提醒、物理清除和人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-24，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对、场景 08 的本地时间排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地撤回、备份、隔离恢复和退出导出、场景 11 可选的外部 Agent 只读接入。真实模型、外部日历、关机后提醒、物理清除和人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
@@ -23,6 +23,7 @@
 | 本地约束排程与计划采用 | 已实现首期 | [排程接手说明](../implementation/scheduling-calendar-sync.md)；用户明确输入可用时间后预览、人工采用，未核对外部日历 |
 | 本机提醒、取消与投递记录 | 已实现 macOS 首期 | [提醒接手说明](../implementation/reminder-delivery-control.md)；必须显式启用规则并保持电脑和服务运行 |
 | 撤回、备份、隔离恢复与退出 | 已实现本机保守流程 | [场景 10 接手说明](../implementation/backup-retraction-recovery.md)；需停服务操作，较新事实冲突不自动合并，物理清除未实现 |
+| 外部 Agent 只读接入 | 已实现可选的本机 MCP stdio 网关 | [场景 11 接手说明](../implementation/external-agent-access.md)；按客户端限制正式来源，真实模型与第三方桌面客户端尚未验收 |
 | 模型回答 | 部分接口 | 模型适配器接口已实现，真实提供方与语义验收未完成 |
 | OCR、模型、外部日历、远程通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力；本机通知已单独接入 |
 
@@ -47,7 +48,7 @@ pnpm install --frozen-lockfile
 pnpm build
 ```
 
-构建成功后，应有 `apps/service/dist/main.js` 和 `apps/obsidian-plugin/dist/main.js`。当前没有热更新或自动复制插件的开发命令。
+构建成功后，应有 `apps/service/dist/main.js`、`apps/obsidian-plugin/dist/main.js` 和可选的 `apps/agent-gateway/dist/stdio.js`。当前没有热更新或自动复制插件的开发命令。
 
 ### 2.2 创建样例并预览接入
 
@@ -155,6 +156,8 @@ flowchart LR
   Vault --> Backup
   Fence --> Backup
   Backup --> Audit[与现有账本和 Vault 核对]
+  Agent[外部 Agent] <-->|MCP stdio| Gateway[可选只读网关]
+  Gateway -->|本机客户端授权| Service
   DB --> Today[Today 正式计划读模型]
   DB --> PlanOutbox[计划笔记投影意图]
   PlanOutbox --> Plugin
@@ -206,6 +209,7 @@ sequenceDiagram
 | 原件、修订与解析保存 | [objects.ts](../../apps/service/src/ingestion/objects.ts) | [store.ts](../../apps/service/src/storage/store.ts)、[002-sources.ts](../../apps/service/src/storage/migrations/002-sources.ts) |
 | 解析入口与格式处理 | [parser.ts](../../apps/service/src/ingestion/parser.ts) | [parser-entry.ts](../../apps/service/src/ingestion/parser-entry.ts)、[web-parser.ts](../../apps/service/src/ingestion/web-parser.ts)、[pdf-parser.ts](../../apps/service/src/ingestion/pdf-parser.ts) |
 | 本地检索、索引代、证据和问答 | [search/search.ts](../../apps/service/src/search/search.ts)、[evidence/locator.ts](../../apps/service/src/evidence/locator.ts) | [answers/answer.ts](../../apps/service/src/answers/answer.ts)、[场景 03 说明](../implementation/evidence-search-answer.md) |
+| 外部 Agent 授权、工具调用与重试 | [agents/clients.ts](../../apps/service/src/agents/clients.ts)、[agents/operations.ts](../../apps/service/src/agents/operations.ts) | [stdio.ts](../../apps/agent-gateway/src/stdio.ts)、[场景 11 接手说明](../implementation/external-agent-access.md) |
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
 | Wiki 提案、批准、版本提交与人工观察 | [review/routes.ts](../../apps/service/src/review/routes.ts)、[views/review.ts](../../apps/obsidian-plugin/src/views/review.ts) | [场景 04 使用与维护](../implementation/wiki-review-commit.md) |
 | 课题、覆盖、快照与报告 | [research/routes.ts](../../apps/service/src/research/routes.ts)、[views/research.ts](../../apps/obsidian-plugin/src/views/research.ts) | [场景 05 使用与维护](../implementation/topic-research-report.md) |

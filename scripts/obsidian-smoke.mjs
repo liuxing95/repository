@@ -200,7 +200,15 @@ try {
   await reminders
     .getByRole("button", { name: "关闭此规则", exact: true })
     .click();
-  await reminders.getByText(/任务开始 · 已关闭/).waitFor();
+  await reminders
+    .getByText(/任务开始 · 已关闭/)
+    .first()
+    .waitFor();
+  await page
+    .getByRole("heading", { name: "14 / 外部 Agent", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.getByRole("button", { name: "刷新客户端", exact: true }).click();
+  await page.screenshot({ path: join(root, "obsidian-agent-access.png") });
   await page.waitForFunction(() =>
     document
       .querySelector(".kb-settings textarea")
