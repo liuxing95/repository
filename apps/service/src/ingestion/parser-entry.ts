@@ -17,8 +17,8 @@ async function run(input: {
     const parsed =
       input.kind === "pdf"
         ? await parsePdf(bytes, input.title, input.password)
-        : ["web", "collection"].includes(input.kind)
-          ? parseWeb(bytes, input.url, input.encoding)
+        : ["html", "web", "collection"].includes(input.kind)
+          ? parseWeb(bytes, input.url, input.encoding, input.kind === "html")
           : parseText(bytes, input.title, input.encoding, input.path);
     parsed.peakMemoryBytes = process.resourceUsage().maxRSS * 1024;
     parsed.durationMs = performance.now() - started;

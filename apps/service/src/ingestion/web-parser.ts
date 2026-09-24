@@ -73,23 +73,25 @@ export function parseText(
   if (!parsed.text.trim()) parsed.gaps.push("EMPTY：没有可用文字。");
   return parsed;
 }
-export function parseWeb(bytes: Uint8Array, url: string, encoding = "utf-8") {
+export function parseWeb(
+  bytes: Uint8Array,
+  url: string,
+  encoding = "utf-8",
+  local = false,
+) {
+  const parserName = local ? "local-html-dom/1" : "readability-0.6.0/2";
   let html: string;
   try {
     html = new TextDecoder(encoding, { fatal: true }).decode(bytes);
   } catch {
-    const p = baseParsed(url, "readability-0.6.0/2", encoding);
+    const p = baseParsed(url, parserName, encoding);
     p.gaps.push("ENCODING_INVALID：原件保留，需选择编码重试。");
     return p;
   }
   // No scripts, resources, browser credentials, or rendered HTML leave this parser.
   const dom = new JSDOM(html, { url });
   const document = dom.window.document;
-  const parsed = baseParsed(
-    document.title || url,
-    "readability-0.6.0/2",
-    encoding,
-  );
+  const parsed = baseParsed(document.title || url, parserName, encoding);
   parsed.canonicalClaim =
     document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href ??
     null;
@@ -119,20 +121,29 @@ export function parseWeb(bytes: Uint8Array, url: string, encoding = "utf-8") {
     parsed.gaps.push("CODE_TABS：只取得静态标签页内容；未验证其他交互状态。");
   if (document.querySelector("canvas,iframe,video,svg,img"))
     parsed.gaps.push("MEDIA：图像、嵌入与图表未做文字识别。");
-  const article = new Readability(document.cloneNode(true) as Document, {
-    maxElemsToParse: 30000,
-    charThreshold: 100,
-  }).parse();
-  const content = new JSDOM(
-    article?.content ??
-      document.querySelector("main,article")?.innerHTML ??
-      document.body.innerHTML,
-  );
-  content.window.document
+  // Local HTML can contain a large saved document. Avoid the
+  // Readability clone and second DOM so it fits the fixed 256 MiB parser heap.
+  const article = local
+    ? null
+    : new Readability(document.cloneNode(true) as Document, {
+        maxElemsToParse: 30000,
+        charThreshold: 100,
+      }).parse();
+  const content = local
+    ? dom
+    : new JSDOM(
+        article?.content ??
+          document.querySelector("main,article")?.innerHTML ??
+          document.body.innerHTML,
+      );
+  const body = local
+    ? (document.querySelector("main,article") ?? document.body)
+    : content.window.document.body;
+  body
     .querySelectorAll("script,style,iframe,object,embed,form,nav,svg")
     .forEach((n) => n.remove());
   let headings: string[] = [];
-  for (const node of content.window.document.querySelectorAll(
+  for (const node of body.querySelectorAll(
     "h1,h2,h3,h4,h5,h6,p,pre,table,li",
   )) {
     if (node.parentElement?.closest("pre,table,li,p")) continue;
@@ -166,21 +177,18 @@ export function parseWeb(bytes: Uint8Array, url: string, encoding = "utf-8") {
     );
   }
   if (!parsed.blocks.length)
-    appendBlock(
-      parsed,
-      content.window.document.body.textContent?.trim() ?? "",
-      "text",
-      {},
-    );
+    appendBlock(parsed, body.textContent?.trim() ?? "", "text", {});
   if (parsed.text.trim().length < 100)
     parsed.gaps.push(
       "SPARSE_OR_SCRIPT_SHELL：文字过少，可能是脚本壳或截断页面。",
     );
   // Completeness cannot be inferred from HTTP 200 or a successful extraction.
   parsed.gaps.push(
-    "STATIC_COVERAGE：仅对本次取得的静态 HTML 负责，未确认上游全文完整。",
+    local
+      ? "LOCAL_HTML_STATIC：只提取此文件的静态文字；脚本与外部资源未运行或获取。"
+      : "STATIC_COVERAGE：仅对本次取得的静态 HTML 负责，未确认上游全文完整。",
   );
-  content.window.close();
+  if (!local) content.window.close();
   dom.window.close();
   return parsed;
 }

@@ -3,7 +3,7 @@ import { Id } from "./workspace";
 export const AcquisitionPlan = z
   .object({
     id: Id,
-    kind: z.enum(["text", "web", "collection", "repository", "pdf"]),
+    kind: z.enum(["text", "html", "web", "collection", "repository", "pdf"]),
     entry: z.string().min(1).max(2048),
     title: z.string().max(200).default(""),
     clip: z.string().max(16000).optional(),

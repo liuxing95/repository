@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { basename, dirname, resolve } from "node:path";
+import { basename, dirname, isAbsolute, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { lstat, realpath } from "node:fs/promises";
 import {
   AcquisitionPlan,
@@ -78,6 +79,12 @@ export class Ingestion {
   }
   async preview(value: unknown, principal: Principal) {
     const plan = AcquisitionPlan.parse(value);
+    if (plan.kind === "html" && plan.clip !== undefined)
+      throw new AppError(
+        "VALIDATION",
+        400,
+        "本地 HTML 请指定文件；手工剪藏请选文本类型。",
+      );
     this.check(principal, principal.policyVersion);
     const prior = this.registry.store.db
       .prepare("SELECT input_digest FROM ingestions WHERE id=?")
@@ -279,6 +286,15 @@ export class Ingestion {
       if (remote.tree.length > 1000)
         warnings.push("仓库条目超过 1000，需缩小研究范围。");
     } else {
+      if (
+        plan.kind === "html" &&
+        (!isAbsolute(plan.entry) || !/\.html?$/i.test(plan.entry))
+      )
+        throw new AppError(
+          "VALIDATION",
+          400,
+          "本地 HTML 请指定一份 .html 或 .htm 文件的绝对路径。",
+        );
       const root = resolve(plan.entry);
       const actual = await realpath(root);
       if (
@@ -292,6 +308,12 @@ export class Ingestion {
         );
       const info = await lstat(root);
       if (info.isSymbolicLink()) throw new AppError("FORBIDDEN", 403);
+      if (plan.kind === "html" && !info.isFile())
+        throw new AppError(
+          "VALIDATION",
+          400,
+          "本地 HTML 请指定一份文件，而非目录。",
+        );
       const isZip = !info.isDirectory() && /\.zip$/i.test(root);
       const zip = isZip
         ? await unzipBounded(
@@ -318,9 +340,11 @@ export class Ingestion {
         const kind =
           plan.kind === "repository"
             ? "repository"
-            : /\.pdf$/i.test(path)
-              ? "pdf"
-              : "text";
+            : plan.kind === "html"
+              ? "html"
+              : /\.pdf$/i.test(path)
+                ? "pdf"
+                : "text";
         const original = `${actual}${info.isDirectory() || isZip ? "/" + path : ""}`;
         const entry = add(
           original,
@@ -686,7 +710,10 @@ export class Ingestion {
                   ? "text"
                   : entry.kind,
               title: manifest.plan.title || basename(entry.original),
-              url: entry.final,
+              url:
+                entry.kind === "html"
+                  ? pathToFileURL(entry.final).href
+                  : entry.final,
               encoding: manifest.plan.encoding,
               path:
                 entry.kind === "repository"

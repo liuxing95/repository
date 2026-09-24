@@ -97,6 +97,7 @@ export function renderIngestion(
   };
   field("kind", "资料类型", "text", [
     ["text", "文本 / Markdown / 剪藏"],
+    ["html", "本地 HTML 文件"],
     ["web", "单页网页"],
     ["collection", "文档集合"],
     ["repository", "代码 / 发布产物"],
@@ -159,7 +160,7 @@ export function renderIngestion(
     );
     const link = el("a", "保存原件");
     link.href = url;
-    link.download = `${path.split("/").at(-1)}.${kind === "pdf" ? "pdf" : kind === "web" || kind === "collection" ? "html" : "txt"}`;
+    link.download = `${path.split("/").at(-1)}.${kind === "pdf" ? "pdf" : kind === "html" || kind === "web" || kind === "collection" ? "html" : "txt"}`;
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };

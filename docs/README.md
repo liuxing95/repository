@@ -11,6 +11,7 @@
 | 完整需求与场景划分 | [PRD](brainstorms/2026-09-21-obsidian-knowledge-and-task-center-requirements.md)、[总体技术方案](plans/2026-09-21-001-feat-overall-knowledge-task-plan.md) |
 | 工作区和运行治理的实际交付 | [场景 01 实施验收](implementation/runtime-governance-validation.md) |
 | 多来源收录的实际交付 | [场景 02 实施验收](implementation/multi-source-ingestion-validation.md) |
+| 本地 HTML 的原件保存、静态正文、操作与排障 | [本地 HTML 收录与接手](implementation/local-html-ingestion.md) |
 | 本地检索、证据整理、问答接口和边界 | [场景 03 使用与维护](implementation/evidence-search-answer.md)、[验收记录](implementation/evidence-search-validation.md) |
 | 候选保存、Wiki 审核与写入、人工观察和恢复 | [场景 04 使用与维护](implementation/wiki-review-commit.md)、[验收记录](implementation/wiki-review-validation.md) |
 | 课题、历史时点、分章报告、快照更新与审核保存 | [场景 05 使用与维护](implementation/topic-research-report.md)、[验收记录](implementation/topic-research-validation.md) |

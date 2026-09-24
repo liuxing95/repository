@@ -54,6 +54,7 @@ export function renderSearch(
   for (const [value, text] of [
     ["", "全部"],
     ["text", "文本"],
+    ["html", "本地 HTML"],
     ["web", "网页"],
     ["collection", "文档集合"],
     ["repository", "代码"],
