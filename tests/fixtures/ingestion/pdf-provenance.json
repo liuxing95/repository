@@ -1,0 +1,56 @@
+[
+  {
+    "file": "basicapi.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/basicapi.pdf",
+    "bytes": 105779,
+    "sha256": "925853d98d67d5dae7473c635f932958e1695ce1029d23b2ecd2531cb65f1f14"
+  },
+  {
+    "file": "labelled_pages.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/labelled_pages.pdf",
+    "bytes": 6717,
+    "sha256": "5469cf9139b28cec6fece1ac7697c98f1ea529999332d8b59535c0439f1140d1"
+  },
+  {
+    "file": "empty_protected.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/empty_protected.pdf",
+    "bytes": 5605,
+    "sha256": "69556af04215faec7da3e93e823c64f1b74679e52fd10379176f0e0462dd4b6c"
+  },
+  {
+    "file": "images.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/images.pdf",
+    "bytes": 1494439,
+    "sha256": "f7a44ca650d951cfea007440cda297dabbf2cf0c8f77a948a580cc0e99496725"
+  },
+  {
+    "file": "rotation.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/rotation.pdf",
+    "bytes": 6605,
+    "sha256": "5087c2afe763d145537d652bb3bc6c321ace3a267b2679ae2c178add3ba7f1d9"
+  },
+  {
+    "file": "bad-PageLabels.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/bad-PageLabels.pdf",
+    "bytes": 798,
+    "sha256": "eff0ee7d1cf2e1a7ccfb25a8fc4c2bbea0ec23c838b61a199a57dbb732ddeaad"
+  },
+  {
+    "file": "tracemonkey.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/tracemonkey.pdf",
+    "bytes": 1016315,
+    "sha256": "3662ff519e485810520552bf301d8c3b2b917fd2f83303f4965d7abed367e113"
+  },
+  {
+    "file": "scan-bad.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/scan-bad.pdf",
+    "bytes": 29832,
+    "sha256": "d40f31f182cf254ab134826d379875acacb1f7b48bf1a57bce2e30b38d16628e"
+  },
+  {
+    "file": "encrypted-attachment.pdf",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/b7338b8dd4dcc609120601d9bcc4ec0d4c93f7e2/test/pdfs/encrypted-attachment.pdf",
+    "bytes": 2719,
+    "sha256": "0f44da5152adf8cafcd7b0057d840310d78e17d033ee5414da0881b6dcd130ab"
+  }
+]

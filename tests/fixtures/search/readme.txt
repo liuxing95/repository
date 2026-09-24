@@ -1,0 +1,118 @@
+# 知识与任务中心
+
+刚接手项目，请先读 [开发者接手指南](docs/development/onboarding.md)：从独立样例运行、首次收录，到架构、代码入口、测试和排障。后续开发遵循 [代码与文档交付约定](CONTRIBUTING.md)。
+
+面向 Obsidian 的本地服务与薄插件。目前完成工程骨架、[场景 01：工作区接入与运行治理](docs/plans/2026-09-21-002-feat-workspace-runtime-governance-plan.md)和[场景 02：多来源资料收录](docs/plans/2026-09-21-003-feat-multi-source-ingestion-plan.md)。
+
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。搜索、TaskNotes、Wiki 更新、模型、通知、日历和发布仍属于后续场景，配置路线不会自动启用这些能力。
+
+## 开发与检查
+
+首个验收平台为 macOS。受测环境：Node.js **24.14.1**、pnpm **10.33.0**、Obsidian **1.13.7**。实际 SQLite 内核为 **3.53.4**；启动时要求至少 3.51.3。依赖精确版本由 `pnpm-lock.yaml` 固定。原生依赖首次安装可能需要 Xcode Command Line Tools。
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+```
+
+`check` 包含类型检查、lint、常规测试、构建和编译产物的真实进程测试。OCI 与桌面测试分别运行：
+
+```sh
+docker pull node:24.14.1-alpine@sha256:8510330d3eb72c804231a834b1a8ebb55cb3796c3e4431297a24d246b8add4d5
+pnpm test:oci
+pnpm test:desktop
+```
+
+桌面测试使用 `/Applications/Obsidian.app`，创建独立测试资料与应用配置，完整操作真实插件。结果放在 `.context/runtime-validation/`，该目录不提交。默认端口 27124 需要空闲。没有 Docker 时，普通治理与自检可用，第三方隔离路线保持关闭。
+
+## 创建第一个试点
+
+先构建，然后预览一个明确选定的 Vault：
+
+```sh
+pnpm build
+pnpm service preview --source "/你的/资料库"
+```
+
+预览会返回文件数、目录、已发现的插件版本、冲突代码和 `digest`。复制该摘要确认接入：
+
+```sh
+pnpm service adopt --source "/你的/资料库" --confirm "预览返回的 digest"
+```
+
+程序在应用数据目录创建 `pilot` 和逐文件校验的 `backup`，输出它们的绝对路径。原资料库不移动、不覆盖。备份保留原插件配置；试点不自动加载原 `.obsidian` 与 `.git`，以免运行未知插件。空目录也会保留。
+
+默认应用数据目录：`~/Library/Application Support/KnowledgeTaskCenter`。可在所有命令中用同一 `--data "/绝对路径"` 指定另一个本地目录，**必须在 Vault 外，且不要放进同步盘**。一个数据目录对应一个工作区。
+
+扫描上限为单文件 20 MB、总量 512 MB、20,000 个文件、5,000 个目录、40 层目录。超过上限时停止接入；先选取较小的试点资料。符号链接、特殊文件、重复 `taskId`、已有受管目录、大小写或 Unicode 同名冲突均需先处理。当前受管目录为 `KB-Sources`、`KB-Wiki`、`KB-Candidates`、`KB-Plans`；可先另建不冲突的试点来源目录。
+
+## 安装插件并连接
+
+1. 在 Obsidian 中打开上一步输出的 `pilot` 目录。
+2. 将 `apps/obsidian-plugin/dist/` 内的 `main.js`、`manifest.json`、`styles.css` 复制到该试点的 `.obsidian/plugins/knowledge-task-center/`。
+3. 在 Obsidian 的第三方插件设置中启用“知识与任务中心”。
+4. 启动服务，再打开插件设置页，输入终端显示的一次性配对码：
+
+```sh
+pnpm service serve
+```
+
+配对码 5 分钟有效，只能使用一次；在本机终端显示，不要写进笔记或共享日志。会话最长 1 小时，插件每 15 秒发送心跳，失联 45 秒后暂停后台执行。会话令牌只留在插件内存，重启插件后重新配对；Vault 的插件数据只保存设备 ID。
+
+首次连接后点击“登记当前设备为主端”，再运行本地自检。主端交接必须先取消或完成作业、核对所有未结算费用，再由旧端释放。旧端不可用时不会自动接管。只读客户端可用 `serve --role reader` 签发配对码；可选角色为 `admin`、`user`、`writer`、`reader`。首期 `writer` 保留给后续受控写入适配器，不获得配置权限。
+
+当前插件固定连接 `http://127.0.0.1:27124`。服务的 `--port` 用于自动化测试或自有客户端，不会同步修改插件配置。服务只监听回环地址，检查 Host、Origin 和 Bearer；无远程开放模式。
+
+## 配置与费用
+
+设置页的“读取配置／保存配置”是配置管理员入口。初始配置为：
+
+```json
+{
+  "schemaVersion": 1,
+  "budget": null,
+  "routes": []
+}
+```
+
+金额为微美元整数，`1 USD = 1,000,000`。启用收费路线需要单作业、日、月额度、时区、有效价格版本、输入／输出上限和受信业务适配器。具体 schema 见 `packages/contracts/src/policy.ts`。每个来源按 read、fetch、model、ocr、embedding、rerank、notification、calendar、publish 分别授权；多来源取允许路线交集，撤回立即阻断。
+
+每次外部调用先在真实 SQLite 事务中预占三层额度。所有子任务、重试共用根预算。请求发出后回执未知，预占仍保留；跨日和重启不释放。结算按唯一提供方请求号去重；超出估计时记录真实费用并停止该根作业的后续收费调用。当前没有接入任何真实付费提供方。
+
+提供方密钥由 `credential --reference <路线引用>` 从标准输入写入操作系统凭据库，服务仅保留引用，worker 不获得密钥。不要把密钥直接放进命令行参数或 JSON 配置。插件会话采用内存保存，避免把设备凭据写入 Vault。
+
+## 运行、诊断与恢复
+
+- `pnpm service diagnose` 输出脱敏版本、队列计数和费用汇总，不包含正文、Vault 路径、会话令牌或提供方密钥。未知数据库版本仅允许诊断，不猜测迁移。
+- `state.db` 是权威账本，位于本机应用数据目录，WAL + FULL 同步；应用目录权限 0700、数据库与备份文件 0600。备份不是加密文件，磁盘加密和系统账户权限由主机负责。
+- 三条队列各一个独立 worker：交互、通知、批量。自有 worker 是受信静态程序；第三方执行必须走固定 OCI 镜像、禁网、非 root、只读输入与专用输出，不挂载 Vault、主目录或容器 socket。
+- 取消阻止后续步骤，已发生的远端费用仍可结算。过期 worker 的旧栅栏结果会被拒绝；过期租约最多尝试 3 次。失败自检可在列表重试，仍关联原根作业。
+- 服务通过应用数据目录内的 `service.lock` 阻止重复启动。正常退出会清理锁；崩溃后，先读取锁内 PID，用 `ps -p <PID> -o command=` 核对旧服务确已退出，再删除该锁文件。不要删除数据库或账本来“恢复额度”。
+- 原件、来源修订、解析、批准与回执已进入 `state.db`。正式来源提交后发出索引事件，实际检索仍由场景 03 实现；不能把数据库当作可丢弃索引。
+
+公开接口与验证记录见[场景 01 实施验收](docs/implementation/runtime-governance-validation.md)。完整产品设计从[总体技术方案](docs/plans/2026-09-21-001-feat-overall-knowledge-task-plan.md)进入。
+
+## 收录一份资料
+
+连接并登记主端后，在插件设置页的“资料收录”中操作：
+
+1. 选择类型，填写来源 URL，或填写**明确授权读取**的本地文件／目录绝对路径。应用数据、试点 Vault 和生成目录不能反向收录。
+2. 网络来源显式填写允许域名与路径。GitHub 仓库使用 `https://github.com/owner/repo`，同时授权 `api.github.com,raw.githubusercontent.com`。语言／版本字段是范围记录，实际 URL 边界由允许路径控制。
+3. 点击“预览获取范围”，核对发现依据、排除项与数量上限。预览本身会按此范围获取原件；不表示已正式导入。取消选择不需要的条目，再点击“确认清单并解析”。
+4. 刷新本批，查看覆盖缺口、原件和逐块定位。选错编码或有 PDF 密码时用“重新解析原件”；密码只用于本次处理。检查上游变化时用“重新获取并生成新预览”。
+5. 点击“审核正式导入文件”，展开逐文件内容后批准。正在编辑、同名不同内容、路径冲突、失联或过期授权都会暂停写入。已应用但丢失回执的文件可按 afterHash 恢复。
+
+源码模式排除 `dist/build`；研究发布产物时改选“发布产物”。ZIP 解包只在内存进行，限制展开字节、条目和路径，不执行仓库脚本或安装依赖。
+
+基础解析在已验证的 macOS Seatbelt + Node 权限进程中执行，操作系统阻断网络、写入与子进程。Linux／Windows 解析入口保持不可用。PDF 保留文字与坐标，扫描、表格、公式、图像及列顺序明确标缺口；不自动调用 OCR。
+
+收录上限：100 个选定条目、单原件 20 MB、范围总量最多 50 MB、最多 1000 个候选、网页发现深度 5、发现时限 120 秒。每个解析进程最多 20 秒、V8 堆 256 MB、结果 8 MB；PDF 首次最多解析 200 页。V8 堆上限不是总 RSS 上限，真实样本峰值见验收记录。
+
+数据库已升级为 schema 2。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源的数据库。
+
+[场景 02 实施与验收记录](docs/implementation/multi-source-ingestion-validation.md)包含 API、50 项测试、30 份真实资料、桌面截图和恢复方法。重跑真实网络样本：
+
+```sh
+pnpm test:corpus
+KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
+```

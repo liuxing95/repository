@@ -1,0 +1,9 @@
+{
+  "mode": "autofix",
+  "base": "6b347dd",
+  "execution": "sequential-main-thread-per-AGENTS",
+  "findings": [],
+  "fixed": ["stale-session-queue-blocking", "repeat-completion-cancellation", "occurrence-conflict-order", "renamed-file-cache-omission", "inventory-upload-boundary", "pending-command-capacity", "paused-learning-non-dispatch", "editing-adoption-protection"],
+  "residual_risks": ["No cross-plugin atomic CAS; automatic field updates remain off", "Scene 08/09 production plan/calendar/reminder integration remains gated", "Service performance is measured separately from full desktop disk scan"],
+  "testing_gaps": ["Actual calendar provider and reminder delivery are later-scene dependencies", "Optional remote P6 capture is not enabled"]
+}

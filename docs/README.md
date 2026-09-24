@@ -1,8 +1,35 @@
-# Obsidian 知识库：完整调研与实施资料合集
+# 文档导航
+
+## 接手当前工程
+
+仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据和问答工程接口，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试、场景 07 的 TaskNotes 和 Today、场景 08 的本地约束排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地备份撤回恢复与退出、场景 11 可选的外部 Agent 只读接入、场景 12 的本机公开副本链路；真实模型、外部日历、关机后提醒、公网发布、物理清除与人工语义验收仍待完成。开发入口如下：
+
+| 需要了解什么 | 入口 |
+|---|---|
+| 首次运行、代码结构、开发测试、排障恢复 | [开发者接手指南](development/onboarding.md) |
+| 项目安装与常用命令 | [项目 README](../README.md) |
+| 完整需求与场景划分 | [PRD](brainstorms/2026-09-21-obsidian-knowledge-and-task-center-requirements.md)、[总体技术方案](plans/2026-09-21-001-feat-overall-knowledge-task-plan.md) |
+| 工作区和运行治理的实际交付 | [场景 01 实施验收](implementation/runtime-governance-validation.md) |
+| 多来源收录的实际交付 | [场景 02 实施验收](implementation/multi-source-ingestion-validation.md) |
+| 本地检索、证据整理、问答接口和边界 | [场景 03 使用与维护](implementation/evidence-search-answer.md)、[验收记录](implementation/evidence-search-validation.md) |
+| 候选保存、Wiki 审核与写入、人工观察和恢复 | [场景 04 使用与维护](implementation/wiki-review-commit.md)、[验收记录](implementation/wiki-review-validation.md) |
+| 课题、历史时点、分章报告、快照更新与审核保存 | [场景 05 使用与维护](implementation/topic-research-report.md)、[验收记录](implementation/topic-research-validation.md) |
+| TaskNotes、候选创建、Today 与离线核对 | [场景 07 使用与维护](implementation/task-today-reconciliation.md)、[验收记录](implementation/task-today-validation.md) |
+| 本地可用时间排程、计划采用、撤销与笔记投影 | [场景 08 使用与维护](implementation/scheduling-calendar-sync.md)、[验证记录](implementation/scheduling-calendar-sync-validation.md) |
+| 本机提醒规则、投递、取消与恢复 | [场景 09 接手说明](implementation/reminder-delivery-control.md)、[验证记录](implementation/reminder-delivery-control-validation.md) |
+| 来源撤回、备份集、隔离恢复、清除清单与可读退出 | [场景 10 接手说明](implementation/backup-retraction-recovery.md)、[验证记录](implementation/backup-retraction-recovery-validation.md) |
+| 外部 Agent 授权、MCP 网关、只读工具与费用状态 | [场景 11 接手说明](implementation/external-agent-access.md)、[验证记录](implementation/external-agent-access-validation.md) |
+| 公开副本检查、隔离构建、本机发布与撤回 | [场景 12 接手说明](implementation/public-copy-publishing.md)、[验证记录](implementation/public-copy-publishing-validation.md) |
+| 学习目标、续学、复习建议与版本影响 | [场景 06 使用与维护](implementation/learning-practice-review.md)、[验收记录](implementation/learning-practice-validation.md) |
+| 后续每次开发需要补什么说明 | [贡献与交付约定](../CONTRIBUTING.md) |
+
+设计方案描述目标，实施说明记录实际完成范围；两者不同的地方以明确记录的实施边界为准。下面保留早期资料包的导航和当时状态。
+
+## 原始调研资料包
 
 **整理日期：2026-09-21｜整理范围：本次对话的全部 12 个文件记录及尚未单独成文的学习方式讨论**
 
-这是一份可离线阅读的资料交付包。现行方案、专题设计、历史版本、原始模板、参考合同和核查记录按用途归档；不是已经开发完成的 Obsidian 插件，也不是一键部署软件。
+这一部分是可离线阅读的原始资料交付包。专题设计、历史版本、原始模板、参考合同和核查记录按用途归档；资料包中的模板与代码片段本身不是完整软件。后续实现位于仓库的 `apps/` 和 `packages/`，运行方式见上面的开发入口。
 
 ## 先看什么
 
@@ -36,8 +63,8 @@
 
 新增导航与学习整理不重写原始方案；原始方案及 ZIP 成员按字节保存。原文中的历史核查通过记录仅属于当时说明的范围，不是本次再次执行的系统测试。
 
-## 尚未完成的工作
+## 原始资料整理时的未完成项
 
-没有现成 Knowledge Bridge/计划服务代码、编译产物、真实全站归档或完整上游源码。TaskNotes 集成、模型效果、手机提醒、跨端同步、真实来源解析仍须开发并实测。原始配置、TS/SQL 示例和虚构用例是参考材料，不是完整生产实现。
+本节描述原始资料整理时的状态，不代表当前工程进度。当时没有现成 Knowledge Bridge/计划服务代码、编译产物、真实全站归档或完整上游源码，TaskNotes 集成、模型效果、手机提醒、跨端同步、真实来源解析仍待开发。原始配置、TS/SQL 示例和虚构用例是参考材料。后续已完成的工作区治理和真实来源解析见上方场景验收记录；TaskNotes 当前进度见上方场景 07；真实模型与提醒仍待验收。
 
 未安装插件，未读取或修改真实日历/待办，未创建提醒，未上传回持久 Library。

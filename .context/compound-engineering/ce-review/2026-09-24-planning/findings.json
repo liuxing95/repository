@@ -1,0 +1,9 @@
+{
+  "mode": "autofix",
+  "base": "1a6505d",
+  "execution": "sequential-main-thread-per-AGENTS",
+  "findings": [],
+  "fixed": ["stable-task-revision-after-reread", "preserve-task-cancel-queue", "overlapping-time-entries", "explicit-log-offset", "solver-wall-clock-budget", "overlapping-resource-windows", "fixed-plan-busy", "provable-capacity-bound", "today-revision-staleness", "linear-task-fact-lookup"],
+  "residual_risks": ["Google OAuth and real-calendar A27 not validated", "P4 automatic delegation and P5 calendar writes remain disabled P6 options", "No cross-system atomic transaction after local plan adoption"],
+  "testing_gaps": ["Real user task acceptance and Google test calendar", "Optional P6 delegation and event projection are not enabled"]
+}

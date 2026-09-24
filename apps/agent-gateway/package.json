@@ -1,0 +1,10 @@
+{
+  "name": "@kb/agent-gateway",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@kb/contracts": "workspace:*",
+    "@napi-rs/keyring": "2.1.0",
+    "zod": "4.6.5"
+  }
+}

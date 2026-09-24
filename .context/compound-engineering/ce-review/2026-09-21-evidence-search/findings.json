@@ -1,0 +1,44 @@
+{
+  "reviewer": "sequential-main-thread-review",
+  "findings": [
+    {
+      "title": "真实模型及人工语义验收未完成",
+      "severity": "P1",
+      "file": "apps/service/src/main.ts",
+      "line": 112,
+      "why_it_matters": "当前 CLI 未安装实际 AnswerProvider，确定性测试不能证明真实模型满足 PRD 的人工支持率门槛。",
+      "autofix_class": "manual",
+      "owner": "human",
+      "requires_verification": true,
+      "confidence": 1,
+      "evidence": [
+        "createServer 默认不传 answerProviders",
+        "固定问题报告 semanticHumanReview 为 not-performed，modelCalls 为 0"
+      ],
+      "pre_existing": false
+    },
+    {
+      "title": "真实问题集与增强对照仍需扩展",
+      "severity": "P2",
+      "file": "tests/fixtures/search/questions.json",
+      "line": 1,
+      "why_it_matters": "7 个来源家族的 Recall@10 不能代表大型知识库效果；P7 增强未验证收益。",
+      "autofix_class": "advisory",
+      "owner": "release",
+      "requires_verification": true,
+      "confidence": 1,
+      "evidence": [
+        "固定报告 20 个问题、7 个来源家族",
+        "enhancementStatus 始终 enabled=false"
+      ],
+      "pre_existing": false
+    }
+  ],
+  "residual_risks": [
+    "原文摘录的机械引用合法不等于问题的语义已被回答。"
+  ],
+  "testing_gaps": [
+    "真实模型与人工重要主张支持率",
+    "约 80 题与真实增强同题对照"
+  ]
+}

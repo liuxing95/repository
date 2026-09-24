@@ -1,0 +1,35 @@
+{
+  "reviewer": "sequential-main-thread-review",
+  "mode": "autofix",
+  "base": "97b151d",
+  "findings": [
+    {
+      "title": "W4 真实模型编译未接入",
+      "severity": "P1",
+      "file": "apps/service/src/wiki/compiler-adapter.ts",
+      "line": 2,
+      "status": "open",
+      "owner": "release",
+      "why_it_matters": "当前只完成固定原文编排，计划的一次提取、一次生成、费用与语义验收仍未完成。",
+      "requires_verification": true
+    },
+    {
+      "title": "本轮全量回归和末次专项未全部通过",
+      "severity": "P1",
+      "file": "docs/implementation/wiki-review-validation.md",
+      "line": 13,
+      "status": "open",
+      "owner": "release",
+      "why_it_matters": "真实语料解析失败、收录超时；末次专项恢复超时和 UI worker 启动超时，不能声明全量通过。",
+      "requires_verification": true
+    }
+  ],
+  "fixed_findings": "见 review.md 的 8 项修复记录",
+  "residual_risks": [
+    "单主端试点，跨应用文件系统写入无全局事务"
+  ],
+  "testing_gaps": [
+    "真实模型费用与人工语义验收",
+    "全量绿色回归"
+  ]
+}
