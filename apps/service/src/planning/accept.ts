@@ -7,6 +7,7 @@ import { TaskCommands } from "../tasks/commands";
 import { readBusy, type BusyProvider } from "../calendar/freebusy";
 import { digest } from "../workspace/registry";
 import { validateCandidate } from "./validator";
+import { ReminderRules } from "../reminders/rules";
 
 export class PlanningLedger {
   constructor(
@@ -181,6 +182,7 @@ export class PlanningLedger {
         .prepare("INSERT INTO plan_outbox VALUES(?,?,?,?,?)")
         .run(`adopt:${id}`, planId, "adoption", "applied", "{}");
       this.store.event("plan.accepted", planId, acceptedAt);
+      new ReminderRules(this.store, this.db.now).sync();
       return { planId, alreadyApplied: false };
     });
   }

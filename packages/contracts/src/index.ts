@@ -11,3 +11,4 @@ export * from "./research";
 export * from "./learning";
 export * from "./tasks";
 export * from "./planning";
+export * from "./reminders";

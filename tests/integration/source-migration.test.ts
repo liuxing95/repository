@@ -19,7 +19,7 @@ test("known v1 migrates transactionally with a private recoverable backup; unkno
     const migrated = new Store(path);
     expect(migrated.readOnly).toBe(false);
     expect(migrated.get("retained")).toBe("unchanged");
-    expect(migrated.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(migrated.db.pragma("user_version", { simple: true })).toBe(9);
     migrated.close();
     const backup = (await readdir(root)).find((n) => n.includes("before-v2"))!;
     expect((await stat(join(root, backup))).mode & 0o777).toBe(0o600);
@@ -52,7 +52,7 @@ test("known v2 preserves source objects and a private v2 backup; reopened v8 sch
       .run("retained-hash", Buffer.from("original bytes"));
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(9);
     expect(
       upgraded.db
         .prepare("SELECT bytes FROM objects WHERE hash=?")
@@ -94,7 +94,7 @@ test("v3 upgrades with an exact private snapshot and v8 reopens with Wiki FTS in
       .run("preserved", '{"answer":"unchanged"}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(9);
     expect(
       upgraded.db
         .prepare("SELECT value FROM answer_candidates WHERE id='preserved'")
@@ -135,7 +135,7 @@ test("v4 research migration keeps Wiki records and a private v4 backup", async (
       .run("retained", "op", "hash", '{"retained":true}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(9);
     expect(
       upgraded.db
         .prepare("SELECT value FROM wiki_changes WHERE id='retained'")
@@ -177,7 +177,7 @@ test("v5 learning migration preserves research and creates a private v5 backup",
       .run("retained", "operation", "digest", '{"rootId":"retained-budget"}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(9);
     expect(
       upgraded.db
         .prepare("SELECT value FROM research_jobs WHERE id='retained'")
@@ -223,7 +223,7 @@ test("v6 tasks migration preserves learning attempts and private recoverable sna
       .run("attempt", "goal", "unit", "baseline", '{"expression":"retained"}');
     old.close();
     const current = new Store(path);
-    expect(current.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(current.db.pragma("user_version", { simple: true })).toBe(9);
     expect(
       current.db
         .prepare("SELECT value FROM learning_attempts WHERE id='attempt'")
@@ -277,7 +277,7 @@ test("v7 planning migration preserves task observations and a private v7 snapsho
       .run("task", '{"revision":"retained"}');
     old.close();
     const upgraded = new Store(path);
-    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(8);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(9);
     expect(
       upgraded.db
         .prepare("SELECT value FROM task_observations WHERE task_id='task'")
@@ -295,4 +295,31 @@ test("v7 planning migration preserves task observations and a private v7 snapsho
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+test("v8 升级提醒账本前保留私有快照", async () => {
+  const { sources } = await import("../../apps/service/src/storage/migrations/002-sources");
+  const { evidence } = await import("../../apps/service/src/storage/migrations/003-evidence");
+  const { changesets } = await import("../../apps/service/src/storage/migrations/004-changesets");
+  const { research } = await import("../../apps/service/src/storage/migrations/005-research");
+  const { learning } = await import("../../apps/service/src/storage/migrations/006-learning");
+  const { tasks } = await import("../../apps/service/src/storage/migrations/007-tasks");
+  const { planning } = await import("../../apps/service/src/storage/migrations/008-planning");
+  const root = await mkdtemp(join(tmpdir(), "kb-reminder-migration-"));
+  const path = join(root, "state.db");
+  try {
+    const old = new Database(path);
+    old.exec(foundation + sources + evidence + changesets + research + learning + tasks + planning);
+    old.prepare("INSERT INTO plan_revisions VALUES(?,?,?,?,?)").run("plan", null, "candidate", 1, '{"id":"plan"}');
+    old.close();
+    const upgraded = new Store(path);
+    expect(upgraded.db.pragma("user_version", { simple: true })).toBe(9);
+    expect(upgraded.db.prepare("SELECT value FROM plan_revisions WHERE id='plan'").get()).toEqual({ value: '{"id":"plan"}' });
+    upgraded.close();
+    const backup = (await readdir(root)).find((name) => name.includes("before-v9"))!;
+    expect((await stat(join(root, backup))).mode & 0o777).toBe(0o600);
+    const snapshot = new Database(join(root, backup));
+    expect(snapshot.pragma("user_version", { simple: true })).toBe(8);
+    snapshot.close();
+  } finally { await rm(root, { recursive: true, force: true }); }
 });

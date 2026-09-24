@@ -17,6 +17,7 @@ import { WorkerPool } from "./runtime/worker-pool";
 import { diagnostics } from "./runtime/diagnostics";
 import { Credentials } from "./security/credentials";
 import { Role } from "@kb/contracts";
+import { ReminderDispatcher } from "./reminders/dispatcher";
 import { AppError, problem } from "./errors";
 
 const args = process.argv.slice(2);
@@ -110,6 +111,7 @@ async function main() {
   const sessions = new Sessions(registry);
   const jobs = new Jobs(store);
   const app = createServer(registry, sessions, jobs, port);
+  const reminderDispatcher = new ReminderDispatcher(store);
   const allowed = () => sessions.hasMasterSession();
   const pool = new WorkerPool(
     jobs,
@@ -121,6 +123,7 @@ async function main() {
     if (stopped) return;
     stopped = true;
     await pool.stop();
+    await reminderDispatcher.stop();
     await app.close();
     store.close();
     await rm(lockPath, { force: true });
@@ -133,6 +136,7 @@ async function main() {
       const code = sessions.issuePairing(Role.parse(option("role") ?? "admin"));
       console.log(`本机配对码（5 分钟内一次有效，请勿复制到笔记）：${code}`);
       pool.start();
+      reminderDispatcher.start();
     }
     process.once("SIGINT", () => void stop());
     process.once("SIGTERM", () => void stop());

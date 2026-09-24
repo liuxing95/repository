@@ -1,6 +1,6 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-24，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对，以及场景 08 的本地时间排程与人工采用。真实模型、外部日历和人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-24，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对、场景 08 的本地时间排程与人工采用，以及场景 09 的 macOS 本机提醒。真实模型、外部日历、关机后提醒和人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
@@ -21,8 +21,9 @@
 | 学习目标、尝试、续学与复习建议 | 已实现本地流程 | [学习接手说明](../implementation/learning-practice-review.md)；TaskNotes 4.13.4 完整清点后可确认创建，Today 回到同一单元 |
 | TaskNotes 与 Today | 已接入固定版本 | [任务接手说明](../implementation/task-today-reconciliation.md)；自动字段更新关闭，Today 可读取本地正式计划 |
 | 本地约束排程与计划采用 | 已实现首期 | [排程接手说明](../implementation/scheduling-calendar-sync.md)；用户明确输入可用时间后预览、人工采用，未核对外部日历 |
+| 本机提醒、取消与投递记录 | 已实现 macOS 首期 | [提醒接手说明](../implementation/reminder-delivery-control.md)；必须显式启用规则并保持电脑和服务运行 |
 | 模型回答 | 部分接口 | 模型适配器接口已实现，真实提供方与语义验收未完成 |
-| OCR、模型、日历、通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力 |
+| OCR、模型、外部日历、远程通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力；本机通知已单独接入 |
 
 首次收录后，可以直接进入 [检索与证据整理说明](../implementation/evidence-search-answer.md)，搜索中文短词或代码符号、回读引用，并了解模型能力当前的边界。
 
@@ -145,6 +146,10 @@ flowchart LR
   Learning --> DB
   Service --> Planning[本地约束排程与独立校验]
   Planning --> DB
+  Service --> Reminders[本机提醒规则与投递器]
+  Reminders <--> DB
+  Reminders --> Mac[macOS 通知命令]
+  Reminders --> Fence[独立发送栅栏文件]
   DB --> Today[Today 正式计划读模型]
   DB --> PlanOutbox[计划笔记投影意图]
   PlanOutbox --> Plugin
@@ -199,6 +204,7 @@ sequenceDiagram
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
 | Wiki 提案、批准、版本提交与人工观察 | [review/routes.ts](../../apps/service/src/review/routes.ts)、[views/review.ts](../../apps/obsidian-plugin/src/views/review.ts) | [场景 04 使用与维护](../implementation/wiki-review-commit.md) |
 | 课题、覆盖、快照与报告 | [research/routes.ts](../../apps/service/src/research/routes.ts)、[views/research.ts](../../apps/obsidian-plugin/src/views/research.ts) | [场景 05 使用与维护](../implementation/topic-research-report.md) |
+| 本机提醒规则、领取与恢复 | [reminders/rules.ts](../../apps/service/src/reminders/rules.ts)、[reminders/dispatcher.ts](../../apps/service/src/reminders/dispatcher.ts) | [提醒接手说明](../implementation/reminder-delivery-control.md)、[提醒界面](../../apps/obsidian-plugin/src/views/reminders.ts) |
 | 学习目标、尝试、容量与版本影响 | [learning/routes.ts](../../apps/service/src/learning/routes.ts)、[views/learning.ts](../../apps/obsidian-plugin/src/views/learning.ts) | [场景 06 接手说明](../implementation/learning-practice-review.md) |
 | 作业租约和费用 | [jobs.ts](../../apps/service/src/runtime/jobs.ts)、[budget.ts](../../apps/service/src/runtime/budget.ts) | [worker-pool.ts](../../apps/service/src/runtime/worker-pool.ts) |
 | 出站与文件授权边界 | [security/egress.ts](../../apps/service/src/security/egress.ts)、[security/paths.ts](../../apps/service/src/security/paths.ts) | [file-reader.ts](../../apps/service/src/ingestion/file-reader.ts) |
@@ -216,6 +222,8 @@ app-data/
   state.db.before-v5-<id>           迁移到研究 schema 5 前的数据库快照
   state.db.before-v7-<id>           迁移到任务 schema 7 前的数据库快照
   state.db.before-v8-<id>           迁移到排程 schema 8 前的数据库快照
+  state.db.before-v9-<id>           迁移到提醒 schema 9 前的数据库快照
+  state.db.reminder-fence           与数据库共同核对的单调发送栅栏；恢复时不能单独删除
   state.db.before-v6-<id>           迁移到学习 schema 6 前的数据库快照
   workspace-<id>/
     pilot/                         Obsidian 打开的试点
@@ -244,7 +252,7 @@ app-data/
 
 批次 `ready` 表示当前阶段处理结束，仍要看每条结果。条目的 `partial_parse` 表示有解析缺口；`pending_write` 仍待写入；`committed` 才是已正式提交。任务状态、批次状态和条目状态不能互相替代。
 
-数据备份目前需要人工执行：先正常停止服务并关闭试点，复制完整应用数据目录到新的备份位置，记录代码版本与原路径。服务运行时单独复制 `state.db` 可能漏掉 WAL 数据。账本中存在工作区绝对路径，恢复到不同位置需要单独核对，当前没有一键搬迁命令。升级前快照用于核对或隔离恢复，不应直接覆盖已经产生新资料的数据库。
+数据备份目前需要人工执行：先正常停止服务并关闭试点，复制完整应用数据目录到新的备份位置，记录代码版本与原路径。服务运行时单独复制 `state.db` 可能漏掉 WAL 数据。提醒启用后还必须连同 `state.db.reminder-fence` 一起备份；应用数据父目录另有 `.kb-reminder-anchor-<路径哈希>`，恢复旧应用数据时不能把该锚点一同回滚。任一计数不匹配时服务会暂停提醒。账本中存在工作区绝对路径，恢复到不同位置需要单独核对，当前没有一键搬迁命令。升级前快照用于核对或隔离恢复，不应直接覆盖已经产生新资料的数据库。
 
 ## 6. 修改代码后的日常流程
 
@@ -334,3 +342,5 @@ node apps/service/dist/main.js diagnose --data "/实际的/app-data"
 2026-09-23（场景 07）：新增 TaskNotes 4.13.4 Runtime 适配器、任务候选与观察账本、Today 和 schema 7。先读[任务与 Today 接手说明](../implementation/task-today-reconciliation.md)，再看[本轮验收](../implementation/task-today-validation.md)。普通任务入口不需要资料或模型；配对后仍要启用 TaskNotes 并完成清点。此项补充不改变场景 06 当时未接入 TaskNotes 的历史验收记录。
 
 2026-09-24（场景 08）：新增本地可用时间排程、人工采用、撤销候选和 schema 8。操作、实现边界、故障恢复见[排程接手说明](../implementation/scheduling-calendar-sync.md)，本次验证见[场景 08 验证记录](../implementation/scheduling-calendar-sync-validation.md)。Google 日历与自动委托仍需独立授权和验收；不改写上方历史记录。
+
+2026-09-24（场景 09）：新增 macOS 本机提醒、schema 9 和独立恢复栅栏。操作、状态含义、恢复条件见[提醒接手说明](../implementation/reminder-delivery-control.md)，本轮检查见[场景 09 验证记录](../implementation/reminder-delivery-control-validation.md)。关机后的 relay 与真实手机投递仍需 P6 独立验收。

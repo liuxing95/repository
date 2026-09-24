@@ -16,6 +16,7 @@ import {
 import { Connection } from "./connection";
 import { renderSettings } from "./views/settings";
 import { renderLearning } from "./views/learning";
+import { renderReminders } from "./views/reminders";
 export default class KnowledgeTaskPlugin extends Plugin {
   connection!: Connection;
   tasks!: TaskNotesAdapter;
@@ -156,6 +157,9 @@ class GovernanceSettings extends PluginSettingTab {
     const planning = document.createElement("section");
     this.containerEl.append(planning);
     renderPlanReview(planning, this.plugin.connection, this.plugin.tasks);
+    const reminders = document.createElement("section");
+    this.containerEl.append(reminders);
+    renderReminders(reminders, this.plugin.connection);
     renderReview(
       review,
       this.plugin.connection,

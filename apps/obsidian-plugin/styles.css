@@ -43,6 +43,25 @@
   margin-top: 8px;
   padding: 10px;
 }
+.kb-reminders select {
+  width: 100%;
+  margin-bottom: 12px;
+}
+.kb-reminders [hidden] {
+  display: none !important;
+}
+.kb-reminders input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+  padding: 0;
+  margin: 0 8px 0 0;
+}
+.kb-reminders label:has(input[type="checkbox"]) {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+}
 .kb-settings textarea {
   font-family: var(--font-monospace);
   font-size: 12px;

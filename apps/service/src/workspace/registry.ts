@@ -280,6 +280,22 @@ export class WorkspaceRegistry {
           "SELECT count(*) n FROM writer_grants g JOIN changesets c ON c.id=g.change_id WHERE json_extract(g.value,'$.expiresAt')>? AND json_extract(c.value,'$.state')='approved'",
         )
         .get(Date.now()) as { n: number };
+      const reminders = this.store.db
+        .prepare(
+          "SELECT count(*) AS n FROM reminder_rules WHERE enabled=1 AND owner_id=?",
+        )
+        .get(principal.deviceId) as { n: number };
+      const inFlightReminders = this.store.db
+        .prepare(
+          "SELECT count(*) AS n FROM reminder_attempts a LEFT JOIN reminder_reviews r ON r.delivery_key=a.delivery_key WHERE a.state='dispatching' OR (a.state='outcome_unknown' AND r.delivery_key IS NULL)",
+        )
+        .get() as { n: number };
+      if (reminders.n || inFlightReminders.n)
+        throw new AppError(
+          "MASTER",
+          409,
+          "先关闭本机提醒规则，并核对在途或结果未知的发送尝试。",
+        );
       if (running.n || unsettled.n || grants.n)
         throw new AppError("MASTER", 409, "请先停止并核对未完成作业。");
       w.deviceId = null;

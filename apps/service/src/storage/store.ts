@@ -1,14 +1,26 @@
 import { research } from "./migrations/005-research";
 import { tasks } from "./migrations/007-tasks";
 import { planning } from "./migrations/008-planning";
+import { reminders } from "./migrations/009-reminders";
 import { learning } from "./migrations/006-learning";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { sources } from "./migrations/002-sources";
 import { changesets } from "./migrations/004-changesets";
 import { evidence } from "./migrations/003-evidence";
 import Database from "better-sqlite3";
-import { chmodSync, existsSync, lstatSync } from "node:fs";
+import {
+  chmodSync,
+  closeSync,
+  existsSync,
+  fsyncSync,
+  lstatSync,
+  openSync,
+  readFileSync,
+  renameSync,
+  writeFileSync,
+} from "node:fs";
 import { AppError } from "../errors";
+import { dirname, join, resolve } from "node:path";
 import { foundation } from "./migrations/001-foundation";
 
 function matchesSchema(db: Database.Database, version: number) {
@@ -28,6 +40,7 @@ function matchesSchema(db: Database.Database, version: number) {
     if (version >= 6) expected.exec(learning);
     if (version >= 7) expected.exec(tasks);
     if (version >= 8) expected.exec(planning);
+    if (version >= 9) expected.exec(reminders);
     return JSON.stringify(schema(db)) === JSON.stringify(schema(expected));
   } finally {
     expected.close();
@@ -38,16 +51,24 @@ export class Store {
   readonly db: Database.Database;
   readonly readOnly: boolean;
   readonly sqliteVersion: string;
+  readonly reminderFencePath: string;
+  readonly reminderAnchorPath: string;
+  reminderPaused = false;
   constructor(path: string) {
     if (existsSync(path) && lstatSync(path).isSymbolicLink())
       throw new AppError("FORBIDDEN");
     this.db = new Database(path);
+    this.reminderFencePath = `${path}.reminder-fence`;
+    this.reminderAnchorPath = join(
+      dirname(dirname(resolve(path))),
+      `.kb-reminder-anchor-${createHash("sha256").update(resolve(path)).digest("hex").slice(0, 24)}`,
+    );
     const version = this.db.pragma("user_version", { simple: true }) as number;
     const tables = this.db
       .prepare("SELECT name FROM sqlite_master WHERE type='table'")
       .all();
     this.readOnly =
-      ![0, 1, 2, 3, 4, 5, 6, 7, 8].includes(version) ||
+      ![0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(version) ||
       (version === 0 && tables.length > 0) ||
       (version > 0 && !matchesSchema(this.db, version));
     this.sqliteVersion = (
@@ -125,6 +146,86 @@ export class Store {
     }
     if (version < 8)
       this.db.transaction(() => this.db.exec(planning)).immediate();
+    if (version > 0 && version < 9) {
+      const backup = `${path}.before-v9-${randomUUID()}`;
+      this.db.prepare("VACUUM INTO ?").run(backup);
+      chmodSync(backup, 0o600);
+    }
+    if (version < 9)
+      this.db.transaction(() => this.db.exec(reminders)).immediate();
+    this.checkReminderFence();
+  }
+  private fenceOnDisk(path: string) {
+    if (!existsSync(path)) return 0;
+    if (lstatSync(path).isSymbolicLink()) return NaN;
+    const raw = readFileSync(path, "utf8");
+    const n = Number(raw);
+    return /^\d+$/.test(raw) && Number.isSafeInteger(n) ? n : NaN;
+  }
+  private checkReminderFence() {
+    const dbValue = Number(
+      (
+        this.db
+          .prepare("SELECT value FROM reminder_meta WHERE key='fence'")
+          .get() as { value: string }
+      ).value,
+    );
+    const diskValue = this.fenceOnDisk(this.reminderFencePath);
+    const anchorValue = this.fenceOnDisk(this.reminderAnchorPath);
+    this.reminderPaused =
+      !Number.isSafeInteger(diskValue) ||
+      !Number.isSafeInteger(anchorValue) ||
+      diskValue !== dbValue ||
+      anchorValue !== dbValue;
+  }
+  advanceReminderFence() {
+    this.writable();
+    if (this.reminderPaused)
+      throw new AppError(
+        "CONFLICT",
+        409,
+        "提醒账本比外部发送栅栏旧；暂停发送，先人工核对恢复。",
+      );
+    const dbValue = Number(
+      (
+        this.db
+          .prepare("SELECT value FROM reminder_meta WHERE key='fence'")
+          .get() as { value: string }
+      ).value,
+    );
+    const diskValue = this.fenceOnDisk(this.reminderFencePath);
+    const anchorValue = this.fenceOnDisk(this.reminderAnchorPath);
+    if (diskValue !== dbValue || anchorValue !== dbValue) {
+      this.reminderPaused = true;
+      throw new AppError(
+        "CONFLICT",
+        409,
+        "提醒账本、发送栅栏与本机锚点不一致；暂停提醒。",
+      );
+    }
+    const next = dbValue + 1;
+    this.persistFence(this.reminderFencePath, next);
+    this.persistFence(this.reminderAnchorPath, next);
+    this.db
+      .prepare("UPDATE reminder_meta SET value=? WHERE key='fence'")
+      .run(String(next));
+  }
+  private persistFence(path: string, next: number) {
+    const tmp = `${path}.${randomUUID()}`;
+    writeFileSync(tmp, String(next), { mode: 0o600, flag: "wx" });
+    const fd = openSync(tmp, "r");
+    try {
+      fsyncSync(fd);
+    } finally {
+      closeSync(fd);
+    }
+    renameSync(tmp, path);
+    const directory = openSync(dirname(path), "r");
+    try {
+      fsyncSync(directory);
+    } finally {
+      closeSync(directory);
+    }
   }
   writable() {
     if (this.readOnly) throw new AppError("SCHEMA");

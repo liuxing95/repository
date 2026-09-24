@@ -23,6 +23,7 @@ import { AppError, problem } from "../errors";
 import { Jobs } from "../runtime/jobs";
 import { diagnostics } from "../runtime/diagnostics";
 import { Policy } from "../security/policy";
+import { ReminderRules } from "../reminders/rules";
 
 export function createServer(
   registry: WorkspaceRegistry,
@@ -189,6 +190,70 @@ export function createServer(
   const taskDb = new Reconciliation(new Proposals(new EvidenceStore(registry)));
   taskRoutes(app, taskDb, sessions);
   planningRoutes(app, taskDb, sessions, busyProvider);
+  const reminders = new ReminderRules(registry.store);
+  const reminderReader = (req: FastifyRequest) => {
+    const p = sessions.authenticate(bearer(req));
+    authorize(registry, p, ["admin", "user", "reader"]);
+    return p;
+  };
+  app.get("/v1/reminders", (req) => {
+    const p = reminderReader(req);
+    const reviewed = registry.store.db
+      .prepare("SELECT delivery_key FROM reminder_reviews WHERE owner_id=?")
+      .all(p.deviceId) as { delivery_key: string }[];
+    return {
+      rules: reminders.list(p.deviceId),
+      occurrences: reminders.occurrences(p.deviceId),
+      reviewedUnknownKeys: reviewed.map((r) => r.delivery_key),
+      pausedToday: reminders.pausedToday(p.deviceId),
+      paused: registry.store.reminderPaused,
+      executor: "本机服务运行且 macOS 通知可用时执行；电脑关机不会提醒",
+    };
+  });
+  app.post("/v1/reminders/rules", (req) =>
+    mutate(req, ["admin", "user"], true, (p) => {
+      if (process.platform !== "darwin")
+        throw new AppError("VALIDATION", 400, "本机通知目前只支持 macOS。");
+      return reminders.register(p.deviceId, req.body);
+    }),
+  );
+  app.post("/v1/reminders/rules/:id/disable", (req) =>
+    mutate(req, ["admin", "user"], true, (p) =>
+      reminders.disable(
+        p.deviceId,
+        Id.parse(z.object({ id: Id }).parse(req.params).id),
+      ),
+    ),
+  );
+  app.post("/v1/reminders/:key/snooze", (req) =>
+    mutate(req, ["admin", "user"], true, (p) => {
+      const { key } = z
+        .object({ key: z.string().regex(/^[a-f0-9]{64}$/) })
+        .parse(req.params);
+      const { until } = z
+        .object({ until: z.number().int().positive() })
+        .strict()
+        .parse(req.body);
+      return reminders.snooze(p.deviceId, key, until);
+    }),
+  );
+  app.post("/v1/reminders/:key/review-unknown", (req) =>
+    mutate(req, ["admin", "user"], true, (p) => {
+      const { key } = z
+        .object({ key: z.string().regex(/^[a-f0-9]{64}$/) })
+        .parse(req.params);
+      return reminders.reviewUnknown(p.deviceId, key);
+    }),
+  );
+  app.post("/v1/reminders/pause-today", (req) =>
+    mutate(req, ["admin", "user"], true, (p) => {
+      const { day, timezone } = z
+        .object({ day: z.string(), timezone: z.string() })
+        .strict()
+        .parse(req.body);
+      return reminders.pauseToday(p.deviceId, day, timezone);
+    }),
+  );
   learningRoutes(
     app,
     new EvidenceStore(registry),

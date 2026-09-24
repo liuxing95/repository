@@ -10,6 +10,7 @@ import {
 } from "@kb/contracts";
 import { Proposals } from "../review/proposals";
 import { AppError } from "../errors";
+import { ReminderRules } from "../reminders/rules";
 import {
   observedTasks,
   saveObservation,
@@ -257,6 +258,7 @@ export class Reconciliation {
         complete: true,
         unmanaged: facts.filter((f) => !f.taskId),
       } satisfies InventoryHead);
+      new ReminderRules(this.store, this.now).sync();
       // Only events preceding inventory start are covered by this boundary.
       this.store.db
         .prepare(

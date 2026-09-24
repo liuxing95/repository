@@ -7,9 +7,10 @@ import { spawnSync, spawn } from "node:child_process";
 
 // Uses a synthetic vault and separate application profile; never opens the user's vault.
 const root = resolve(
-  process.env.KB_TEST_TASKNOTES === "1"
-    ? ".context/runtime-validation/tasknotes-v7"
-    : ".context/runtime-validation",
+  process.env.KB_TEST_VALIDATION_DIR ??
+    (process.env.KB_TEST_TASKNOTES === "1"
+      ? ".context/runtime-validation/tasknotes-v7"
+      : ".context/runtime-validation"),
 );
 await mkdir(join(root, "source"), { recursive: true });
 await writeFile(
@@ -139,6 +140,9 @@ try {
   page.on("console", (m) => {
     if (m.type() === "error") console.log("BROWSER ERROR", m.text());
   });
+  const trust = page.getByText("信任仓库作者并启用插件", { exact: true });
+  await trust.waitFor({ state: "visible", timeout: 10_000 }).catch(() => {});
+  if (await trust.isVisible()) await trust.click();
   await page.waitForFunction(
     () => window.app?.plugins?.plugins["knowledge-task-center"]?.connection,
   );
@@ -172,6 +176,31 @@ try {
       .waitFor();
   }
   await page.getByRole("button", { name: "读取配置", exact: true }).click();
+  const reminders = page.locator(".kb-reminders");
+  await reminders
+    .getByRole("button", { name: "读取提醒", exact: true })
+    .click();
+  await reminders.getByText(/本机服务运行且 macOS 通知可用时执行/).waitFor();
+  await reminders.locator("select").selectOption("start");
+  if (await reminders.getByLabel("当地时间（晨间／晚间，HH:mm）").isVisible())
+    throw new Error("提醒类型切换后仍显示不适用的当地时间字段");
+  await reminders
+    .getByLabel("我已核对 TaskNotes 的同类提醒，不会重复开启")
+    .check();
+  await reminders
+    .getByRole("button", { name: "登记本机提醒", exact: true })
+    .click();
+  await reminders.getByText(/任务开始 · 已开启/).waitFor();
+  await reminders
+    .getByRole("heading", { name: "12 / 本机提醒" })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-reminders.png") });
+  await reminders.getByText(/任务开始 · 已开启/).scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-reminders-result.png") });
+  await reminders
+    .getByRole("button", { name: "关闭此规则", exact: true })
+    .click();
+  await reminders.getByText(/任务开始 · 已关闭/).waitFor();
   await page.waitForFunction(() =>
     document
       .querySelector(".kb-settings textarea")
@@ -750,6 +779,7 @@ try {
           "pair",
           "master-claim",
           "read-save-settings",
+          "reminder-register-disable",
           "worker-success",
           "redacted-diagnostics",
           "ingestion-preview-freeze-parse",

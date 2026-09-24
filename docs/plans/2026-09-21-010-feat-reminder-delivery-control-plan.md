@@ -85,14 +85,18 @@ flowchart TD
 
 ## 7. 实施单元
 
-- [ ] **N1：规则与身份账本。** 需求 R075—R077、R080；依赖 G3、T3、P3。文件：`packages/contracts/src/reminders.ts`、`apps/service/src/reminders/rules.ts`、`apps/service/src/reminders/identity.ts`、`apps/service/src/storage/migrations/009-reminders.ts`；测试：`tests/unit/reminder-identity.test.ts`。测试同日改摘要、已发后改期、夏令时、snooze、未配置重发、TaskNotes 重叠规则；预期 generation 与投递资格分离。完成依据：每条提醒可说明何时由谁发、是否会重发。
+- [x] **N1：规则与身份账本。** 需求 R075—R077、R080；依赖 G3、T3、P3。文件：`packages/contracts/src/reminders.ts`、`apps/service/src/reminders/rules.ts`、`apps/service/src/reminders/identity.ts`、`apps/service/src/storage/migrations/009-reminders.ts`；测试：`tests/unit/reminder-identity.test.ts`。测试同日改摘要、已发后改期、夏令时、snooze、未配置重发、TaskNotes 重叠规则；预期 generation 与投递资格分离。完成依据：每条提醒可说明何时由谁发、是否会重发。
 
-- [ ] **N2：本地执行与结果核对。** 需求 R076、R078—R080；依赖 N1。文件：`apps/service/src/reminders/dispatcher.ts`、`apps/service/src/reminders/reconcile.ts`、`apps/service/src/reminders/channels/local.ts`；测试：`tests/faults/reminder-dispatch.test.ts`。测试发送前／后崩溃、渠道超时、勿扰、睡眠后迟到、任务状态过旧；预期 unknown 不记成功，过期不堆积发送。完成依据：A29、A31 在实际本机模式验证。
+- [x] **N2：本地执行与结果核对。** 需求 R076、R078—R080；依赖 N1。文件：`apps/service/src/reminders/dispatcher.ts`、`apps/service/src/reminders/reconcile.ts`、`apps/service/src/reminders/channels/local.ts`；测试：`tests/faults/reminder-dispatch.test.ts`。测试发送前／后崩溃、渠道超时、勿扰、睡眠后迟到、任务状态过旧；预期 unknown 不记成功，过期不堆积发送。完成依据：A29、A31 在实际本机模式验证。
 
 - [ ] **N3：远端 relay 与权威交接。** 需求 R075、R077—R079；依赖 N2、G2；P6 单独实施。文件：`apps/reminder-relay/src/server.ts`、`apps/reminder-relay/src/ledger.ts`、`apps/reminder-relay/src/dispatcher.ts`、`apps/service/src/reminders/relay-sync.ts`、`apps/reminder-relay/src/channels/ntfy.ts`；测试：`tests/integration/reminder-authority.test.ts`、`tests/devices/mobile-reminder.test.ts`。测试电脑关闭、旧 upsert 晚于取消、两端切换时在途、匿名读取、手机离线；预期唯一负责人、最小摘要、真实回执。完成依据：A29—A30 通过才承诺相应部署条件。
 
-- [ ] **N4：跨域取消与恢复。** 需求 R077、R080，协同 R053—R054、R090；依赖 N2，远端可选 N3。文件：`apps/service/src/reminders/invalidation.ts`、`apps/obsidian-plugin/src/views/reminders.ts`；测试：`tests/integration/task-reminder-cancellation.test.ts`、`tests/faults/reminder-restore.test.ts`。测试来源撤回、任务确认删除、旧计划重放、旧备份、取消与发送并发；预期旧提醒不主动复活、在途结果诚实可见。完成依据：A37、A42 的本地与远端取消状态可追溯。
+- [x] **N4：跨域取消与恢复。** 需求 R077、R080，协同 R053—R054、R090；依赖 N2，远端可选 N3。文件：`apps/service/src/reminders/invalidation.ts`、`apps/obsidian-plugin/src/views/reminders.ts`；测试：`tests/integration/task-reminder-cancellation.test.ts`、`tests/faults/reminder-restore.test.ts`。测试来源撤回、任务确认删除、旧计划重放、旧备份、取消与发送并发；预期旧提醒不主动复活、在途结果诚实可见。完成依据：A37、A42 的本地与远端取消状态可追溯。
 
 ## 8. 风险与启用设置
 
 渠道的认证、私有 topic、TLS、保留策略和目标设备权限均需实测；随机 topic 名不是授权控制。ntfy 的当前文档能力与具体部署版本分别登记。没有可靠去重／核对能力的渠道须展示限制，不把账本内幂等推导为外部绝对零重复。
+
+## 9. 2026-09-24 实施进度
+
+本机模式已落地规则、固定与任务提醒、macOS 通知命令、投递尝试、勿扰／暂停今天／稍后提醒、迟到与显式补发、任务及计划失效取消、旧备份栅栏。实际行为和操作入口以[场景 09 接手说明](../implementation/reminder-delivery-control.md)为准；检查结果见[验证记录](../implementation/reminder-delivery-control-validation.md)。N4 的来源撤回在本机提醒里没有正文依赖：当前通知只发通用固定提示，未生成来源摘要。旧计划 `plan_outbox` 的提醒投影仍保持 `disabled`，本机提醒使用独立账本。N3 远端 relay、手机投递、两端权威交接尚未实施，因此方案维持 `active`，A30 与 A37 的远端部分不能标为通过。
