@@ -337,7 +337,7 @@ export class WorkspaceRegistry {
     });
   }
   capabilities() {
-    let valid = !this.store.readOnly;
+    let valid = !this.store.readOnly && !this.store.restoreHeld;
     try {
       this.get();
       this.settings();

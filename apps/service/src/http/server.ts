@@ -24,6 +24,7 @@ import { Jobs } from "../runtime/jobs";
 import { diagnostics } from "../runtime/diagnostics";
 import { Policy } from "../security/policy";
 import { ReminderRules } from "../reminders/rules";
+import { Retraction } from "../lifecycle/retraction";
 
 export function createServer(
   registry: WorkspaceRegistry,
@@ -144,9 +145,66 @@ export function createServer(
     })),
   );
   app.put("/v1/source-policy", async (req) =>
-    mutate(req, ["admin"], false, () => {
-      new Policy(registry).setSource(SourcePolicy.parse(req.body));
+    mutate(req, ["admin"], false, (p) => {
+      new Policy(registry).setSource(SourcePolicy.parse(req.body), p.id);
       return { policyVersion: registry.get().policyVersion };
+    }),
+  );
+  app.post("/v1/sources/:id/retract", (req) =>
+    mutate(req, ["admin"], false, (p) => {
+      const { id } = z.object({ id: Id }).parse(req.params);
+      const { reason } = z
+        .object({ reason: z.string().trim().min(1).max(500) })
+        .strict()
+        .parse(req.body);
+      return new Retraction(registry).retract(id, p.id, reason);
+    }),
+  );
+  app.get("/v1/sources/:id/retraction-impact", (req) => {
+    authorize(registry, sessions.authenticate(bearer(req)), [
+      "admin",
+      "user",
+      "reader",
+    ]);
+    const { id } = z.object({ id: Id }).parse(req.params);
+    return new Retraction(registry).impact(id);
+  });
+  app.get("/v1/recovery/paid-gate", (req) => {
+    authorize(registry, sessions.authenticate(bearer(req)), ["admin"]);
+    return {
+      state: registry.store.get("recovery:paid") ?? "not-restored",
+      unknownCalls: (
+        registry.store.db
+          .prepare(
+            "SELECT COUNT(*) n FROM calls WHERE state IN ('reserved','dispatched','unknown')",
+          )
+          .get() as { n: number }
+      ).n,
+    };
+  });
+  app.post("/v1/recovery/paid-gate/reopen", (req) =>
+    mutate(req, ["admin"], false, () => {
+      const input = z
+        .object({
+          reviewedUnknownCalls: z.number().int().nonnegative(),
+          confirm: z.literal(true),
+        })
+        .strict()
+        .parse(req.body);
+      if (registry.store.get("recovery:paid") !== "review-required")
+        throw new AppError("CONFLICT");
+      const count = (
+        registry.store.db
+          .prepare(
+            "SELECT COUNT(*) n FROM calls WHERE state IN ('reserved','dispatched','unknown')",
+          )
+          .get() as { n: number }
+      ).n;
+      if (count !== input.reviewedUnknownCalls)
+        throw new AppError("BASELINE", 409, "未知费用条数已变化，请重新核对。");
+      registry.store.set("recovery:paid", "open");
+      registry.store.event("recovery.paid-gate-opened", registry.get().id);
+      return { state: "open", reviewedUnknownCalls: count };
     }),
   );
   app.post("/v1/master/claim", async (req) =>

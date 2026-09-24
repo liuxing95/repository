@@ -68,6 +68,12 @@ export class Budget {
   }) {
     const store = this.registry.store;
     return store.tx(() => {
+      if (store.get("recovery:paid") === "review-required")
+        throw new AppError(
+          "FORBIDDEN",
+          403,
+          "恢复后须先核对未知费用并重新开放外部调用。",
+        );
       const job = this.jobs.active(input.jobId, input.fence);
       if (store.get(`budgetStopped:${job.rootId}`))
         throw new AppError("BUDGET");

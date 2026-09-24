@@ -2,9 +2,9 @@
 
 刚接手项目，请先读 [开发者接手指南](docs/development/onboarding.md)：从独立样例运行、首次收录，到架构、代码入口、测试和排障。后续开发遵循 [代码与文档交付约定](CONTRIBUTING.md)。
 
-面向 Obsidian 的本地服务与薄插件。目前完成工程骨架和场景 01—09 的本机部分；各场景的实际边界见下文接手说明。
+面向 Obsidian 的本地服务与薄插件。目前完成工程骨架和场景 01—09 的本机部分，并接入场景 10 的本地撤回、可校验备份、隔离恢复、退出导出与清除清单；各场景的实际边界见下文接手说明。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。外部日历、关机后提醒、自动委托和发布尚未启用。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。外部日历、关机后提醒、自动委托和发布尚未启用。
 
 要试用排程，请先按场景 07 说明连接 TaskNotes 并完成清点，再在插件设置页 **11 / 安排时间** 填写时区、带 `Z` 或 `+08:00` 等偏移的可用起止时间，以及节点上限、冻结分钟数和日历有效毫秒数。点击“核对任务并预览”，检查已排与未排、移动差异；确认后点击“核对后采用此计划”。采用后的时间块在 Today 查看，主端稍后把不可变笔记写到 `KB-Plans`。真实 Google 日历当前未连接，不要把本地窗口当成已查过会议。
 
@@ -15,6 +15,17 @@
 服务写入发送尝试后才调用 macOS 通知；结果分别显示“已接受”“失败”“结果未知”等状态。**已接受只代表本机通知命令返回成功，不代表系统实际展示、手机送达或用户已读。**任务完成、删除、计划改期会取消旧排期；通知已经发出时无法撤回。电脑关机后的提醒需要独立在线 relay 与手机实测，当前不可用。具体运行条件、接口、恢复栅栏和排障见[场景 09 接手说明](docs/implementation/reminder-delivery-control.md)。
 
 恢复旧应用数据时，保留应用数据父目录的提醒锚点，不要把它与数据库一起回滚。计数不一致会暂停提醒；处理步骤见接手说明。
+
+## 撤回来源与维护数据
+
+插件设置页 **13 / 撤回与维护** 可按正式来源 ID 查看影响并提交撤回原因。撤回立即阻止本机继续使用旧来源；原件、备份和已发送外部内容不会自动清除，个人任务不会被删除。需要完整备份时，先正常停止服务，再使用新的、与应用数据分离的目录：
+
+```sh
+pnpm service backup --data "/绝对路径/应用数据" --output "/绝对路径/新备份集"
+pnpm service verify-backup --set "/绝对路径/新备份集"
+```
+
+只有 `complete: true` 且验证通过的备份集可进入隔离恢复。恢复永远先写到新目录，现有数据会参与冲突核对；较新的撤回、任务、提醒或人工文件不能被旧备份自动覆盖。退出导出、清除清单和完整恢复命令见[场景 10 接手说明](docs/implementation/backup-retraction-recovery.md)。当前没有物理清除与远端提醒账本核对能力。
 
 ## 开发与检查
 

@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { mkdir, open, readFile, rm, chmod } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -18,6 +19,11 @@ import { diagnostics } from "./runtime/diagnostics";
 import { Credentials } from "./security/credentials";
 import { Role } from "@kb/contracts";
 import { ReminderDispatcher } from "./reminders/dispatcher";
+import { backupSet } from "./lifecycle/backup";
+import { restoreSet, verifyBackupSet } from "./lifecycle/restore";
+import { exitExport, verifyExitExport } from "./lifecycle/export";
+import { purgeInventory } from "./lifecycle/purge";
+import { restoreAudit, restoreResume } from "./lifecycle/resume-gates";
 import { AppError, problem } from "./errors";
 
 const args = process.argv.slice(2);
@@ -29,7 +35,7 @@ const option = (key: string) => {
 async function main() {
   if (command === "help") {
     console.log(
-      "工作区治理服务\npreview --source <Vault> [--data <目录>]\nadopt --source <Vault> --confirm <预览摘要> [--data <目录>]\nserve [--data <目录>] [--port 27124] [--role admin|user|reader|writer]\ndiagnose [--data <目录>]\ncredential --reference <引用> [--data <目录>]  从标准输入读取密钥到系统凭据库",
+      "工作区治理服务\npreview --source <Vault> [--data <目录>]\nadopt --source <Vault> --confirm <预览摘要> [--data <目录>]\nserve [--data <目录>] [--port 27124] [--role admin|user|reader|writer]\ndiagnose [--data <目录>]\nbackup --data <目录> --output <新目录>\nverify-backup --set <备份集目录>\nrestore-stage --set <备份集目录> --output <新目录>\nrestore-audit --set <备份集目录> --current-data <现有应用目录>\nrestore-resume --data <隔离恢复目录> --set <备份集目录> --current-data <现有应用目录> --confirm <核对摘要>\nexit-export --data <目录> --output <新目录>\nverify-exit --set <退出导出目录>\npurge-inventory --data <目录> --source-id <来源 ID>\ncredential --reference <引用> [--data <目录>]  从标准输入读取密钥到系统凭据库",
     );
     return;
   }
@@ -38,6 +44,53 @@ async function main() {
       ? join(homedir(), "Library", "Application Support", "KnowledgeTaskCenter")
       : join(homedir(), ".local", "share", "knowledge-task-center");
   const requested = resolve(option("data") ?? defaultData);
+  if (command === "verify-backup") {
+    console.log(
+      JSON.stringify(await verifyBackupSet(option("set") ?? ""), null, 2),
+    );
+    return;
+  }
+  if (command === "verify-exit") {
+    console.log(
+      JSON.stringify(await verifyExitExport(option("set") ?? ""), null, 2),
+    );
+    return;
+  }
+  if (command === "restore-stage") {
+    console.log(
+      JSON.stringify(
+        await restoreSet(option("set") ?? "", option("output") ?? ""),
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+  if (command === "restore-audit") {
+    console.log(
+      JSON.stringify(
+        await restoreAudit(option("set") ?? "", option("current-data") ?? ""),
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+  if (command === "restore-resume") {
+    console.log(
+      JSON.stringify(
+        await restoreResume(
+          option("data") ?? "",
+          option("set") ?? "",
+          option("current-data") ?? "",
+          option("confirm") ?? "",
+        ),
+        null,
+        2,
+      ),
+    );
+    return;
+  }
   if (command === "preview" || command === "adopt") {
     const source = option("source");
     if (!source)
@@ -54,6 +107,10 @@ async function main() {
   await mkdir(requested, { recursive: true, mode: 0o700 });
   const data = await trustedDirectory(requested);
   await chmod(data, 0o700);
+  if (["backup", "exit-export", "purge-inventory"].includes(command)) {
+    if (existsSync(join(data, "service.lock")))
+      throw new AppError("SERVICE_LOCK", 409, "维护命令前先正常停止服务。");
+  }
   const store = new Store(join(data, "state.db"));
   const registry = new WorkspaceRegistry(store, data);
   if (command !== "serve") {
@@ -80,6 +137,26 @@ async function main() {
         );
       else if (command === "diagnose")
         console.log(JSON.stringify(diagnostics(registry), null, 2));
+      else if (command === "backup") {
+        const result = await backupSet(registry, option("output") ?? "");
+        console.log(JSON.stringify(result, null, 2));
+        if (!result.complete) process.exitCode = 2;
+      } else if (command === "exit-export")
+        console.log(
+          JSON.stringify(
+            await exitExport(registry, option("output") ?? ""),
+            null,
+            2,
+          ),
+        );
+      else if (command === "purge-inventory")
+        console.log(
+          JSON.stringify(
+            purgeInventory(registry, option("source-id") ?? ""),
+            null,
+            2,
+          ),
+        );
       else if (command === "credential") {
         const value = (await readFile("/dev/stdin", "utf8")).trim();
         if (!value || value.length > 8192)
@@ -129,10 +206,11 @@ async function main() {
     await rm(lockPath, { force: true });
   };
   try {
-    if (!store.readOnly) new Budget(registry, jobs).recover();
+    if (!store.readOnly && !store.restoreHeld)
+      new Budget(registry, jobs).recover();
     await app.listen({ host: "127.0.0.1", port });
     console.log(`治理服务已启动：http://127.0.0.1:${port}。停止：Ctrl+C。`);
-    if (!store.readOnly) {
+    if (!store.readOnly && !store.restoreHeld) {
       const code = sessions.issuePairing(Role.parse(option("role") ?? "admin"));
       console.log(`本机配对码（5 分钟内一次有效，请勿复制到笔记）：${code}`);
       pool.start();

@@ -10,12 +10,13 @@ export function diagnostics(registry: WorkspaceRegistry) {
   const base = {
     serviceVersion: "0.1.0",
     policyVersion,
-    supportedSchemaVersion: 7,
+    supportedSchemaVersion: 9,
     databaseSchemaVersion: store.db.pragma("user_version", { simple: true }),
     schemaVersion: 1,
     node: process.versions.node,
     sqlite: store.sqliteVersion,
     readOnly: store.readOnly,
+    restoreHeld: store.restoreHeld,
     uptimeSeconds: Math.floor(process.uptime()),
     capabilities: registry.capabilities(),
   };

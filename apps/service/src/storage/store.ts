@@ -23,7 +23,7 @@ import { AppError } from "../errors";
 import { dirname, join, resolve } from "node:path";
 import { foundation } from "./migrations/001-foundation";
 
-function matchesSchema(db: Database.Database, version: number) {
+export function matchesSchema(db: Database.Database, version: number) {
   const expected = new Database(":memory:");
   const schema = (connection: Database.Database) =>
     connection
@@ -53,11 +53,13 @@ export class Store {
   readonly sqliteVersion: string;
   readonly reminderFencePath: string;
   readonly reminderAnchorPath: string;
+  readonly restoreHoldPath: string;
   reminderPaused = false;
   constructor(path: string) {
     if (existsSync(path) && lstatSync(path).isSymbolicLink())
       throw new AppError("FORBIDDEN");
     this.db = new Database(path);
+    this.restoreHoldPath = `${path}.restore-hold`;
     this.reminderFencePath = `${path}.reminder-fence`;
     this.reminderAnchorPath = join(
       dirname(dirname(resolve(path))),
@@ -229,6 +231,15 @@ export class Store {
   }
   writable() {
     if (this.readOnly) throw new AppError("SCHEMA");
+    if (this.restoreHeld)
+      throw new AppError(
+        "CONFLICT",
+        409,
+        "恢复副本仍在维护核对中，写入和发送已暂停。",
+      );
+  }
+  get restoreHeld() {
+    return existsSync(this.restoreHoldPath);
   }
   tx<T>(fn: () => T): T {
     this.writable();
