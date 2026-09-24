@@ -209,6 +209,10 @@ try {
     .scrollIntoViewIfNeeded();
   await page.getByRole("button", { name: "刷新客户端", exact: true }).click();
   await page.screenshot({ path: join(root, "obsidian-agent-access.png") });
+  await page
+    .getByRole("heading", { name: "15 / 公开副本", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: join(root, "obsidian-publication.png") });
   await page.waitForFunction(() =>
     document
       .querySelector(".kb-settings textarea")

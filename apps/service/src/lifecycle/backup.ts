@@ -117,6 +117,9 @@ export async function catalogue(root: string): Promise<BackupFile[]> {
       const path = join(dir, entry.name);
       const rel = relative(root, path).split(sep).join("/");
       safeRelative(rel);
+      // Publication bytes are already in the SQLite preview ledger. The local
+      // site tree contains an active symlink and must be rebuilt after restore.
+      if (rel === "public-site") continue;
       if (entry.isSymbolicLink() || (!entry.isDirectory() && !entry.isFile()))
         throw new AppError("FORBIDDEN", 403, "备份范围含符号链接或特殊文件。");
       if (entry.isDirectory()) {

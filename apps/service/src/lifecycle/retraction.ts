@@ -1,6 +1,7 @@
 import { AppError } from "../errors";
 import { Policy } from "../security/policy";
 import type { WorkspaceRegistry } from "../workspace/registry";
+import { publicationImpact, retractPublications } from "../publishing/retraction";
 
 const emptyRoutes = {
   read: [],
@@ -25,6 +26,7 @@ export class Retraction {
       actorId,
       reason,
     );
+    retractPublications(this.registry, sourceId);
     return this.impact(sourceId);
   }
   impact(sourceId: string) {
@@ -58,6 +60,7 @@ export class Retraction {
       ),
       external:
         "已发出的提供方内容与副本无法撤回；当前没有远端提醒 relay，未执行外部取消。",
+      publications: publicationImpact(this.registry, sourceId),
     };
   }
   private requireSource(sourceId: string) {

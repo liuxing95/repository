@@ -2,7 +2,7 @@
 
 ## 接手当前工程
 
-仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据和问答工程接口，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试、场景 07 的 TaskNotes 和 Today、场景 08 的本地约束排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地备份撤回恢复与退出、场景 11 可选的外部 Agent 只读接入；真实模型、外部日历、关机后提醒、物理清除与人工语义验收仍待完成。开发入口如下：
+仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据和问答工程接口，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试、场景 07 的 TaskNotes 和 Today、场景 08 的本地约束排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地备份撤回恢复与退出、场景 11 可选的外部 Agent 只读接入、场景 12 的本机公开副本链路；真实模型、外部日历、关机后提醒、公网发布、物理清除与人工语义验收仍待完成。开发入口如下：
 
 | 需要了解什么 | 入口 |
 |---|---|
@@ -19,6 +19,7 @@
 | 本机提醒规则、投递、取消与恢复 | [场景 09 接手说明](implementation/reminder-delivery-control.md)、[验证记录](implementation/reminder-delivery-control-validation.md) |
 | 来源撤回、备份集、隔离恢复、清除清单与可读退出 | [场景 10 接手说明](implementation/backup-retraction-recovery.md)、[验证记录](implementation/backup-retraction-recovery-validation.md) |
 | 外部 Agent 授权、MCP 网关、只读工具与费用状态 | [场景 11 接手说明](implementation/external-agent-access.md)、[验证记录](implementation/external-agent-access-validation.md) |
+| 公开副本检查、隔离构建、本机发布与撤回 | [场景 12 接手说明](implementation/public-copy-publishing.md)、[验证记录](implementation/public-copy-publishing-validation.md) |
 | 学习目标、续学、复习建议与版本影响 | [场景 06 使用与维护](implementation/learning-practice-review.md)、[验收记录](implementation/learning-practice-validation.md) |
 | 后续每次开发需要补什么说明 | [贡献与交付约定](../CONTRIBUTING.md) |
 

@@ -1,7 +1,7 @@
 ---
 title: 场景 12：公开副本导出与发布
 type: feat
-status: active
+status: completed
 date: 2026-09-21
 origin: docs/brainstorms/2026-09-21-obsidian-knowledge-and-task-center-requirements.md
 ---
@@ -66,12 +66,18 @@ flowchart TD
 
 ## 6. 实施单元
 
-- [ ] **PUB1：依赖清单与公开转换。** 需求 R094、R083；依赖 E1、W3、O1。文件：`packages/contracts/src/publication.ts`、`apps/service/src/publishing/manifest.ts`、`apps/service/src/publishing/transform.ts`；测试：`tests/security/publication-dependencies.test.ts`。测试私密嵌入、未授权原件、附件间接引用、链接泄漏标题、来源撤回；预期清单封闭且阻断未授权内容。完成依据：用户能看到每个公开文件及其依据。
+- [x] **PUB1：依赖清单与公开转换。** 需求 R094、R083；依赖 E1、W3、O1。文件：`packages/contracts/src/publication.ts`、`apps/service/src/publishing/manifest.ts`、`apps/service/src/publishing/transform.ts`；测试：`tests/security/publication-dependencies.test.ts`。测试私密嵌入、未授权原件、附件间接引用、链接泄漏标题、来源撤回；预期清单封闭且阻断未授权内容。完成依据：用户能看到每个公开文件及其依据。
 
-- [ ] **PUB2：隔离构建、扫描与预览。** 需求 R094、R084—R085；依赖 PUB1。文件：`apps/service/src/publishing/build.ts`、`apps/service/src/publishing/scan.ts`、`apps/obsidian-plugin/src/views/publication.ts`；测试：`tests/integration/publication-build.test.ts`。测试 staging 外读取、脚本注入、搜索索引／图谱／RSS 泄漏、附件复制及构建后内容变化；预期最终字节可审核，未通过不得申请发布。完成依据：A38 覆盖实际构建输出而非只检查 Markdown。
+- [x] **PUB2：隔离构建、扫描与预览。** 需求 R094、R084—R085；依赖 PUB1。文件：`apps/service/src/publishing/build.ts`、`apps/service/src/publishing/scan.ts`、`apps/obsidian-plugin/src/views/publication.ts`；测试：`tests/integration/publication-build.test.ts`。测试 staging 外读取、脚本注入、搜索索引／图谱／RSS 泄漏、附件复制及构建后内容变化；预期最终字节可审核，未通过不得申请发布。完成依据：A38 覆盖实际构建输出而非只检查 Markdown。
 
-- [ ] **PUB3：批准副本发布与下架。** 需求 R094，协同 R034、R090；依赖 PUB2、G2。文件：`apps/service/src/publishing/release.ts`、`apps/service/src/publishing/retraction.ts`；测试：`tests/faults/publication-release.test.ts`。测试批准后重新构建、目标改变、上传超时、部分发布、回滚含撤回源、站点编辑；预期旧批准失效、回执准确、不回写个人库。完成依据：真实测试站点能核对 release 与批准字节，下架例外明确。
+- [x] **PUB3：批准副本发布与下架。** 需求 R094，协同 R034、R090；依赖 PUB2、G2。文件：`apps/service/src/publishing/release.ts`、`apps/service/src/publishing/retraction.ts`；测试：`tests/faults/publication-release.test.ts`。测试批准后重新构建、目标改变、上传超时、部分发布、回滚含撤回源、站点编辑；预期旧批准失效、回执准确、不回写个人库。完成依据：真实测试站点能核对 release 与批准字节，下架例外明确。
 
 ## 7. 上线条件
 
 生产站点、认证方式、公开范围和缓存处理在启用时选择。没有公开授权只能本地预览，不能替用户发布。本方案不把平台产品选型扩大成公共知识社区、多人协作或双向同步项目。
+
+## 8. 2026-09-24 实施边界
+
+本轮交付了固定 Wiki 修订的依赖检查、受控 UTF-8 文本附件、只读草稿、OCI 内的最终文件构建与扫描、摘要批准、本机静态站点 release、同操作重试、来源撤回下架和历史批准版本的受权回退。真实 OCI 到本机站点的链路已跑通；操作与验证见[场景 12 接手说明](../implementation/public-copy-publishing.md)和[本轮验证](../implementation/public-copy-publishing-validation.md)。
+
+实施时将原拟 Quartz 构建器收敛为仓库内固定的 `native-static-v1`：当前没有经过锁定和验收的 Quartz 源码、依赖及容器镜像，而本轮只需输出选定页面的纯文本静态站点。此适配器不安装第三方插件，仍使用 G5 的固定无网络 OCI 沙箱；它不会把 Vault 挂入构建器。当前目标是本机 `local-static-site`，不是公网平台。Quartz、PandaWiki、远端站点认证、缓存清理和公网发布均未实现，启用前需另立目标、锁定版本并做独立验收。PUB1—PUB3 的勾选仅针对本轮本机目标与受控文本附件，不表示任意附件或公网平台已经安全可用。

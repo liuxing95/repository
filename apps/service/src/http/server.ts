@@ -16,7 +16,7 @@ import { Ingestion } from "../ingestion/manifest";
 import { ingestionRoutes } from "../ingestion/routes";
 import Fastify, { type FastifyRequest } from "fastify";
 import { z } from "zod";
-import { Id, SourcePolicy, type Principal, type Role } from "@kb/contracts";
+import { Id, Purpose, SourcePolicy, type Principal, type Role } from "@kb/contracts";
 import { WorkspaceRegistry, digest } from "../workspace/registry";
 import { Sessions, authorize, bearer, localBoundary } from "./auth";
 import { AppError, problem } from "../errors";
@@ -27,6 +27,7 @@ import { ReminderRules } from "../reminders/rules";
 import { Retraction } from "../lifecycle/retraction";
 import { AgentClients } from "../agents/clients";
 import { AgentOperations } from "../agents/operations";
+import { publicationRoutes } from "../publishing/routes";
 
 export function createServer(
   registry: WorkspaceRegistry,
@@ -152,6 +153,17 @@ export function createServer(
       return { policyVersion: registry.get().policyVersion };
     }),
   );
+  app.get("/v1/source-policy/:id", (req) => {
+    authorize(registry, sessions.authenticate(bearer(req)), ["admin"]);
+    const { id } = z.object({ id: Id }).parse(req.params);
+    if (!registry.store.db.prepare("SELECT 1 FROM sources WHERE id=?").get(id))
+      throw new AppError("NOT_FOUND", 404);
+    return registry.store.get(`source:${id}`) ?? SourcePolicy.parse({
+      sourceId: id,
+      retracted: false,
+      routes: Object.fromEntries(Purpose.options.map((purpose) => [purpose, purpose === "read" ? ["local"] : []])),
+    });
+  });
   app.post("/v1/sources/:id/retract", (req) =>
     mutate(req, ["admin"], false, (p) => {
       const { id } = z.object({ id: Id }).parse(req.params);
@@ -268,6 +280,7 @@ export function createServer(
   ingestionRoutes(app, new Ingestion(registry, jobs), sessions, mutate);
   searchRoutes(app, new EvidenceStore(registry), sessions, answerProviders);
   reviewRoutes(app, new EvidenceStore(registry), sessions);
+  publicationRoutes(app, new EvidenceStore(registry), sessions);
   researchRoutes(app, new EvidenceStore(registry), sessions, researchProviders);
   const taskDb = new Reconciliation(new Proposals(new EvidenceStore(registry)));
   taskRoutes(app, taskDb, sessions);

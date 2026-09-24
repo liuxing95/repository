@@ -2,9 +2,9 @@
 
 刚接手项目，请先读 [开发者接手指南](docs/development/onboarding.md)：从独立样例运行、首次收录，到架构、代码入口、测试和排障。后续开发遵循 [代码与文档交付约定](CONTRIBUTING.md)。
 
-面向 Obsidian 的本地服务与薄插件。目前完成工程骨架和场景 01—09 的本机部分，并接入场景 10 的本地撤回与恢复、场景 11 可选的外部 Agent 只读网关；各场景的实际边界见下文接手说明。
+面向 Obsidian 的本地服务与薄插件。目前完成工程骨架和场景 01—09 的本机部分，并接入场景 10 的本地撤回与恢复、场景 11 可选的外部 Agent 只读网关、场景 12 的公开副本本机静态发布链路；各场景的实际边界见下文接手说明。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。场景 11 的客户端授权、MCP stdio 网关和只读工具见[外部 Agent 接手说明](docs/implementation/external-agent-access.md)。外部日历、关机后提醒、自动委托和发布尚未启用。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。场景 11 的客户端授权、MCP stdio 网关和只读工具见[外部 Agent 接手说明](docs/implementation/external-agent-access.md)。场景 12 的本机公开副本链路见[公开副本接手说明](docs/implementation/public-copy-publishing.md)。外部日历、关机后提醒、自动委托和公网发布尚未启用。
 
 要试用排程，请先按场景 07 说明连接 TaskNotes 并完成清点，再在插件设置页 **11 / 安排时间** 填写时区、带 `Z` 或 `+08:00` 等偏移的可用起止时间，以及节点上限、冻结分钟数和日历有效毫秒数。点击“核对任务并预览”，检查已排与未排、移动差异；确认后点击“核对后采用此计划”。采用后的时间块在 Today 查看，主端稍后把不可变笔记写到 `KB-Plans`。真实 Google 日历当前未连接，不要把本地窗口当成已查过会议。
 
@@ -30,6 +30,10 @@ pnpm service verify-backup --set "/绝对路径/新备份集"
 ## 接入外部 Agent
 
 需要时，在插件设置页 **14 / 外部 Agent** 由管理员登记客户端、明确允许的正式来源和接收用途，保存一次性密钥，再启动 `apps/agent-gateway/dist/stdio.js` 作为 MCP stdio 服务。当前仅有 `kb_search`、`kb_read_evidence`、`kb_answer`、`kb_operation` 四个只读工具；每次请求仍受来源撤回、期限、策略和输出上限约束。默认本机原文整理不需要模型提供方；真实模型路线当前未安装。配对命令、运行流程、重试和费用边界见[场景 11 接手说明](docs/implementation/external-agent-access.md)。
+
+## 导出公开副本
+
+在插件设置页 **15 / 公开副本** 选择已审核的当前 Wiki 修订，检查直接链接和附件。管理员先在 **03 / 预算与路线** 配置 `publish` 路线，再逐来源明确授权。无 Docker 时可阅读导出草稿，但不能批准或发布；准备好 README 下文列出的固定镜像后，可隔离构建最终 `index.html`、页面、`search.json` 和受控文本附件。检查所有文件及哈希、单独批准，再发布到应用数据目录 `public-site/current`。这只是本机静态副本，不会上传到互联网。具体步骤、撤回、重试和限制见[场景 12 接手说明](docs/implementation/public-copy-publishing.md)。
 
 ## 开发与检查
 

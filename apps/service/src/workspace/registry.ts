@@ -370,6 +370,12 @@ export class WorkspaceRegistry {
         reason: "本地中文、别名与代码符号检索；固定引用、原文整理和知识检查",
       },
       {
+        id: "publish",
+        available: valid,
+        enabled: valid,
+        reason: "本机静态站点副本；须逐来源授权并单独批准；不连接公网平台",
+      },
+      {
         id: "tasknotes",
         available: valid,
         enabled:
@@ -394,7 +400,6 @@ export class WorkspaceRegistry {
         "rerank",
         "notification",
         "calendar",
-        "publish",
       ].map((id) => ({
         id,
         available: false,

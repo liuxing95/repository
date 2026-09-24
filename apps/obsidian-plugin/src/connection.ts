@@ -66,6 +66,8 @@ export class Connection {
             path === "/v1/search" ||
             path === "/v1/search/rebuild"
             ? 130_000
+            : path === "/v1/publications/previews"
+              ? 25_000
             : path === "/v1/answers"
               ? 35_000
               : 10_000,

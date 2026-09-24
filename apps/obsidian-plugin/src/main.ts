@@ -1,6 +1,7 @@
 import { TaskNotesAdapter } from "./tasknotes/adapter";
 import { renderToday } from "./views/today";
 import { renderPlanReview } from "./views/plan-review";
+import { renderPublication } from "./views/publication";
 import { syncPlanNotes } from "./views/plan-notes";
 import { renderResearch } from "./views/research";
 import { renderReview, syncWikiObservations } from "./views/review";
@@ -168,6 +169,9 @@ class GovernanceSettings extends PluginSettingTab {
     const agents = document.createElement("section");
     this.containerEl.append(agents);
     renderAgentAccess(agents, this.plugin.connection);
+    const publication = document.createElement("section");
+    this.containerEl.append(publication);
+    renderPublication(publication, this.plugin.connection);
     renderReview(
       review,
       this.plugin.connection,

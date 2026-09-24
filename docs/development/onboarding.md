@@ -24,8 +24,9 @@
 | 本机提醒、取消与投递记录 | 已实现 macOS 首期 | [提醒接手说明](../implementation/reminder-delivery-control.md)；必须显式启用规则并保持电脑和服务运行 |
 | 撤回、备份、隔离恢复与退出 | 已实现本机保守流程 | [场景 10 接手说明](../implementation/backup-retraction-recovery.md)；需停服务操作，较新事实冲突不自动合并，物理清除未实现 |
 | 外部 Agent 只读接入 | 已实现可选的本机 MCP stdio 网关 | [场景 11 接手说明](../implementation/external-agent-access.md)；按客户端限制正式来源，真实模型与第三方桌面客户端尚未验收 |
+| 公开副本导出与本机静态发布 | 已实现可选的本机链路 | [场景 12 接手说明](../implementation/public-copy-publishing.md)；隔离构建需 Docker，公网平台与 Quartz 未接入 |
 | 模型回答 | 部分接口 | 模型适配器接口已实现，真实提供方与语义验收未完成 |
-| OCR、模型、外部日历、远程通知和发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力；本机通知已单独接入 |
+| OCR、模型、外部日历、远程通知和公网发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力；本机通知和本机公开副本已单独接入 |
 
 首次收录后，可以直接进入 [检索与证据整理说明](../implementation/evidence-search-answer.md)，搜索中文短词或代码符号、回读引用，并了解模型能力当前的边界。
 
@@ -158,6 +159,9 @@ flowchart LR
   Backup --> Audit[与现有账本和 Vault 核对]
   Agent[外部 Agent] <-->|MCP stdio| Gateway[可选只读网关]
   Gateway -->|本机客户端授权| Service
+  Service --> Publication[公开副本：固定修订、最终文件与批准]
+  Publication --> Sandbox[无网络 OCI 沙箱]
+  Sandbox --> LocalSite[本机静态站点 current]
   DB --> Today[Today 正式计划读模型]
   DB --> PlanOutbox[计划笔记投影意图]
   PlanOutbox --> Plugin
@@ -210,6 +214,7 @@ sequenceDiagram
 | 解析入口与格式处理 | [parser.ts](../../apps/service/src/ingestion/parser.ts) | [parser-entry.ts](../../apps/service/src/ingestion/parser-entry.ts)、[web-parser.ts](../../apps/service/src/ingestion/web-parser.ts)、[pdf-parser.ts](../../apps/service/src/ingestion/pdf-parser.ts) |
 | 本地检索、索引代、证据和问答 | [search/search.ts](../../apps/service/src/search/search.ts)、[evidence/locator.ts](../../apps/service/src/evidence/locator.ts) | [answers/answer.ts](../../apps/service/src/answers/answer.ts)、[场景 03 说明](../implementation/evidence-search-answer.md) |
 | 外部 Agent 授权、工具调用与重试 | [agents/clients.ts](../../apps/service/src/agents/clients.ts)、[agents/operations.ts](../../apps/service/src/agents/operations.ts) | [stdio.ts](../../apps/agent-gateway/src/stdio.ts)、[场景 11 接手说明](../implementation/external-agent-access.md) |
+| Wiki 公开副本、附件、批准和撤回 | [publishing/manifest.ts](../../apps/service/src/publishing/manifest.ts)、[publishing/release.ts](../../apps/service/src/publishing/release.ts) | [publishing/routes.ts](../../apps/service/src/publishing/routes.ts)、[场景 12 接手说明](../implementation/public-copy-publishing.md) |
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
 | Wiki 提案、批准、版本提交与人工观察 | [review/routes.ts](../../apps/service/src/review/routes.ts)、[views/review.ts](../../apps/obsidian-plugin/src/views/review.ts) | [场景 04 使用与维护](../implementation/wiki-review-commit.md) |
 | 课题、覆盖、快照与报告 | [research/routes.ts](../../apps/service/src/research/routes.ts)、[views/research.ts](../../apps/obsidian-plugin/src/views/research.ts) | [场景 05 使用与维护](../implementation/topic-research-report.md) |
@@ -223,6 +228,9 @@ sequenceDiagram
 ```text
 app-data/
   state.db                         权威账本：原件、版本、作业、预算、批准、回执
+  public-site/                     公开副本本机投影；只向静态服务器开放 current
+    releases/<release-id>/         已核对的最终文件
+    current -> releases/<release-id> 当前本机版本入口
   state.db-wal / state.db-shm       SQLite 运行时可能存在的伴随文件
   service.lock                     当前服务 PID
   state.db.before-v2-<id>           从 schema 1 升级时才生成的数据库快照
@@ -353,3 +361,5 @@ node apps/service/dist/main.js diagnose --data "/实际的/app-data"
 2026-09-24（场景 08）：新增本地可用时间排程、人工采用、撤销候选和 schema 8。操作、实现边界、故障恢复见[排程接手说明](../implementation/scheduling-calendar-sync.md)，本次验证见[场景 08 验证记录](../implementation/scheduling-calendar-sync-validation.md)。Google 日历与自动委托仍需独立授权和验收；不改写上方历史记录。
 
 2026-09-24（场景 09）：新增 macOS 本机提醒、schema 9 和独立恢复栅栏。操作、状态含义、恢复条件见[提醒接手说明](../implementation/reminder-delivery-control.md)，本轮检查见[场景 09 验证记录](../implementation/reminder-delivery-control-validation.md)。关机后的 relay 与真实手机投递仍需 P6 独立验收。
+
+2026-09-24（场景 12）：新增已审核 Wiki 的公开副本检查、只读草稿、受控文本附件、隔离静态构建、摘要批准与本机 release 记录。接手先读[公开副本说明](../implementation/public-copy-publishing.md)，本轮环境与测试见[验证记录](../implementation/public-copy-publishing-validation.md)。`state.db` 保存批准字节；`public-site/` 不纳入备份文件清单，恢复后需重新核对与发布。Quartz 和公网发布仍未接入。
