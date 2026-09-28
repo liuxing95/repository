@@ -64,3 +64,22 @@ export function matchExpression(text: string) {
     .map((t) => `"${t}"`)
     .join(" OR ");
 }
+export function queryAspects(query: string) {
+  return [...new Set(
+    query
+      .replace(/分别在哪里讨论|分别在哪些章节|分别在哪些部分|的区别在哪两节说明|在哪两节说明|怎么关联|是什么|是多少|请问/g, " ")
+      .split(/[、，,；;？?]|以及|和|与|及/g)
+      .map((part) => part.trim())
+      .filter((part) => part.length >= 2 && /[\p{L}\p{N}]/u.test(part)),
+  )].slice(0, 8);
+}
+export function aspectExpression(text: string) {
+  const tokens = tokenize(text);
+  const terms = tokens.terms.some((token) => token.startsWith("b"))
+    ? tokens.terms.filter((token) => !token.startsWith("h"))
+    : tokens.terms;
+  return [...terms, ...tokens.symbols]
+    .slice(0, 16)
+    .map((token) => `"${token}"`)
+    .join(" AND ");
+}

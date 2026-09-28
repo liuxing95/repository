@@ -2,6 +2,7 @@ import { research } from "./migrations/005-research";
 import { tasks } from "./migrations/007-tasks";
 import { planning } from "./migrations/008-planning";
 import { reminders } from "./migrations/009-reminders";
+import { rag } from "./migrations/010-rag";
 import { learning } from "./migrations/006-learning";
 import { createHash, randomUUID } from "node:crypto";
 import { sources } from "./migrations/002-sources";
@@ -41,6 +42,7 @@ export function matchesSchema(db: Database.Database, version: number) {
     if (version >= 7) expected.exec(tasks);
     if (version >= 8) expected.exec(planning);
     if (version >= 9) expected.exec(reminders);
+    if (version >= 10) expected.exec(rag);
     return JSON.stringify(schema(db)) === JSON.stringify(schema(expected));
   } finally {
     expected.close();
@@ -70,7 +72,7 @@ export class Store {
       .prepare("SELECT name FROM sqlite_master WHERE type='table'")
       .all();
     this.readOnly =
-      ![0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(version) ||
+      ![0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(version) ||
       (version === 0 && tables.length > 0) ||
       (version > 0 && !matchesSchema(this.db, version));
     this.sqliteVersion = (
@@ -155,6 +157,13 @@ export class Store {
     }
     if (version < 9)
       this.db.transaction(() => this.db.exec(reminders)).immediate();
+    if (version > 0 && version < 10) {
+      const backup = `${path}.before-v10-${randomUUID()}`;
+      this.db.prepare("VACUUM INTO ?").run(backup);
+      chmodSync(backup, 0o600);
+    }
+    if (version < 10)
+      this.db.transaction(() => this.db.exec(rag)).immediate();
     this.checkReminderFence();
   }
   private fenceOnDisk(path: string) {

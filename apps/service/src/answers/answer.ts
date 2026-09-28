@@ -10,6 +10,8 @@ import { SearchService } from "../search/search";
 import { compareScope, matchScope } from "../evidence/scope";
 import {
   evidencePack,
+  focusedModelPack,
+  modelLocationSupported,
   PROMPT_VERSION,
   type EvidencePack,
 } from "./evidence-pack";
@@ -23,6 +25,8 @@ import { Policy } from "../security/policy";
 // Installed by trusted service code, never by a note, request-supplied URL, or model output.
 export type AnswerProvider = {
   model: string;
+  timeoutMs?: number;
+  inputTokenUpperBound?: (pack: EvidencePack, maxOutputTokens: number) => number;
   generate: (
     pack: EvidencePack,
     input: {
@@ -75,6 +79,10 @@ function validateClaims(
       throw new AppError("SCOPE_MISMATCH");
     if (model && claim.kind === "user-stated")
       throw new AppError("INVALID_CLAIM_KIND");
+    if (model && claim.kind === "inferred" && !refs.length)
+      throw new AppError("INVALID_CITATION");
+    if (model && claim.text.trim() === pack.question.trim())
+      throw new AppError("UNSUPPORTED_CLAIM", 409, "模型复述了问题，没有形成回答。");
   }
   const ids = new Set(claims.map((c) => c.id));
   if (ids.size !== claims.length) throw new AppError("INVALID_CITATION");
@@ -119,7 +127,7 @@ export class AnswerService {
       { ...snapshot.input, snapshotId: snapshot.id },
       p,
     );
-    const pack = evidencePack(result, this.search.evidence);
+    const fullPack = evidencePack(result, this.search.evidence);
     const provider = input.routeId
       ? this.providers.get(input.routeId)
       : undefined;
@@ -129,6 +137,9 @@ export class AnswerService {
         503,
         "尚未安装受信模型适配器；可先使用原文证据整理。",
       );
+    const pack = provider && fullPack.evidence.length
+      ? focusedModelPack(fullPack)
+      : fullPack;
     const registry = this.search.evidence.registry;
     const policy = new Policy(registry);
     const sources = [...new Set(pack.evidence.map((e) => e.sourceId))];
@@ -168,6 +179,10 @@ export class AnswerService {
       gaps: pack.gaps,
     };
     if (provider && pack.evidence.length) {
+      const price = registry.settings().routes.find((route) => route.id === input.routeId)?.price;
+      const upperBound = provider.inputTokenUpperBound
+        ? provider.inputTokenUpperBound(pack, price?.maxOutputTokens ?? 0)
+        : Buffer.byteLength(JSON.stringify(pack), "utf8") + 512;
       if (this.busy) throw new AppError("BUSY", 429);
       this.busy = true;
       const jobs = new Jobs(this.search.store);
@@ -215,8 +230,8 @@ export class AnswerService {
         const value = await broker.call(
           token,
           operationKey,
-          Buffer.byteLength(JSON.stringify(pack)),
-          AbortSignal.any([controller.signal, AbortSignal.timeout(30000)]),
+          upperBound,
+          AbortSignal.any([controller.signal, AbortSignal.timeout(provider.timeoutMs ?? 30000)]),
         );
         check();
         output = ModelAnswer.parse(value);
@@ -239,18 +254,22 @@ export class AnswerService {
     const claims = validateClaims(output, pack, !!provider);
     check();
     const conflict = output.relations.some((r) => r.type === "contradicts");
+    const locationSupported = !provider || modelLocationSupported(pack.question, claims, pack.evidence);
     const answer: AnswerResult = {
       ...output,
       claims,
-      gaps: [...new Set([...pack.gaps, ...output.gaps])],
+      gaps: [...new Set([
+        ...pack.gaps, ...output.gaps,
+        ...(!locationSupported ? ["模型没有给出与所引证据一致的章节位置；请直接核对固定原文。"] : []),
+      ])],
       id: randomUUID(),
       snapshotId: snapshot.id,
       status: conflict
         ? "conflict"
-        : claims.some((c) => c.kind === "sourced")
+        : pack.answerable && locationSupported && claims.some((c) => c.evidenceIds.length > 0)
           ? "supported"
           : "insufficient",
-      mode: provider ? "model" : "extractive",
+      mode: provider && pack.evidence.length ? "model" : "extractive",
       semanticReview: "not-reviewed",
       evidence: pack.evidence,
       familyCount: new Set(pack.evidence.map((e) => e.familyId)).size,

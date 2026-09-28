@@ -1,0 +1,41 @@
+{
+  "mode": "autofix",
+  "base": "9492a4c",
+  "plan": "docs/plans/2026-09-28-001-feat-long-document-rag-plan.md",
+  "execution": "sequential-main-thread-per-AGENTS",
+  "verdict": "not-ready-for-full-quality-acceptance",
+  "findings": [
+    {
+      "title": "真实本机模型的长文档语义回答未通过验收",
+      "severity": "P1",
+      "file": "docs/implementation/long-document-rag-validation.md",
+      "line": 32,
+      "why_it_matters": "本轮检索找齐了标注章节，但 3B 模型在 6 道实际生成题上没有给出人工认定完整且有据的答案；不能宣布 U5 或整份计划完成。",
+      "autofix_class": "manual",
+      "owner": "downstream-resolver",
+      "requires_verification": true,
+      "confidence": 1,
+      "evidence": [
+        "真实生成 6 题：3 题拒绝输出、2 题章节要点不全、1 题只复述关键词",
+        "计划 U5 的完成条件要求真实模型在所选长文题上通过人工核查"
+      ],
+      "pre_existing": false,
+      "todo": ".context/compound-engineering/todos/013-ready-p1-local-model-quality.md"
+    }
+  ],
+  "fixed": [
+    "bounded-chunk-readback",
+    "multi-section-candidate-selection",
+    "model-route-timeout-and-citation-validation",
+    "visible-semantic-review-caveat"
+  ],
+  "residual_risks": [
+    "进程连接观察不能证明系统级零外发",
+    "本轮题集只有一份 HTML、20 题，模型生成仅抽取其中 6 道可回答题",
+    "向量未在此题集带来额外召回，正式入口保持关闭"
+  ],
+  "testing_gaps": [
+    "约 80 题及其他来源类型的人工语义验收",
+    "更强本机模型的实际完整正确率和无答案模型自身拒答能力"
+  ]
+}

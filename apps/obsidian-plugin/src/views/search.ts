@@ -125,7 +125,7 @@ export function renderSearch(
     output.append(
       node(
         "p",
-        `问题：${result.snapshot.input.query} · 快照 ${result.snapshot.id} · 索引 ${result.index.state === "complete" ? "已完成" : "部分完成"} · ${result.index.blocks} 块 · ${result.hits.length} 个来源家族`,
+        `问题：${result.snapshot.input.query} · 快照 ${result.snapshot.id} · 索引 ${result.index.state === "complete" ? "已完成" : "部分完成"} · ${result.index.blocks} 个检索片段 · ${result.hits.length} 条证据 / ${new Set(result.hits.map((hit) => hit.familyId)).size} 个来源家族`,
       ),
     );
     for (const warning of result.warnings) output.append(node("p", warning));
@@ -141,7 +141,7 @@ export function renderSearch(
       row.append(
         node(
           "summary",
-          `${hit.title} · ${hit.profile.scope.version ?? "版本未知"} · ${hit.profile.scope.sourceType ?? "类型未知"} · ${hit.profile.review}`,
+          `${hit.title} · [${hit.start}, ${hit.end}) · ${hit.profile.scope.version ?? "版本未知"} · ${hit.profile.scope.sourceType ?? "类型未知"} · ${hit.profile.review}`,
         ),
         node("pre", hit.text),
         node("p", hit.gaps.join("；")),
@@ -182,7 +182,9 @@ export function renderSearch(
         answer.status === "conflict"
           ? "证据冲突"
           : answer.status === "supported"
-            ? "有原文支持的证据"
+            ? answer.mode === "model"
+              ? "已找到引用，结论待核对"
+              : "有原文支持的证据"
             : "证据不足",
       ),
       node(

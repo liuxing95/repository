@@ -130,6 +130,33 @@ test("model structure errors and removal of a negation cannot pass as sourced fa
     }
   }
 });
+test("a model cannot turn the question itself into a supported claim", async () => {
+  const { f, search } = await modelFixture();
+  try {
+    const r = await search.search({ query: "权限" }, f.principal);
+    const provider: AnswerProvider = {
+      model: "echo-fixture",
+      generate: async (pack) => ({
+        requestId: randomUUID(),
+        cost: 60,
+        value: {
+          claims: [{
+            id: randomUUID(), text: pack.question, kind: "inferred",
+            scope: pack.evidence[0]!.profile.scope,
+            evidenceIds: [pack.evidence[0]!.id],
+          }],
+          relations: [], gaps: [],
+        },
+      }),
+    };
+    await expect(new AnswerService(search, new Map([["test-model", provider]])).answer(
+      { snapshotId: r.snapshot.id, operationId: randomUUID(), routeId: "test-model" },
+      f.principal,
+    )).rejects.toMatchObject({ code: "UNSUPPORTED_CLAIM" });
+  } finally {
+    await f.close();
+  }
+});
 test("same-scope model disagreements are shown without selecting the newer source", async () => {
   const { f, e, search, ref } = await modelFixture();
   try {

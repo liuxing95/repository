@@ -29,6 +29,7 @@ export function purgeInventory(registry: WorkspaceRegistry, sourceId: string) {
     })),
     localCopies: [
       "state.db 当前页与 WAL",
+      "检索片段与可选本机向量索引（state.db 内的可重建副本）",
       "迁移前快照",
       "接入时 backup/",
       "用户配置的备份集",

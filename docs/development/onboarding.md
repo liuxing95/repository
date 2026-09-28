@@ -1,10 +1,11 @@
 # 开发者接手指南
 
-适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-24，已实现范围为场景 01、02、场景 03 的本地检索与问答工程接口，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对、场景 08 的本地时间排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地撤回、备份、隔离恢复和退出导出、场景 11 可选的外部 Agent 只读接入、场景 12 的本机公开副本发布。真实模型、外部日历、关机后提醒、物理清除和人工语义验收仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
+适合第一次接手这个仓库、需要运行和修改代码的开发者。最后核对：2026-09-28。已实现范围为场景 01、02、场景 03 的本地检索、长文分块与可选本机模型适配器，以及场景 04 的候选审核、Wiki 受控写入与恢复、场景 05 的库内研究和原文报告、场景 06 的学习目标、实际尝试与复习建议、场景 07 的 TaskNotes 候选创建与 Today 核对、场景 08 的本地时间排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地撤回、备份、隔离恢复和退出导出、场景 11 可选的外部 Agent 只读接入、场景 12 的本机公开副本发布。大题集尚未扩充，本轮 3B 模型的人工语义验收未达标；外部日历、关机后提醒和物理清除仍待完成。后续交付应同步更新本文，具体要求见 [贡献与交付约定](../../CONTRIBUTING.md)。
 
 第一次接手，先读第 1—3 节，完成一份文本的收录。准备改代码时读第 4—7 节；遇到问题直接查第 8 节。不必先读完调研资料。
 
 场景 12 的本机公开副本发布已实现；本地 HTML 文件也可按原字节收录并提取静态文字。后者的操作和限制见[本地 HTML 收录说明](../implementation/local-html-ingestion.md)。
+长文检索、同文多处证据、本机模型的启动条件及 schema 10 恢复见[长文档接手说明](../implementation/long-document-rag.md)；这轮真实指南的数字和模型失败项见[试点记录](../implementation/long-document-rag-validation.md)。
 
 ## 1. 这个项目现在能做什么
 
@@ -17,7 +18,7 @@
 | 工作区接入、主端、会话、预算、作业治理 | 已实现 | 一份应用数据对应一个工作区；主端交接要显式完成 |
 | 多来源获取、原件保存、解析与定位 | 已实现 | 基础解析目前仅在受测 macOS 环境开放；网页仅处理静态响应 |
 | 来源文件审核与写入 | 已实现 | 仅新建不可变来源投影；不会自动覆盖人工修改 |
-| 本地搜索、固定引用、原文整理与候选保存 | 已实现 | 首次查询或显式重建产生索引；原文摘录不等于已审核答案 |
+| 本地搜索、长文多处固定引用、原文整理与候选保存 | 已实现 | 首次查询或显式重建产生索引；原文摘录不等于已审核答案 |
 | 候选区保存、Wiki 提升与更新、观察和影响清单 | 已实现本地流程 | 两次独立审核；打开编辑页会暂停写入；真实模型编译尚未开启 |
 | 库内课题、历史资格、快照更新与研究报告 | 已实现原文流程 | [研究接手说明](../implementation/topic-research-report.md)；真实模型及语义验收未完成 |
 | 学习目标、尝试、续学与复习建议 | 已实现本地流程 | [学习接手说明](../implementation/learning-practice-review.md)；TaskNotes 4.13.4 完整清点后可确认创建，Today 回到同一单元 |
@@ -27,8 +28,8 @@
 | 撤回、备份、隔离恢复与退出 | 已实现本机保守流程 | [场景 10 接手说明](../implementation/backup-retraction-recovery.md)；需停服务操作，较新事实冲突不自动合并，物理清除未实现 |
 | 外部 Agent 只读接入 | 已实现可选的本机 MCP stdio 网关 | [场景 11 接手说明](../implementation/external-agent-access.md)；按客户端限制正式来源，真实模型与第三方桌面客户端尚未验收 |
 | 公开副本导出与本机静态发布 | 已实现可选的本机链路 | [场景 12 接手说明](../implementation/public-copy-publishing.md)；隔离构建需 Docker，公网平台与 Quartz 未接入 |
-| 模型回答 | 部分接口 | 模型适配器接口已实现，真实提供方与语义验收未完成 |
-| OCR、模型、外部日历、远程通知和公网发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力；本机通知和本机公开副本已单独接入 |
+| 本机模型回答 | 可选适配器已实现 | 需另装已下载的 Ollama 模型，并配置预算路线和逐来源授权；人工语义验收见本轮记录 |
+| OCR、远端模型、外部日历、远程通知和公网发布 | 尚未接入实际提供方 | 填写路线配置不会自动开通业务能力；可选本机模型、本机通知和本机公开副本分别按上面的条件使用 |
 
 首次收录后，可以直接进入 [检索与证据整理说明](../implementation/evidence-search-answer.md)，搜索中文短词或代码符号、回读引用，并了解模型能力当前的边界。
 
@@ -142,6 +143,9 @@ flowchart LR
   User[用户] --> Plugin[Obsidian 插件：界面与 Writer]
   Plugin <-->|本机 HTTP：配对、主端、政策版本| Service[Node.js 服务]
   Service <--> DB[(SQLite 权威账本)]
+  Service --> RAG[长文片段、检索快照与证据问答]
+  RAG <--> DB
+  RAG -->|显式授权、本机回环| Ollama[可选禁云 Ollama 子进程]
   Service --> Fetch[有界获取：文件 / HTTPS / 仓库]
   Fetch --> Raw[原件字节]
   Raw --> Parser[受限解析进程]
@@ -215,7 +219,7 @@ sequenceDiagram
 | 获取、冻结、重试和解析调度 | [ingestion/routes.ts](../../apps/service/src/ingestion/routes.ts) | [manifest.ts](../../apps/service/src/ingestion/manifest.ts)、[fetcher.ts](../../apps/service/src/ingestion/fetcher.ts)、[repository.ts](../../apps/service/src/ingestion/repository.ts) |
 | 原件、修订与解析保存 | [objects.ts](../../apps/service/src/ingestion/objects.ts) | [store.ts](../../apps/service/src/storage/store.ts)、[002-sources.ts](../../apps/service/src/storage/migrations/002-sources.ts) |
 | 解析入口与格式处理 | [parser.ts](../../apps/service/src/ingestion/parser.ts) | [parser-entry.ts](../../apps/service/src/ingestion/parser-entry.ts)、[web-parser.ts](../../apps/service/src/ingestion/web-parser.ts)、[pdf-parser.ts](../../apps/service/src/ingestion/pdf-parser.ts) |
-| 本地检索、索引代、证据和问答 | [search/search.ts](../../apps/service/src/search/search.ts)、[evidence/locator.ts](../../apps/service/src/evidence/locator.ts) | [answers/answer.ts](../../apps/service/src/answers/answer.ts)、[场景 03 说明](../implementation/evidence-search-answer.md) |
+| 本地检索、长文片段、证据和问答 | [search/search.ts](../../apps/service/src/search/search.ts)、[search/chunks.ts](../../apps/service/src/search/chunks.ts) | [answers/answer.ts](../../apps/service/src/answers/answer.ts)、[长文档接手说明](../implementation/long-document-rag.md) |
 | 外部 Agent 授权、工具调用与重试 | [agents/clients.ts](../../apps/service/src/agents/clients.ts)、[agents/operations.ts](../../apps/service/src/agents/operations.ts) | [stdio.ts](../../apps/agent-gateway/src/stdio.ts)、[场景 11 接手说明](../implementation/external-agent-access.md) |
 | Wiki 公开副本、附件、批准和撤回 | [publishing/manifest.ts](../../apps/service/src/publishing/manifest.ts)、[publishing/release.ts](../../apps/service/src/publishing/release.ts) | [publishing/routes.ts](../../apps/service/src/publishing/routes.ts)、[场景 12 接手说明](../implementation/public-copy-publishing.md) |
 | 审批、落盘、冲突和恢复 | [commit.ts](../../apps/service/src/ingestion/commit.ts) | [writer/apply.ts](../../apps/obsidian-plugin/src/writer/apply.ts)、[writer/guard.ts](../../apps/obsidian-plugin/src/writer/guard.ts) |
@@ -243,6 +247,7 @@ app-data/
   state.db.before-v7-<id>           迁移到任务 schema 7 前的数据库快照
   state.db.before-v8-<id>           迁移到排程 schema 8 前的数据库快照
   state.db.before-v9-<id>           迁移到提醒 schema 9 前的数据库快照
+  state.db.before-v10-<id>          迁移到长文片段 schema 10 前的数据库快照
   state.db.reminder-fence           与数据库共同核对的单调发送栅栏；恢复时不能单独删除
   state.db.before-v6-<id>           迁移到学习 schema 6 前的数据库快照
   workspace-<id>/

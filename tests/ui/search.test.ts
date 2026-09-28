@@ -81,7 +81,7 @@ test("model response budget outlasts the provider timeout while retaining a fini
     );
     const response = connection.request("/v1/answers", "POST", {});
     const failure = expect(response).rejects.toThrow("CONNECTION_TIMEOUT");
-    await vi.advanceTimersByTimeAsync(35000);
+    await vi.advanceTimersByTimeAsync(190_000);
     await failure;
   } finally {
     vi.useRealTimers();

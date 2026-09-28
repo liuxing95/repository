@@ -142,7 +142,7 @@ export function checkDatabase(path: string) {
   const db = new Database(path, { readonly: true, fileMustExist: true });
   try {
     const schemaVersion = db.pragma("user_version", { simple: true }) as number;
-    if (schemaVersion !== 9 || !matchesSchema(db, 9))
+    if (schemaVersion !== 10 || !matchesSchema(db, 10))
       throw new AppError("SCHEMA", 409, "备份数据库结构未知；仅能只读诊断。");
     const check = db.pragma("quick_check") as { quick_check: string }[];
     if (check.length !== 1 || check[0]?.quick_check !== "ok")
@@ -198,7 +198,7 @@ export async function backupSet(registry: WorkspaceRegistry, output: string) {
     id: randomUUID(),
     createdAt: Date.now(),
     softwareVersion: "0.1.0",
-    schemaVersion: 9,
+    schemaVersion: 10,
     workspaceId: workspace.id,
     vaultPath: workspace.vaultPath,
     eventWatermark: 0,

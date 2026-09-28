@@ -18,6 +18,7 @@ import { authorize } from "../http/auth";
 import { WorkspaceRegistry, digest } from "../workspace/registry";
 import { AppError } from "../errors";
 import { compareScope } from "./scope";
+import { MAX_CHUNK_CHARS, type RetrievalChunk } from "../search/chunks";
 export class EvidenceStore {
   readonly commits: SourceCommit;
   constructor(readonly registry: WorkspaceRegistry) {
@@ -54,13 +55,13 @@ export class EvidenceStore {
     if (!this.readable(value.sourceId)) throw new AppError("FORBIDDEN", 403);
     return value;
   }
-  profile(parseId: string): Profile {
+  profile(parseId: string, parsed?: ParseArtifact, sourceRevision?: SourceRevision): Profile {
     const row = this.store.db
       .prepare("SELECT value FROM evidence_profiles WHERE parse_id=?")
       .get(parseId) as { value: string } | undefined;
     if (row) return Profile.parse(JSON.parse(row.value));
-    const parse = this.commits.parse(parseId);
-    const revision = this.revision(parse.revisionId);
+    const parse = parsed ?? this.commits.parse(parseId);
+    const revision = sourceRevision ?? this.revision(parse.revisionId);
     const meta = revision.metadata;
     const known = (v: unknown) =>
       typeof v === "string" && v !== "unknown" ? v : null;
@@ -151,6 +152,32 @@ export class EvidenceStore {
       return item;
     });
   }
+  registerSpan(parsed: ParseArtifact, chunk: RetrievalChunk) {
+    const rev = this.revision(parsed.revisionId);
+    if (!parsed.committed || chunk.end - chunk.start > MAX_CHUNK_CHARS ||
+        chunk.end <= chunk.start || parsed.text.slice(chunk.start, chunk.end) !== chunk.text)
+      throw new AppError("HASH_MISMATCH");
+    const first = parsed.blocks.find((block) => block.end > chunk.start);
+    if (!first || digest(first.locator.heading ?? []) !== digest(chunk.heading))
+      throw new AppError("HASH_MISMATCH");
+    const value = {
+      parseId: parsed.id,
+      revisionId: rev.id,
+      sourceId: rev.sourceId,
+      blockId: `chunk:${chunk.start}:${chunk.end}`,
+      start: chunk.start,
+      end: chunk.end,
+      hash: hashBytes(chunk.text),
+      parseHash: parsed.objectHash,
+      originalHash: rev.objectHash,
+      locator: { ...first.locator, heading: chunk.heading },
+    };
+    const item: Evidence = { id: digest(value), ...value };
+    this.store.db
+      .prepare("INSERT OR IGNORE INTO evidence VALUES(?,?,?)")
+      .run(item.id, parsed.id, JSON.stringify(item));
+    return item;
+  }
   read(id: string, cache = new Map<string, ParseArtifact>()): EvidenceRead {
     const row = this.store.db
       .prepare("SELECT value FROM evidence WHERE id=?")
@@ -175,23 +202,34 @@ export class EvidenceStore {
     const parsed = cache.get(item.parseId) ?? this.commits.parse(item.parseId);
     cache.set(item.parseId, parsed);
     const block = parsed.blocks.find((b) => b.id === item.blockId);
+    // A committed span keeps its range and hash even if a later index uses a
+    // different chunker. Re-running today's splitter would invalidate old IDs.
+    const isSpan = item.blockId === `chunk:${item.start}:${item.end}`;
+    const first = isSpan
+      ? parsed.blocks.find((candidate) => candidate.end > item.start)
+      : undefined;
+    const validLocation = isSpan
+      ? !!first &&
+        item.start >= 0 && item.end > item.start && item.end <= parsed.text.length &&
+        digest({ ...first.locator, heading: first.locator.heading ?? [] }) === digest(item.locator)
+      : !!block &&
+        block.start === item.start &&
+        block.end === item.end &&
+        digest(block.locator) === digest(item.locator);
     if (
       !parsed.committed ||
       parsed.revisionId !== revision.id ||
       revision.sourceId !== item.sourceId ||
       revision.objectHash !== item.originalHash ||
       parsed.objectHash !== item.parseHash ||
-      !block ||
-      block.start !== item.start ||
-      block.end !== item.end ||
-      digest(block.locator) !== digest(item.locator) ||
+      !validLocation ||
       hashBytes(parsed.text.slice(item.start, item.end)) !== item.hash
     )
       throw new AppError("HASH_MISMATCH");
-    const profile = this.profile(item.parseId);
+    const profile = this.profile(item.parseId, parsed, revision);
     return {
       ...item,
-      text: block.text,
+      text: isSpan ? parsed.text.slice(item.start, item.end) : block!.text,
       context: parsed.text.slice(Math.max(0, item.start - 200), item.end + 200),
       title: parsed.title,
       familyId: this.family(item.sourceId),

@@ -3,6 +3,8 @@ import { setImmediate } from "node:timers/promises";
 import { EvidenceStore } from "../evidence/locator";
 import { AppError } from "../errors";
 import { TOKENIZER_VERSION, tokenize } from "./tokenizer";
+import { CHUNKER_VERSION, retrievalChunks } from "./chunks";
+const INDEX_FINGERPRINT = `${TOKENIZER_VERSION}:${CHUNKER_VERSION}`;
 export type Generation = {
   id: string;
   state: string;
@@ -39,7 +41,7 @@ export class Indexer {
     return {
       generation: generation.id,
       state: (generation.watermark === this.watermark() &&
-      generation.fingerprint === TOKENIZER_VERSION
+      generation.fingerprint === INDEX_FINGERPRINT
         ? "complete"
         : "partial") as "complete" | "partial",
       blocks: generation.blocks,
@@ -65,7 +67,7 @@ export class Indexer {
       id: randomUUID(),
       state: "building",
       watermark: this.watermark(),
-      fingerprint: TOKENIZER_VERSION,
+      fingerprint: INDEX_FINGERPRINT,
       blocks: 0,
     };
     this.store.db
@@ -86,29 +88,36 @@ export class Indexer {
       for (const { id, source_id } of parses) {
         if (!this.evidence.readable(source_id)) continue;
         const parsed = this.evidence.commits.parse(id);
-        // Explicit read restrictions affect serving, not whether private local index generations exist.
+        // Recheck local-read policy before materializing this parse into a new index.
         const rev = this.store.db
           .prepare("SELECT source_id FROM source_revisions WHERE id=?")
           .get(parsed.revisionId) as { source_id: string };
         if (!this.evidence.readable(rev.source_id)) continue;
         this.store.tx(() => {
-          const entries = this.evidence.register(parsed);
-          const title = tokenize(parsed.title).terms.join(" ");
-          for (let i = 0; i < entries.length; i++) {
-            const entry = entries[i]!;
-            const block = parsed.blocks[i]!;
+          const originals = this.evidence.register(parsed);
+          const chunks = retrievalChunks(parsed);
+          for (let i = 0; i < chunks.length; i++) {
+            const chunk = chunks[i]!;
+            const unchanged = parsed.blocks.findIndex(
+              (block) => block.start === chunk.start && block.end === chunk.end,
+            );
+            const entry = unchanged >= 0
+              ? originals[unchanged]!
+              : this.evidence.registerSpan(parsed, chunk);
+            const title = i === 0 ? tokenize(parsed.title).terms.join(" ") : "";
             const tokens = tokenize(
-              parsed.title +
+              chunk.text +
                 " " +
-                block.text +
-                " " +
-                (block.locator.path ?? ""),
+                (entry.locator.path ?? ""),
             );
             const row = this.store.db
               .prepare(
                 "INSERT INTO search_documents(generation,parse_id,source_id,evidence_id) VALUES(?,?,?,?)",
               )
               .run(generation.id, id, entry.sourceId, entry.id);
+            this.store.db
+              .prepare("INSERT INTO retrieval_chunks VALUES(?,?,?,?,?,?,?)")
+              .run(generation.id, entry.id, id, i, chunk.start, chunk.end, CHUNKER_VERSION);
             this.store.db
               .prepare(
                 "INSERT INTO search_fts(rowid,title,terms,symbols) VALUES(?,?,?,?)",
@@ -137,6 +146,8 @@ export class Indexer {
       return generation;
     } catch (error) {
       this.store.tx(() => {
+        this.store.db.prepare("DELETE FROM retrieval_vectors WHERE generation=?").run(generation.id);
+        this.store.db.prepare("DELETE FROM retrieval_chunks WHERE generation=?").run(generation.id);
         this.store.db
           .prepare(
             "DELETE FROM search_fts WHERE rowid IN (SELECT id FROM search_documents WHERE generation=?)",
@@ -164,6 +175,8 @@ export class Indexer {
         .all(this.active()?.id ?? "") as { id: string }[];
       for (const { id } of old) {
         if (this.building) continue;
+        this.store.db.prepare("DELETE FROM retrieval_vectors WHERE generation=?").run(id);
+        this.store.db.prepare("DELETE FROM retrieval_chunks WHERE generation=?").run(id);
         this.store.db
           .prepare(
             "DELETE FROM search_fts WHERE rowid IN (SELECT id FROM search_documents WHERE generation=?)",

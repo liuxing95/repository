@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 import { join } from "node:path";
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { fixture } from "../helpers";
 import { publish } from "../evidence-helpers";
 import { backupSet, sha } from "../../apps/service/src/lifecycle/backup";
@@ -19,6 +20,27 @@ import { Sessions } from "../../apps/service/src/http/auth";
 import { Jobs } from "../../apps/service/src/runtime/jobs";
 import { createServer } from "../../apps/service/src/http/server";
 import { randomUUID } from "node:crypto";
+
+test("schema 9 upgrades to 10 with a private pre-migration snapshot", async () => {
+  const root = await mkdtemp(join(tmpdir(), "kb-rag-migration-"));
+  const path = join(root, "state.db");
+  try {
+    const old = new Store(path);
+    old.db.exec("DROP TABLE retrieval_vectors; DROP INDEX retrieval_chunks_parse; DROP TABLE retrieval_chunks; PRAGMA user_version=9;");
+    old.close();
+    const upgraded = new Store(path);
+    try {
+      expect(upgraded.readOnly).toBe(false);
+      expect(upgraded.db.pragma("user_version", { simple: true })).toBe(10);
+      expect(upgraded.db.prepare("SELECT count(*) n FROM retrieval_chunks").get()).toEqual({ n: 0 });
+      expect((await readdir(root)).some((name) => name.startsWith("state.db.before-v10-"))).toBe(true);
+    } finally {
+      upgraded.close();
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
 
 test("a complete set restores into a held directory and resumes only after equal-ledger audit", async () => {
   const f = await fixture();

@@ -4,11 +4,11 @@
 
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架和场景 01—09 的本机部分，并接入场景 10 的本地撤回与恢复、场景 11 可选的外部 Agent 只读网关、场景 12 的公开副本本机静态发布链路；各场景的实际边界见下文接手说明。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。真实模型编译与语义验收尚未完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。场景 11 的客户端授权、MCP stdio 网关和只读工具见[外部 Agent 接手说明](docs/implementation/external-agent-access.md)。场景 12 的本机公开副本链路见[公开副本接手说明](docs/implementation/public-copy-publishing.md)。外部日历、关机后提醒、自动委托和公网发布尚未启用。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。可选本机模型适配器已接入；本轮 3B 模型的人工语义验收未达标，扩大题集仍待完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。场景 11 的客户端授权、MCP stdio 网关和只读工具见[外部 Agent 接手说明](docs/implementation/external-agent-access.md)。场景 12 的本机公开副本链路见[公开副本接手说明](docs/implementation/public-copy-publishing.md)。外部日历、关机后提醒、自动委托和公网发布尚未启用。
 
 要试用排程，请先按场景 07 说明连接 TaskNotes 并完成清点，再在插件设置页 **11 / 安排时间** 填写时区、带 `Z` 或 `+08:00` 等偏移的可用起止时间，以及节点上限、冻结分钟数和日历有效毫秒数。点击“核对任务并预览”，检查已排与未排、移动差异；确认后点击“核对后采用此计划”。采用后的时间块在 Today 查看，主端稍后把不可变笔记写到 `KB-Plans`。真实 Google 日历当前未连接，不要把本地窗口当成已查过会议。
 
-本地 `.html`／`.htm` 文件也可直接收录：在“05 / 资料收录”选择“本地 HTML 文件”，填写原件绝对路径。服务保留原字节，隔离解析静态正文；脚本和外部资源不会运行或获取。操作、数据和排障见[本地 HTML 收录说明](docs/implementation/local-html-ingestion.md)。
+本地 `.html`／`.htm` 文件也可直接收录：在“05 / 资料收录”选择“本地 HTML 文件”，填写原件绝对路径。服务保留原字节，隔离解析静态正文；脚本和外部资源不会运行或获取。长文会派生有界重叠检索片段，同一文档可返回多处证据；操作、数据和排障见[本地 HTML 收录说明](docs/implementation/local-html-ingestion.md)与[长文档接手说明](docs/implementation/long-document-rag.md)。
 
 ## 登记本机提醒
 
@@ -31,7 +31,7 @@ pnpm service verify-backup --set "/绝对路径/新备份集"
 
 ## 接入外部 Agent
 
-需要时，在插件设置页 **14 / 外部 Agent** 由管理员登记客户端、明确允许的正式来源和接收用途，保存一次性密钥，再启动 `apps/agent-gateway/dist/stdio.js` 作为 MCP stdio 服务。当前仅有 `kb_search`、`kb_read_evidence`、`kb_answer`、`kb_operation` 四个只读工具；每次请求仍受来源撤回、期限、策略和输出上限约束。默认本机原文整理不需要模型提供方；真实模型路线当前未安装。配对命令、运行流程、重试和费用边界见[场景 11 接手说明](docs/implementation/external-agent-access.md)。
+需要时，在插件设置页 **14 / 外部 Agent** 由管理员登记客户端、明确允许的正式来源和接收用途，保存一次性密钥，再启动 `apps/agent-gateway/dist/stdio.js` 作为 MCP stdio 服务。当前仅有 `kb_search`、`kb_read_evidence`、`kb_answer`、`kb_operation` 四个只读工具；每次请求仍受来源撤回、期限、策略和输出上限约束。默认本机原文整理不需要模型；可选 Ollama 模型路线需单独配置和授权，见[长文档接手说明](docs/implementation/long-document-rag.md)。配对命令、运行流程、重试和费用边界见[场景 11 接手说明](docs/implementation/external-agent-access.md)。
 
 ## 导出公开副本
 
@@ -139,7 +139,7 @@ pnpm service serve
 
 收录上限：100 个选定条目、单原件 20 MB、范围总量最多 50 MB、最多 1000 个候选、网页发现深度 5、发现时限 120 秒。每个解析进程最多 20 秒、V8 堆 256 MB、结果 8 MB；PDF 首次最多解析 200 页。V8 堆上限不是总 RSS 上限，真实样本峰值见验收记录。
 
-数据库已升级为 schema 9。schema 8 升级前创建 `state.db.before-v9-<id>` 私有快照，再增加本机提醒规则、排期、发送尝试和恢复栅栏。schema 7 升级前创建 `state.db.before-v8-<id>` 私有快照，再增加排程候选、正式计划版本、采用与投影意图账本。schema 6 升级前创建 `state.db.before-v7-<id>` 私有快照，再增加任务观察、命令、循环映射、失效与回执账本。schema 5 升级前创建 `state.db.before-v6-<id>` 私有快照，再事务增加学习目标、基线、尝试、评价、建议与任务创建意图表。schema 4 升级前创建 `state.db.before-v5-<id>` 私有快照，再事务增加研究清单、证据快照、章节与报告表。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源、尝试或费用的数据库。
+数据库已升级为 schema 10。schema 9 升级前创建 `state.db.before-v10-<id>` 私有快照，再增加可重建的长文检索片段和向量试验表。schema 8 升级前创建 `state.db.before-v9-<id>` 私有快照，再增加本机提醒规则、排期、发送尝试和恢复栅栏。schema 7 升级前创建 `state.db.before-v8-<id>` 私有快照，再增加排程候选、正式计划版本、采用与投影意图账本。schema 6 升级前创建 `state.db.before-v7-<id>` 私有快照，再增加任务观察、命令、循环映射、失效与回执账本。schema 5 升级前创建 `state.db.before-v6-<id>` 私有快照，再事务增加学习目标、基线、尝试、评价、建议与任务创建意图表。schema 4 升级前创建 `state.db.before-v5-<id>` 私有快照，再事务增加研究清单、证据快照、章节与报告表。schema 3 升级前创建 `state.db.before-v4-<id>` 快照，再事务增加 Wiki 提案、批准、版本与观察表。schema 2 升级前创建 `state.db.before-v3-<id>` 快照，再事务增加证据与检索表。已知 schema 1 首次打开时先创建权限为 0600 的 `state.db.before-v2-<id>` 快照，再事务迁移。不要用迁移前备份覆盖已有新来源、尝试或费用的数据库。
 
 [场景 02 实施与验收记录](docs/implementation/multi-source-ingestion-validation.md)包含 API、50 项测试、30 份真实资料、桌面截图和恢复方法。重跑真实网络样本：
 
@@ -150,11 +150,11 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 
 ## 搜索与证据整理
 
-正式提交资料后，在设置页“06 / 证据检索与问答”搜索“权限”“重排”、`C++`、`Node.js` 或完整函数名。首次查询构建本地索引，结果显示固定快照、覆盖与版本；通过“回读固定原文”核对上下文。
+正式提交资料后，在设置页“06 / 证据检索与问答”搜索“权限”“重排”、`C++`、`Node.js` 或完整函数名。首次查询构建本地索引，结果显示固定快照、覆盖与版本；同一长文可以返回不同章节的多条证据。通过“回读固定原文”核对范围和相邻上下文。
 
 “整理本次原文证据”保留完整摘录，保存结果只会进入待审核候选，不直接写 Wiki。真实模型默认关闭。若已有自定义来源政策，本地读取需要 `routes.read` 包含 `local`；模型用途单独授权。
 
-完整流程、接口、代码入口、迁移及排障见 [场景 03 说明](docs/implementation/evidence-search-answer.md)，实际测试与性能边界见 [验收记录](docs/implementation/evidence-search-validation.md)。
+完整流程、接口、代码入口、迁移及排障见 [场景 03 说明](docs/implementation/evidence-search-answer.md)和[长文档接手说明](docs/implementation/long-document-rag.md)，本轮长文试点见[测试记录](docs/implementation/long-document-rag-validation.md)，旧测试与性能边界见[历史验收](docs/implementation/evidence-search-validation.md)。
 
 ## 审核候选并写入 Wiki
 

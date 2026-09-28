@@ -125,6 +125,8 @@ export class AgentOperations {
         },
         principal,
       );
+      for (const item of result.evidence)
+        this.clients.authorizeEvidence(client, principal, item.id);
       return { kind: "answer", answerId: result.id };
     }
     throw new AppError("VALIDATION", 400);

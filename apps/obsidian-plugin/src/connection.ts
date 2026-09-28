@@ -69,7 +69,7 @@ export class Connection {
             : path === "/v1/publications/previews"
               ? 25_000
             : path === "/v1/answers"
-              ? 35_000
+              ? 190_000
               : 10_000,
         );
       }),

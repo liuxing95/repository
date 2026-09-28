@@ -25,6 +25,7 @@ import { exitExport, verifyExitExport } from "./lifecycle/export";
 import { purgeInventory } from "./lifecycle/purge";
 import { restoreAudit, restoreResume } from "./lifecycle/resume-gates";
 import { AppError, problem } from "./errors";
+import { startLocalOllama } from "./answers/local-model";
 
 const args = process.argv.slice(2);
 const command = args[0] ?? "help";
@@ -37,6 +38,7 @@ async function main() {
     console.log(
       "工作区治理服务\npreview --source <Vault> [--data <目录>]\nadopt --source <Vault> --confirm <预览摘要> [--data <目录>]\nserve [--data <目录>] [--port 27124] [--role admin|user|reader|writer]\ndiagnose [--data <目录>]\nbackup --data <目录> --output <新目录>\nverify-backup --set <备份集目录>\nrestore-stage --set <备份集目录> --output <新目录>\nrestore-audit --set <备份集目录> --current-data <现有应用目录>\nrestore-resume --data <隔离恢复目录> --set <备份集目录> --current-data <现有应用目录> --confirm <核对摘要>\nexit-export --data <目录> --output <新目录>\nverify-exit --set <退出导出目录>\npurge-inventory --data <目录> --source-id <来源 ID>\ncredential --reference <引用> [--data <目录>]  从标准输入读取密钥到系统凭据库",
     );
+    console.log("serve 可选：--ollama-model <已下载本机模型> [--ollama-bin <本机可执行文件>]");
     return;
   }
   const defaultData =
@@ -185,9 +187,35 @@ async function main() {
   });
   await lock.writeFile(String(process.pid));
   await lock.close();
+  let localModel: Awaited<ReturnType<typeof startLocalOllama>> | undefined;
+  try {
+    if (option("ollama-model"))
+      localModel = await startLocalOllama(
+        option("ollama-model")!,
+        option("ollama-bin") ?? "ollama",
+      );
+  } catch (error) {
+    store.close();
+    await rm(lockPath, { force: true });
+    throw error;
+  }
   const sessions = new Sessions(registry);
   const jobs = new Jobs(store);
-  const app = createServer(registry, sessions, jobs, port);
+  let app: ReturnType<typeof createServer>;
+  try {
+    app = createServer(
+      registry,
+      sessions,
+      jobs,
+      port,
+      localModel ? new Map([["local-ollama", localModel.provider]]) : undefined,
+    );
+  } catch (error) {
+    localModel?.close();
+    store.close();
+    await rm(lockPath, { force: true });
+    throw error;
+  }
   const reminderDispatcher = new ReminderDispatcher(store);
   const allowed = () => sessions.hasMasterSession();
   const pool = new WorkerPool(
@@ -202,6 +230,7 @@ async function main() {
     await pool.stop();
     await reminderDispatcher.stop();
     await app.close();
+    localModel?.close();
     store.close();
     await rm(lockPath, { force: true });
   };

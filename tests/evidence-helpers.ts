@@ -16,6 +16,7 @@ export function publish(
   title = "原文",
   extra: Record<string, string> = {},
   blockTexts = [text],
+  parsedOverride?: Parsed,
 ) {
   const ingestion = new Ingestion(f.registry, f.jobs);
   const id = randomUUID();
@@ -34,7 +35,7 @@ export function publish(
     metadata: { kind: "text", ...extra },
   };
   let offset = 0;
-  const parsed: Parsed = {
+  const parsed: Parsed = parsedOverride ?? {
     title,
     parser: "fixture-v1",
     encoding: "utf-8",

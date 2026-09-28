@@ -26,7 +26,7 @@ const manifestSchema = z
     id: z.string().uuid(),
     createdAt: z.number().int(),
     softwareVersion: z.string(),
-    schemaVersion: z.literal(9),
+    schemaVersion: z.literal(10),
     workspaceId: z.string().uuid(),
     vaultPath: z.string(),
     eventWatermark: z.number().int().nonnegative(),
