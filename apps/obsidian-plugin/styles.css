@@ -254,3 +254,24 @@
 .kb-learning button {
   margin: 6px 8px 6px 0;
 }
+
+.kb-search textarea {
+  display: block;
+  width: 100%;
+  min-height: 110px;
+}
+.kb-search input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+  margin-right: 8px;
+}
+.kb-drafts textarea {
+  min-height: 130px;
+  line-height: 1.7;
+  resize: vertical;
+}
+.kb-drafts fieldset {
+  margin: 16px 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+}

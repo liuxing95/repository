@@ -278,6 +278,11 @@ export function renderReview(
     for (const c of candidates) {
       const row = el("div");
       row.append(el("p", `${c.id} · ${c.title} · ${c.status}`));
+      action("创建编辑草稿", row, async () => {
+        await connection.refresh();
+        await connection.request(`/v1/answers/${c.id}/draft`, "POST", { title: title.value || c.title });
+        detail.replaceChildren(el("p", "编辑草稿已保存；到上方“正文草稿”点击“读取草稿”继续编辑。"));
+      });
       action("审核保存到候选区", row, () => propose(c.id, "candidate"));
       action("审核提升为 Wiki", row, () => propose(c.id, "wiki"));
       list.append(row);

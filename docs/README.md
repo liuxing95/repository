@@ -2,7 +2,7 @@
 
 ## 接手当前工程
 
-仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据、长文分块和可选本机模型适配器，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试、场景 07 的 TaskNotes 和 Today、场景 08 的本地约束排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地备份撤回恢复与退出、场景 11 可选的外部 Agent 只读接入、场景 12 的本机公开副本链路；大题集尚未扩充，3B 模型人工语义验收未达标；外部日历、关机后提醒、公网发布与物理清除仍待完成。开发入口如下：
+仓库目前已实现工程骨架、场景 01 工作区与运行治理、场景 02 多来源资料收录，并新增场景 03 的本地检索、固定证据、长文分块和可选本机模型适配器，以及场景 04 的候选审核、Wiki 更新与恢复、场景 05 的库内课题与原文报告、场景 06 的学习目标与实际尝试、场景 07 的 TaskNotes 和 Today、场景 08 的本地约束排程与人工采用、场景 09 的 macOS 本机提醒，以及场景 10 的本地备份撤回恢复与退出、场景 11 可选的外部 Agent 只读接入、场景 12 的本机公开副本链路；大题集尚未扩充，此前长文指南试点的 3B 模型人工语义验收未达标；外部日历、关机后提醒、公网发布与物理清除仍待完成。开发入口如下：
 
 | 需要了解什么 | 入口 |
 |---|---|
@@ -14,6 +14,7 @@
 | 本地 HTML 的原件保存、静态正文、操作与排障 | [本地 HTML 收录与接手](implementation/local-html-ingestion.md) |
 | 本地检索、证据整理、问答接口和边界 | [场景 03 使用与维护](implementation/evidence-search-answer.md)、[验收记录](implementation/evidence-search-validation.md) |
 | 长文分块、同文多处证据、本机模型试点与恢复 | [长文档接手说明](implementation/long-document-rag.md)、[本轮试点记录](implementation/long-document-rag-validation.md)、[实施计划](plans/2026-09-28-001-feat-long-document-rag-plan.md) |
+| 本机生成简介、逐段编辑草稿、引用核对与版本冲突 | [本机写作接手说明](implementation/local-writing-drafts.md)、[补齐计划](plans/2026-09-28-002-feat-local-generation-draft-editing-plan.md) |
 | 候选保存、Wiki 审核与写入、人工观察和恢复 | [场景 04 使用与维护](implementation/wiki-review-commit.md)、[验收记录](implementation/wiki-review-validation.md) |
 | 课题、历史时点、分章报告、快照更新与审核保存 | [场景 05 使用与维护](implementation/topic-research-report.md)、[验收记录](implementation/topic-research-validation.md) |
 | TaskNotes、候选创建、Today 与离线核对 | [场景 07 使用与维护](implementation/task-today-reconciliation.md)、[验收记录](implementation/task-today-validation.md) |

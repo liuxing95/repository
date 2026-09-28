@@ -3,6 +3,8 @@ import type { ProposalInput } from "@kb/contracts";
 import { AppError } from "../errors";
 // Deterministic compilation has no capabilities: no filesystem, network, model or executable output.
 export const COMPILER_VERSION = "native-evidence-page-v1";
+// Draft prose is text, not a channel for HTML, embeds, commands or remote images.
+export const prose = (value: string) => value.replace(/([\\`*_{}\[\]()<>#+.!|~-])/g, "\\$1");
 export function literal(value: string) {
   const fence = "`".repeat(
     Math.max(3, ...[...value.matchAll(/`+/g)].map((m) => m[0].length + 1)),
@@ -19,6 +21,24 @@ export function compileCandidate(
       409,
       "决定页需要填写本人确认的决定；模型建议不能自动提升为决定。",
     );
+  if (candidate.draft) {
+    const refs = candidate.answer.evidence.filter((e) => candidate.draft!.paragraphs.some((p) => p.evidenceIds.includes(e.id)));
+    const content = [
+      `# ${prose(candidate.draft.title)}`,
+      ...candidate.draft.paragraphs.map((p) => `${prose(p.text)}${p.evidenceIds.map((id) => {
+        const index = refs.findIndex((e) => e.id === id);
+        if (index < 0) throw new AppError("INVALID_CITATION");
+        return `[^${index + 1}]`;
+      }).join("")}${p.evidenceIds.length ? "" : "（本段未附来源，需人工核对）"}`),
+      ...(input.confirmedDecision ? ["## 用户明确决定", prose(input.confirmedDecision)] : []),
+      "## 来源与审核说明",
+      `本机草稿修订 ${candidate.draft.revision}。模型综合及人工编辑均需核对；引用有效不等于语义已经证实。`,
+      ...refs.map((e, i) => `[^${i + 1}]: ${prose(e.title)}；${prose(e.locator.heading?.join(" / ") ?? "")}。证据：\`${e.id}\`；来源修订：\`${e.revisionId}\`。`),
+      ...(candidate.answer.gaps.length ? ["## 资料缺口", ...candidate.answer.gaps.map(prose)] : []),
+    ].join("\n\n") + "\n";
+    if (Buffer.byteLength(content) > 128000) throw new AppError("LIMIT");
+    return { content, claims: candidate.answer.claims, deferred: candidate.answer.gaps, evidenceIds: refs.map((e) => e.id) };
+  }
   if (candidate.report && input.destination === "candidate") {
     if (Buffer.byteLength(candidate.report.content) > 128000)
       throw new AppError("LIMIT");

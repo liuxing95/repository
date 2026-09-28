@@ -1,4 +1,4 @@
-import type { AnswerResult, EvidenceRead, SearchResult } from "@kb/contracts";
+import type { AnswerResult, EvidenceRead, SearchResult, WritingDraft } from "@kb/contracts";
 import { Connection } from "../connection";
 import { OperationState } from "../ui/operation-state";
 const node = <K extends keyof HTMLElementTagNameMap>(tag: K, text?: string) => {
@@ -25,6 +25,7 @@ export function renderSearch(
   const field = (key: keyof typeof draft, label: string) => {
     const wrap = node("label", label);
     const input = node("input");
+    input.setAttribute("aria-label", label);
     input.value = draft[key];
     input.addEventListener("input", () => {
       draft[key] = input.value;
@@ -77,15 +78,21 @@ export function renderSearch(
   const output = node("div");
   const detail = node("div");
   let result: SearchResult | undefined;
+  const selected = new Set<string>();
+  let inputRevision = 0;
+  for (const input of root.querySelectorAll("input, select"))
+    input.addEventListener("input", () => {
+      inputRevision++;
+      result = undefined;
+      selected.clear();
+      output.replaceChildren();
+      detail.replaceChildren(node("p", "检索条件已变化，请重新搜索。"));
+    });
   const action = (name: string, fn: () => Promise<unknown>, parent = root) => {
     const button = node("button", name);
     button.type = "button";
     button.addEventListener("click", () => {
-      void state.run(fn).catch(() => {
-        output.replaceChildren();
-        detail.replaceChildren();
-        result = undefined;
-      });
+      void state.run(fn).catch(() => { /* Keep the selection and user input for correction. */ });
     });
     parent.append(button);
   };
@@ -109,10 +116,12 @@ export function renderSearch(
     );
   };
   action("搜索原文", async () => {
+    const revision = inputRevision;
     detail.replaceChildren();
     output.replaceChildren();
     result = undefined;
-    result = await connection.request<SearchResult>("/v1/search", "POST", {
+    selected.clear();
+    const found = await connection.request<SearchResult>("/v1/search", "POST", {
       query: draft.query,
       scope: {
         version: draft.version || null,
@@ -121,7 +130,10 @@ export function renderSearch(
       ...(historical.value ? { asOf: historical.value } : {}),
       ...(draft.collection ? { collection: draft.collection } : {}),
       ...(review.value ? { review: review.value } : {}),
+      limit: 30,
     });
+    if (revision !== inputRevision) return;
+    result = found;
     output.append(
       node(
         "p",
@@ -146,6 +158,15 @@ export function renderSearch(
         node("pre", hit.text),
         node("p", hit.gaps.join("；")),
       );
+      const choose = node("label", "用于本机写作"), box = node("input");
+      box.type = "checkbox";
+      box.setAttribute("aria-label", `写作证据 ${hit.id}`);
+      box.checked = selected.size < 5 && ["original", "mirror", "reprint"].includes(hit.profile.kind);
+      if (box.checked) selected.add(hit.id);
+      box.onchange = () => { if (box.checked) selected.add(hit.id); else selected.delete(hit.id); };
+      choose.prepend(box);
+      choose.onclick = (event) => event.stopPropagation();
+      row.querySelector("summary")!.prepend(choose);
       action(
         "回读固定原文",
         async () =>
@@ -220,6 +241,44 @@ export function renderSearch(
     );
   };
   action("整理本次原文证据", answer());
+  const writing = node("fieldset");
+  writing.append(node("legend", "本机写作"), node("p", "先限定集合并搜索，再勾选最多 8 条原文。检索词用于找资料，写作要求用于组织正文；生成不会覆盖已有草稿。"));
+  const titleLabel = node("label", "生成草稿标题"), writingTitle = node("input");
+  writingTitle.setAttribute("aria-label", "生成草稿标题"); titleLabel.append(writingTitle);
+  const instructionLabel = node("label", "写作要求"), instruction = node("textarea");
+  instruction.setAttribute("aria-label", "写作要求");
+  instruction.value = "根据选定资料写一篇约 500 字的简介，介绍定位、适合的读者、核心内容与入门顺序。用自然段叙述；没有依据的内容列为缺口。";
+  instructionLabel.append(instruction); writing.append(titleLabel, instructionLabel); root.append(writing);
+  const writingSelection = () => {
+    if (!result || selected.size < 1 || selected.size > 8)
+      throw { code: "VALIDATION", message: "请先搜索并勾选 1—8 条原文证据。" };
+    return { snapshotId: result.snapshot.id, evidenceIds: [...selected] };
+  };
+  action("授权选定资料用于本机模型", async () => {
+    const input = writingSelection(), searchInput = result!.snapshot.input, revision = inputRevision;
+    result = undefined;
+    await connection.refresh();
+    await connection.request("/v1/answers/local-setup", "POST", input);
+    await connection.refresh();
+    const found = await connection.request<SearchResult>("/v1/search", "POST", { ...searchInput, snapshotId: undefined });
+    if (revision !== inputRevision) return;
+    result = found;
+    detail.replaceChildren(node("p", "已配置零费用本机路线，并仅授权选定证据所属来源。其他模型路线和来源权限保留。现在可以生成草稿。"));
+  }, writing);
+  action("本机生成可编辑草稿", async () => {
+    const selection = writingSelection(), title = writingTitle.value.trim(), writingInstruction = instruction.value.trim();
+    if (!title || !writingInstruction) throw { code: "VALIDATION", message: "请填写草稿标题和写作要求。" };
+    const options = await connection.request<{ routes: { id: string; localOnly?: boolean }[] }>("/v1/answers/options");
+    if (!options.routes.some((r) => r.id === "local-ollama" && r.localOnly))
+      throw { code: "UNAVAILABLE", message: "本机模型未启用，点击“查看模型状态”查看启动说明。" };
+    detail.replaceChildren(node("p", "本机模型正在生成，最多等待 3 分钟。请勿重复提交；生成结果会保存为独立草稿。"));
+    const saved = await connection.request<WritingDraft>("/v1/writing", "POST", {
+      ...selection, title, routeId: "local-ollama", operationId: crypto.randomUUID(), writingInstruction,
+    });
+    const answer = saved.answer;
+    detail.replaceChildren(node("h4", saved.title), node("p", `已保存草稿 ${saved.id}，模型 ${answer.model}。到下方“07 / 正文草稿”读取并编辑，核对引用后再提交审核。`),
+      ...saved.paragraphs.map((p) => node("p", p.text)), ...answer.gaps.map((gap) => node("p", gap)));
+  }, writing);
   action("查看模型状态", async () => {
     const options = await connection.request<{
       message: string;

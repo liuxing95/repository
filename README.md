@@ -4,7 +4,7 @@
 
 面向 Obsidian 的本地服务与薄插件。目前完成工程骨架和场景 01—09 的本机部分，并接入场景 10 的本地撤回与恢复、场景 11 可选的外部 Agent 只读网关、场景 12 的公开副本本机静态发布链路；各场景的实际边界见下文接手说明。
 
-资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。可选本机模型适配器已接入；本轮 3B 模型的人工语义验收未达标，扩大题集仍待完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。场景 11 的客户端授权、MCP stdio 网关和只读工具见[外部 Agent 接手说明](docs/implementation/external-agent-access.md)。场景 12 的本机公开副本链路见[公开副本接手说明](docs/implementation/public-copy-publishing.md)。外部日历、关机后提醒、自动委托和公网发布尚未启用。
+资料收录支持文本、静态网页及集合、固定代码快照和 PDF。经逐文件批准后，由插件写入不可变来源投影。本地搜索、固定证据回读、原文整理与候选保存也已实现，详见 [场景 03 使用与维护](docs/implementation/evidence-search-answer.md)。场景 04 已增加候选区保存、Wiki 提升与更新、逐项恢复和人工修改观察，详见 [Wiki 审核与写入说明](docs/implementation/wiki-review-commit.md)。场景 05 已增加库内课题、快照确认、分章原文报告和审核保存，见 [研究报告说明](docs/implementation/topic-research-report.md)。场景 06 已增加目标、实际尝试、续学与复习建议，见[学习接手说明](docs/implementation/learning-practice-review.md)。可选本机模型适配器已接入；此前长文指南试点的 3B 模型人工语义验收未达标，扩大题集仍待完成；场景 07 已接入固定版本 TaskNotes、候选创建与 Today 核对，见[任务与 Today 接手说明](docs/implementation/task-today-reconciliation.md)。场景 08 已接入明确本地时间窗口的排程预览、人工采用、Today 读模型和计划笔记，见[排程接手说明](docs/implementation/scheduling-calendar-sync.md)。场景 09 已接入 macOS 本机提醒规则、投递账本与取消，见[提醒接手说明](docs/implementation/reminder-delivery-control.md)。场景 10 的本地备份和撤回入口见[撤回、备份恢复与退出接手说明](docs/implementation/backup-retraction-recovery.md)。场景 11 的客户端授权、MCP stdio 网关和只读工具见[外部 Agent 接手说明](docs/implementation/external-agent-access.md)。场景 12 的本机公开副本链路见[公开副本接手说明](docs/implementation/public-copy-publishing.md)。外部日历、关机后提醒、自动委托和公网发布尚未启用。
 
 要试用排程，请先按场景 07 说明连接 TaskNotes 并完成清点，再在插件设置页 **11 / 安排时间** 填写时区、带 `Z` 或 `+08:00` 等偏移的可用起止时间，以及节点上限、冻结分钟数和日历有效毫秒数。点击“核对任务并预览”，检查已排与未排、移动差异；确认后点击“核对后采用此计划”。采用后的时间块在 Today 查看，主端稍后把不可变笔记写到 `KB-Plans`。真实 Google 日历当前未连接，不要把本地窗口当成已查过会议。
 
@@ -156,6 +156,12 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 
 完整流程、接口、代码入口、迁移及排障见 [场景 03 说明](docs/implementation/evidence-search-answer.md)和[长文档接手说明](docs/implementation/long-document-rag.md)，本轮长文试点见[测试记录](docs/implementation/long-document-rag-validation.md)，旧测试与性能边界见[历史验收](docs/implementation/evidence-search-validation.md)。
 
+## 用本机模型生成并编辑正文
+
+启动服务时追加 `--ollama-model qwen2.5:3b`（先用 Ollama 下载该模型），继续使用原来的 `--data` 目录。在 **06 / 证据检索与问答** 限定集合、搜索并勾选 1—8 条原文，填写标题和写作要求；管理员首次点击“授权选定资料用于本机模型”，再点击“本机生成可编辑草稿”。
+
+生成结果自动保存到本机服务。在 **07 / 正文草稿** 读取、修改段落和引用，保存后提交审核，再到 Wiki 审核区分别批准候选区保存与正式提升。编辑使旧审核失效，重新生成不会覆盖人工草稿。安装、数据、接口和排障见[本机生成与草稿编辑接手说明](docs/implementation/local-writing-drafts.md)。2026-09-28 已用所收录的 XQuant 前言和准备工作跑通真实本机生成、编辑、保存和 Wiki 写入；这不替代完整长文问题集的语义验收。
+
 ## 审核候选并写入 Wiki
 
 在“06 / 证据检索与问答”保存固定候选后，进入“07 / Wiki 候选与审核”：
@@ -165,7 +171,7 @@ KB_TEST_OCI=1 KB_TEST_BUILT=1 KB_TEST_CORPUS=1 pnpm test
 3. 候选区提交完成后，点击“审核提升为 Wiki”，对新提案再次审核和批准。同类型、同标题优先更新已有页，内容相同允许零变更。
 4. 用“检索已提交 Wiki”查正式页面；用“扫描人工修改与影响”检查修改和来源问题。打开的编辑页会阻断 Writer，保存并关闭后再核对恢复。
 
-本地编排每次最多一页、20 条主张，不需要模型密钥。它保留原文和条件，不自动生成综合结论。决定页需要用户明确填写决定；普通候选不能自动代表用户决策。
+默认原文编排每次最多一页、20 条主张，不需要模型密钥，保留原文和条件。上方本机写作入口可生成综合正文，再进入同一审核流程。决定页需要用户明确填写决定；普通候选不能自动代表用户决策。
 
 页面更新使用 Obsidian 的同步 `Vault.process` 检查当前内容；回执丢失时按 afterHash 恢复，遇到第三版本则保留人工内容。只有所有必要文件核对一致，正式知识版本才推进；磁盘部分应用不等于业务提交完成。已完成的页面更新可生成反向提案，重新审核后恢复原字节；首次新建不会自动删文件。
 

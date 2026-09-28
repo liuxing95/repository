@@ -25,6 +25,7 @@ import { Policy } from "../security/policy";
 // Installed by trusted service code, never by a note, request-supplied URL, or model output.
 export type AnswerProvider = {
   model: string;
+  localOnly?: boolean;
   timeoutMs?: number;
   inputTokenUpperBound?: (pack: EvidencePack, maxOutputTokens: number) => number;
   generate: (
@@ -44,6 +45,8 @@ export const AnswerInput = z
       .regex(/^[a-z0-9-]{1,64}$/)
       .optional(),
     operationId: z.string().uuid(),
+    writingInstruction: z.string().trim().min(1).max(1000).optional(),
+    evidenceIds: z.array(z.string().regex(/^[a-f0-9]{64}$/)).min(1).max(8).optional(),
   })
   .strict();
 function validateClaims(
@@ -114,10 +117,10 @@ export class AnswerService {
   options() {
     return {
       modelEnabled: this.providers.size > 0,
-      routes: [...this.providers].map(([id, p]) => ({ id, model: p.model })),
+      routes: [...this.providers].map(([id, p]) => ({ id, model: p.model, localOnly: !!p.localOnly })),
       message: this.providers.size
         ? "模型输出仍需人工核对语义。"
-        : "未配置模型；可以搜索和整理原文证据。",
+        : "未启用本机模型。先下载模型，再用 pnpm service serve --ollama-model <已下载的模型名> 启动服务，重新配对后查看状态。未启用时仍可整理原文。",
     };
   }
   async answer(value: unknown, p: Principal): Promise<AnswerResult> {
@@ -137,9 +140,25 @@ export class AnswerService {
         503,
         "尚未安装受信模型适配器；可先使用原文证据整理。",
       );
-    const pack = provider && fullPack.evidence.length
+    if ((input.writingInstruction || input.evidenceIds) && !provider)
+      throw new AppError("UNAVAILABLE", 503, "写作需要先启用模型。");
+    let pack = provider && fullPack.evidence.length
       ? focusedModelPack(fullPack)
       : fullPack;
+    if (input.evidenceIds) {
+      // Explicit selection stays inside the fixed search and retains whole chunks.
+      const selected = input.evidenceIds.map((id) => {
+        const hit = result.hits.find((e) => e.id === id);
+        if (!hit || !["original", "mirror", "reprint"].includes(hit.profile.kind))
+          throw new AppError("INVALID_CITATION");
+        return this.search.evidence.read(id);
+      });
+      if (new Set(input.evidenceIds).size !== selected.length) throw new AppError("INVALID_CITATION");
+      if (selected.some((e) => e.text.length > 4000 || matchScope(snapshot.input.scope, e.profile.scope) !== "overlap"))
+        throw new AppError("SCOPE_MISMATCH");
+      pack = { ...fullPack, evidence: selected, answerable: true, gaps: [...new Set([...result.warnings, ...selected.flatMap((e) => e.gaps), "仅根据本次选定证据写作；未声称完整覆盖集合中的所有资料。"])] };
+    }
+    if (input.writingInstruction) pack = { ...pack, question: input.writingInstruction };
     const registry = this.search.evidence.registry;
     const policy = new Policy(registry);
     const sources = [...new Set(pack.evidence.map((e) => e.sourceId))];
@@ -163,6 +182,7 @@ export class AnswerService {
       model: provider?.model ?? "local-extractive",
       prompt: PROMPT_VERSION,
       route: input.routeId ?? null,
+      evidenceIds: pack.evidence.map((e) => e.id),
     });
     const cached = this.cache.get(key, p);
     if (cached) return cached;

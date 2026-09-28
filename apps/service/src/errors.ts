@@ -23,6 +23,10 @@ export function problem(error: unknown): Problem {
     CONFLICT: "发现需要核对的冲突。",
     VALIDATION: "输入不符合要求。",
     UNAVAILABLE: "所需能力尚未通过验证。",
+    BUSY: "本机已有生成任务正在运行。",
+    UNSUPPORTED_CLAIM: "模型没有返回可用的正文。",
+    INVALID_CITATION: "正文引用不在本次选定证据中。",
+    SNAPSHOT_EXPIRED: "本次检索快照已过期。",
   };
   const nextSteps: Record<string, string> = {
     AUTH: "重新获取本机配对码并连接。",
@@ -32,6 +36,8 @@ export function problem(error: unknown): Problem {
     BASELINE: "刷新当前设置，核对差异后重新提交。",
     SCHEMA: "保留数据并导出诊断，使用匹配数据版本的服务。",
     UNAVAILABLE: "检查本地环境；尚未接入的业务能力保持关闭。",
+    BUSY: "请等待当前任务完成，再到“正文草稿”读取结果，避免重复提交。",
+    SNAPSHOT_EXPIRED: "重新搜索并核对证据后再生成；已有草稿仍可继续编辑。",
   };
   return {
     code: e.code,

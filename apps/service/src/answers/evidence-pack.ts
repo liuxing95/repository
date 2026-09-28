@@ -2,7 +2,7 @@ import { queryAspects, queryCoverage } from "../search/tokenizer";
 import { matchScope } from "../evidence/scope";
 import type { Claim, EvidenceRead, SearchResult } from "@kb/contracts";
 import type { EvidenceStore } from "../evidence/locator";
-export const PROMPT_VERSION = "bounded-multi-evidence-v2";
+export const PROMPT_VERSION = "bounded-multi-evidence-v3";
 export function evidencePack(
   result: SearchResult,
   store: EvidenceStore,

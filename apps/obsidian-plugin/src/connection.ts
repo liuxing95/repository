@@ -68,7 +68,7 @@ export class Connection {
             ? 130_000
             : path === "/v1/publications/previews"
               ? 25_000
-            : path === "/v1/answers"
+            : path === "/v1/answers" || path === "/v1/writing"
               ? 190_000
               : 10_000,
         );

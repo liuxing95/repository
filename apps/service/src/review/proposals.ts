@@ -5,7 +5,7 @@ import {
   type WikiChangeSet,
   type WikiPage,
 } from "@kb/contracts";
-import { Candidates } from "./candidates";
+import { Candidates, validateDraft } from "./candidates";
 import { compileCandidate } from "../wiki/bounded-compiler";
 import { EvidenceStore } from "../evidence/locator";
 import { digest } from "../workspace/registry";
@@ -89,6 +89,9 @@ export class Proposals {
       .get(c.candidateId) as { value: string } | undefined;
     if (!row || digest(JSON.parse(row.value)) !== c.candidateHash)
       throw new AppError("BASELINE");
+    // A grant issued before an edit must not apply the old reviewed draft.
+    if (!["committed", "rejected"].includes(c.state))
+      validateDraft(JSON.parse(row.value), this.evidence);
   }
   save(c: WikiChangeSet) {
     this.store.writable();
@@ -141,6 +144,8 @@ export class Proposals {
         return this.read(old.id, p);
       }
       const candidate = this.candidates.get(input.candidateId, p);
+      if (candidate.draft && input.title !== candidate.draft.title)
+        throw new AppError("VALIDATION", 400, "页面标题须与已保存草稿一致；需要改名时先编辑草稿并重新提交审核。");
       if (
         input.destination === "wiki" &&
         !this.store.db

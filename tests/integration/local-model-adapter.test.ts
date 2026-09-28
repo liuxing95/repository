@@ -11,7 +11,6 @@ test("dedicated local adapter disables cloud, discovers an installed model and s
   const binary = join(dir, "fake-ollama");
   await writeFile(binary, `#!/usr/bin/env node
 const http = require("node:http");
-const crypto = require("node:crypto");
 const port = Number(process.env.OLLAMA_HOST.split(":")[1]);
 http.createServer((req, res) => {
   res.setHeader("content-type", "application/json");
@@ -24,7 +23,7 @@ http.createServer((req, res) => {
     const pack = JSON.parse(input.messages[1].content);
     const e = pack.evidence[0];
     if (e.heading[0] !== "3.4 权限") { res.statusCode = 500; res.end("{}"); return; }
-    const value = { claims: [{ id: crypto.randomUUID(), text: e.text, kind: "sourced", scope: e.scope, evidenceIds: [pack.question === "未知证据" ? "E99" : e.id] }], relations: [], gaps: [] };
+    const value = { paragraphs: [{ text: e.text, citations: [pack.question === "未知证据" ? "E99" : e.id] }], gaps: [] };
     res.end(JSON.stringify({ message: { content: JSON.stringify(value) }, prompt_eval_count: 100 }));
   });
 }).listen(port, "127.0.0.1");

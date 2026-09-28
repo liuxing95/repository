@@ -255,3 +255,23 @@ test("a derived page cannot smuggle later original evidence into a historical an
     await f.close();
   }
 });
+
+test("writing instruction and selected evidence form the cache identity; foreign evidence is rejected before model execution", async () => {
+  const { f, search } = await modelFixture();
+  const settings = f.registry.settings();
+  f.registry.saveSettings({ ...settings, budget: { ...settings.budget!, dayLimit: 10000, monthLimit: 10000 } }, f.registry.get().policyVersion);
+  f.principal = f.sessions.refresh(f.token);
+  const seen: string[] = [];
+  const provider: AnswerProvider = { ...quoted, generate: async (pack) => { seen.push(pack.question); return quoted.generate(pack, { signal: new AbortController().signal, maxOutputTokens: 100, idempotencyKey: "fixture" }); } };
+  try {
+    const a = new AnswerService(search, new Map([["test-model", provider]]));
+    const s = await search.search({ query: "权限" }, f.principal);
+    const input = { snapshotId: s.snapshot.id, operationId: randomUUID(), routeId: "test-model", evidenceIds: [s.hits[0]!.id], writingInstruction: "写一段权限简介" };
+    await a.answer(input, f.principal);
+    await a.answer(input, f.principal);
+    await a.answer({ ...input, operationId: randomUUID(), writingInstruction: "给开发者写使用步骤" }, f.principal);
+    expect(seen).toEqual(["写一段权限简介", "给开发者写使用步骤"]);
+    await expect(a.answer({ ...input, evidenceIds: ["f".repeat(64)] }, f.principal)).rejects.toMatchObject({ code: "INVALID_CITATION" });
+    expect(seen).toHaveLength(2);
+  } finally { await f.close(); }
+});

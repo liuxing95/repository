@@ -1,4 +1,4 @@
-import type { AnswerResult, Principal, ResearchReport } from "@kb/contracts";
+import type { AnswerResult, Principal, ResearchReport, WritingDraft } from "@kb/contracts";
 import { EvidenceStore } from "../evidence/locator";
 import { AppError } from "../errors";
 import { digest } from "../workspace/registry";
@@ -8,7 +8,16 @@ export type SavedCandidate = {
   createdBy: string;
   state: string;
   report?: { id: string; digest: string; content: string; title: string };
+  draft?: Pick<WritingDraft, "id" | "revision" | "title" | "paragraphs"> & { digest: string };
 };
+export function validateDraft(candidate: SavedCandidate, evidence: EvidenceStore) {
+  if (!candidate.draft) return;
+  const { digest: expected, ...body } = candidate.draft;
+  const current = evidence.store.get(`writing-draft:${body.id}`) as WritingDraft | undefined;
+  if (!current || current.revision !== body.revision) throw new AppError("BASELINE");
+  if (digest(body) !== expected || digest({ id: current.id, revision: current.revision, title: current.title, paragraphs: current.paragraphs }) !== expected)
+    throw new AppError("HASH_MISMATCH");
+}
 export class Candidates {
   constructor(readonly evidence: EvidenceStore) {}
   get(id: string, p: Principal) {
@@ -18,6 +27,7 @@ export class Candidates {
       .get(id) as { value: string } | undefined;
     if (!row) throw new AppError("NOT_FOUND", 404);
     const candidate = JSON.parse(row.value) as SavedCandidate;
+    validateDraft(candidate, this.evidence);
     if (candidate.report) {
       const row = this.evidence.store.db
         .prepare("SELECT value FROM research_reports WHERE id=?")
@@ -63,7 +73,7 @@ export class Candidates {
           {
             id,
             title:
-              c.report?.title ??
+              c.draft?.title ?? c.report?.title ??
               c.answer.claims[0]?.text.slice(0, 80) ??
               "证据不足",
             status: c.answer.status,

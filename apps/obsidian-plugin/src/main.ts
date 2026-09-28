@@ -6,6 +6,7 @@ import { syncPlanNotes } from "./views/plan-notes";
 import { renderResearch } from "./views/research";
 import { renderReview, syncWikiObservations } from "./views/review";
 import { renderSearch } from "./views/search";
+import { renderDrafts } from "./views/drafts";
 import { renderIngestion } from "./views/ingestion";
 import { obsidianHost } from "./writer/apply";
 import {
@@ -141,6 +142,9 @@ class GovernanceSettings extends PluginSettingTab {
     );
     this.containerEl.append(search);
     renderSearch(search, this.plugin.connection, this.plugin.searchDraft);
+    const drafts = document.createElement("section");
+    this.containerEl.append(drafts);
+    renderDrafts(drafts, this.plugin.connection);
     const review = document.createElement("section");
     this.containerEl.append(review);
     const research = document.createElement("section");
